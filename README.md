@@ -1,4 +1,4 @@
 djinn_contenttypes
-==================
+===================
 
-Contenttypes base for Djinn
+Djinn module for content types.
