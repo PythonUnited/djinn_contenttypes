@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<p>{% blocktrans %}Are you sure you want to delete {{ object }}{% endblocktrans %}</p>
+
+<form id="delete_form" action="{{ url }}" method="POST">
+  {% csrf_token %}
+</form>
+
+<a href="#" class="btn btn-primary submit" 
+   id="delete_submit"
+   onclick="$('#delete_form').submit(); $('#delete_submit').attr('disabled', 'disabled');">
+  {% trans "Delete" %}
+</a>
+<a href="#" class="btn cancel">{% trans "Cancel" %}</a>

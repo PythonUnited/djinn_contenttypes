@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.db import models
 from django.core.urlresolvers import reverse
 from pgutils.exception_handlers import Http403
-from pgcontent.registry import CTRegistry
+from djinn_contenttypes.registry import CTRegistry
 
 
 VIEW = 'contenttypes.view'
@@ -23,7 +23,7 @@ class DetailView(BaseDetailView):
     def get_template_names(self):
 
         if self.request.GET.get("modal", False):
-            ["%s/snippets/%s_modal_detail.html" % (self.model.__module__.split(".")[0],
+            return ["%s/snippets/%s_modal_detail.html" % (self.model.__module__.split(".")[0],
                                              self.model.__name__.lower())]
         else:
             return ["%s/%s_detail.html" % (self.model.__module__.split(".")[0],
@@ -86,13 +86,26 @@ class CreateView(BaseCreateView):
 
 class UpdateView(BaseUpdateView):
 
-    def get_initial(self):
-        
-        initial = super(CreateView, self).get_initial()
+    def get_form_kwargs(self):
 
-        initial.update({"changed_by": self.request.user})        
+        """ Allow for missing input values for owner, ... """
 
-        return initial
+        kwargs = super(UpdateView, self).get_form_kwargs()
+
+        if self.request.method == "POST":
+
+            del kwargs['data']
+
+            data = QueryDict("", mutable=True)
+
+            for key in self.request.POST.keys():
+                data[key] = self.request.POST[key]
+
+            data['changed_by'] = data["creator"] = self.request.user.id
+
+            kwargs.update({"data": data})
+
+        return kwargs
 
     def get_template_names(self):
 
@@ -123,7 +136,7 @@ class UpdateView(BaseUpdateView):
         if self.request.POST.get('action', None) == "Afbreken" or \
                 self.request.POST.get('action', None) == "Annuleren":
             
-            if self.object.is_initiated:
+            if getattr(self.object, "is_initiated", False):
                 self.object.delete()
                 
                 url = self.request.user.profile.get_absolute_url()
@@ -135,27 +148,21 @@ class UpdateView(BaseUpdateView):
             form_class = self.get_form_class()
             form = self.get_form(form_class)
 
-            created = self.object.is_initiated
+            created = getattr(self.object, "is_initiated", True)
 
             if form.is_valid():
-                self.object.is_initiated = False
+                if hasattr(self.object, "is_initiated"):
+                    self.object.is_initiated = False
                 self.form_valid(form)
-                self.post_save(form, created=created)
                 
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.form_invalid(form)
 
-    def form_valid(self, form):
-
-        form.instance.changed_by=self.request.user
-
-        self.object = form.save(commit=True)
-        
 
 class DeleteView(BaseDeleteView):
 
-    template_name = "djinn_contenttypes/snippets/delete.html"
+    template_name = "djinn_contenttypes/snippets/confirm_delete.html"
 
     def delete(self, request, *args, **kwargs):
 

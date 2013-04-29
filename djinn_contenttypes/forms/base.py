@@ -117,6 +117,7 @@ class BaseContentForm(forms.ModelForm):
         for ctype, cid, mode in self.cleaned_data['shares']['add']:
             obj.add_share(ctype, cid, mode)
 
-        obj.set_owner(self.cleaned_data['owner'])
+        if self.cleaned_data.get("owner", None):
+            obj.set_owner(self.cleaned_data['owner'])
 
         return obj

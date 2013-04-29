@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: djinn_contenttypes\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-29 14:41+0200\n"
+"PO-Revision-Date: 2013-04-29 14:42+0100\n"
+"Last-Translator: Duco Dokter <dokter@w20e.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+
+#: forms/base.py:14
+msgid "Add to group"
+msgstr "Toevoegen aan groep"
+
+#: forms/base.py:18
+#: models/base.py:15
+msgid "Title"
+msgstr "Titel"
+
+#: forms/base.py:22
+msgid "Publish from"
+msgstr "Publiceren vanaf"
+
+#: forms/base.py:30
+msgid "Publiceren till"
+msgstr "Publiceren tot"
+
+#: forms/base.py:38
+#: models/base.py:26
+msgid "Keywords"
+msgstr "Trefwoorden"
+
+#: forms/base.py:46
+msgid "Related content"
+msgstr "Gerelateerde inhoud"
+
+#: forms/base.py:50
+msgid "Add link"
+msgstr "Voeg link toe"
+
+#: forms/base.py:53
+msgid "Owner"
+msgstr "Eigenaar"
+
+#: forms/base.py:56
+msgid "Change owner"
+msgstr "Wijzig eigenaar"
+
+#: forms/base.py:59
+msgid "Shares"
+msgstr "Gedeeld met"
+
+#: forms/base.py:61
+msgid "Add user or group"
+msgstr "Voeg gebruiker of groep to"
+
+#: models/base.py:17
+msgid "Created"
+msgstr "Aangemaakt"
+
+#: models/base.py:19
+msgid "Creator naam"
+msgstr "Naam auteur"
+
+#: models/base.py:22
+msgid "Last changed"
+msgstr "Laatst gewijzigd"
+
+#: models/base.py:28
+msgid "Toon eigenaar"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:11
+msgid "Please correct the following errors"
+msgstr "Verbeter de onderstaande fouten"
+
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:3
+#, python-format
+msgid "Are you sure you want to delete %(object)s"
+msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
+
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:14
+msgid "Cancel"
+msgstr "Annuleren"
+

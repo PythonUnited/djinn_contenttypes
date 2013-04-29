@@ -1,3 +1,5 @@
+import registry
+
 def get_js():
 
     return ["djinn_forms.js"]
