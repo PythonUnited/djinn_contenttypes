@@ -1,7 +1,7 @@
 {% extends "layout-8x4.html" %}
-{% load i18n auth_tags %}
+{% load i18n %}
 
-{% block body_class %}ct {{ object.ct_name }} edit{% endblock %}
+{% block body_class %}ct {{ ct_name }} edit{% endblock %}
 
 {% block left-pane %}
 
@@ -9,13 +9,7 @@
 
 <header>
   <h1>
-    {% with object_name=object.ct_name %}
-    {% if object %}
-    {% blocktrans %}Edit {{ object_name }}{% endblocktrans %}
-    {% else %}
-    {% blocktrans %}New {{ object_name }}{% endblocktrans %}
-    {% endif %}
-    {% endwith %}
+    {% blocktrans %}New {{ ct_name }}{% endblocktrans %}
   </h1>
 </header>
 
@@ -47,27 +41,15 @@
   {% endblock %}
 
   {% block formcontrols %}
-  <div class="btn-group form-controls">
+  <div class="form-actions">
     <button class="btn btn-primary protected" type="submit" 
             value="save" name="action">
       {% trans "Save" %}
     </button>
-    <button class="btn btn-primary protected" type="submit" 
+    <button class="btn protected" type="submit" 
             value="cancel" name="action">
       {% trans "Cancel" %}
     </button>
-    {% if object %}
-    {% ifpermission object request.user contenttypes.delete_contenttype %}
-    <a class="btn btn-danger"
-       data-toggle="modal"
-       href="{{ view.delete_url }}"
-       data-target="#MyModal">
-      {% with object_name=object.ct_name %}
-      {% blocktrans %}Delete this {{ content_name }}{% endblocktrans %}
-      {% endwith %}
-    </a>
-    {% endifpermission %}
-    {% endif %}
   </div>
   {% endblock %}
 

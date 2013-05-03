@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from pgcontent.fields import OwnerField, \
     RelatedContentField, SharesField, KeywordField
@@ -7,25 +8,31 @@ from pgcontent.widgets.shares import SharesWidget
 from pgcontent.widgets.owner import OwnerWidget
 from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
 from djinn_contenttypes.utils import get_object_by_ctype_id
+from djinn_contenttypes.models.base import BaseContent
 
 
-class BaseContentForm(forms.ModelForm):
+class BaseForm(forms.ModelForm):
+
+    creator = forms.ModelChoiceField(label=_("Creator"),
+                                     queryset=User.objects,
+                                     widget=forms.HiddenInput())
+
+    title = forms.CharField(label=_("Title"),
+                            max_length=255,
+                            widget=forms.TextInput())
+
+class BaseContentForm(BaseForm):
 
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
                                              queryset=None)
     
-    title = forms.CharField(label=_("Title"),
-                            max_length=255,
-                            widget=forms.TextInput())
-
     publish_from = forms.DateTimeField(label=_("Publish from"),
                                        required=False,
                                        widget=forms.DateTimeInput(
                 attrs={'class': 'datetime'},
                 format="%d-%m-%Y %H:%M"
-                )
-                                       )
+                )                                       )
     
     publish_to = forms.DateTimeField(label=_("Publiceren till"),
                                      required=False,
@@ -33,8 +40,7 @@ class BaseContentForm(forms.ModelForm):
                 attrs={'class': 'datetime'},
                 format="%d-%m-%Y %H:%M"
                 )
-                                     )
-                            
+                                     )                          
     userkeywords = forms.CharField(label=_("Keywords"),
                                    required=False,
                                    widget=KeywordField(
@@ -65,9 +71,13 @@ class BaseContentForm(forms.ModelForm):
 
         super(BaseContentForm, self).__init__(*args, **kwargs)
 
-        self.fields['related'].widget.object = self.instance
-        self.fields['owner'].widget.object = self.instance
-        self.fields['shares'].widget.object = self.instance
+        if 'related' in self.fields:
+            self.fields['related'].widget.object = self.instance
+        if 'owner' in self.fields:
+            self.fields['owner'].widget.object = self.instance
+
+        if 'shares' in self.fields:
+            self.fields['shares'].widget.object = self.instance
 
         owner = self.instance.get_owner()
 

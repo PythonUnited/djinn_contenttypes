@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-29 14:41+0200\n"
+"POT-Creation-Date: 2013-05-03 15:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,68 +17,104 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms/base.py:14
-msgid "Add to group"
+#: forms/base.py:16
+msgid "Creator"
 msgstr ""
 
-#: forms/base.py:18 models/base.py:15
+#: forms/base.py:20 models/base.py:17
 msgid "Title"
 msgstr ""
 
-#: forms/base.py:22
-msgid "Publish from"
+#: forms/base.py:26
+msgid "Add to group"
 msgstr ""
 
 #: forms/base.py:30
+msgid "Publish from"
+msgstr ""
+
+#: forms/base.py:37
 msgid "Publiceren till"
 msgstr ""
 
-#: forms/base.py:38 models/base.py:26
+#: forms/base.py:44 models/base.py:23
 msgid "Keywords"
 msgstr ""
 
-#: forms/base.py:46
+#: forms/base.py:52
 msgid "Related content"
 msgstr ""
 
-#: forms/base.py:50
+#: forms/base.py:56
 msgid "Add link"
 msgstr ""
 
-#: forms/base.py:53
+#: forms/base.py:59
 msgid "Owner"
 msgstr ""
 
-#: forms/base.py:56
+#: forms/base.py:62
 msgid "Change owner"
 msgstr ""
 
-#: forms/base.py:59
+#: forms/base.py:65
 msgid "Shares"
 msgstr ""
 
-#: forms/base.py:61
+#: forms/base.py:67
 msgid "Add user or group"
 msgstr ""
 
-#: models/base.py:17
+#: models/base.py:19
 msgid "Created"
 msgstr ""
 
-#: models/base.py:19
+#: models/base.py:21
 msgid "Creator naam"
 msgstr ""
 
-#: models/base.py:22
-msgid "Last changed"
-msgstr ""
-
-#: models/base.py:28
+#: models/base.py:25
 msgid "Toon eigenaar"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:11
+#: models/base.py:30
+msgid "Temporary"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_add.html:12
+#, python-format
+msgid "New %(ct_name)s"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_add.html:22
+#: templates/djinn_contenttypes/base_edit.html:28
 msgid "Please correct the following errors"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_add.html:47
+#: templates/djinn_contenttypes/base_edit.html:53
+msgid "Save"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_add.html:51
+#: templates/djinn_contenttypes/base_edit.html:57
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+msgid "Cancel"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:14
+#, python-format
+msgid "Edit %(object_name)s"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:16
+#, python-format
+msgid "New %(object_name)s"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:66
+#, python-format
+msgid "Delete this %(content_name)s"
 msgstr ""
 
 #: templates/djinn_contenttypes/snippets/confirm_delete.html:3
@@ -86,10 +122,6 @@ msgstr ""
 msgid "Are you sure you want to delete %(object)s"
 msgstr ""
 
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:10
 msgid "Delete"
-msgstr ""
-
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:14
-msgid "Cancel"
 msgstr ""

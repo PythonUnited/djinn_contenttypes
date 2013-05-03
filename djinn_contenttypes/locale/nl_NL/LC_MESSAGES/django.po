@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-29 14:41+0200\n"
-"PO-Revision-Date: 2013-04-29 14:42+0100\n"
+"POT-Creation-Date: 2013-05-03 15:40+0200\n"
+"PO-Revision-Date: 2013-05-03 15:41+0100\n"
 "Last-Translator: Duco Dokter <dokter@w20e.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,82 +18,117 @@ msgstr ""
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 
-#: forms/base.py:14
-msgid "Add to group"
-msgstr "Toevoegen aan groep"
+#: forms/base.py:16
+#, fuzzy
+msgid "Creator"
+msgstr "Naam auteur"
 
-#: forms/base.py:18
-#: models/base.py:15
+#: forms/base.py:20
+#: models/base.py:17
 msgid "Title"
 msgstr "Titel"
 
-#: forms/base.py:22
+#: forms/base.py:26
+msgid "Add to group"
+msgstr "Toevoegen aan groep"
+
+#: forms/base.py:30
 msgid "Publish from"
 msgstr "Publiceren vanaf"
 
-#: forms/base.py:30
+#: forms/base.py:37
 msgid "Publiceren till"
 msgstr "Publiceren tot"
 
-#: forms/base.py:38
-#: models/base.py:26
+#: forms/base.py:44
+#: models/base.py:23
 msgid "Keywords"
 msgstr "Trefwoorden"
 
-#: forms/base.py:46
+#: forms/base.py:52
 msgid "Related content"
 msgstr "Gerelateerde inhoud"
 
-#: forms/base.py:50
+#: forms/base.py:56
 msgid "Add link"
 msgstr "Voeg link toe"
 
-#: forms/base.py:53
+#: forms/base.py:59
 msgid "Owner"
 msgstr "Eigenaar"
 
-#: forms/base.py:56
+#: forms/base.py:62
 msgid "Change owner"
 msgstr "Wijzig eigenaar"
 
-#: forms/base.py:59
+#: forms/base.py:65
 msgid "Shares"
 msgstr "Gedeeld met"
 
-#: forms/base.py:61
+#: forms/base.py:67
 msgid "Add user or group"
 msgstr "Voeg gebruiker of groep to"
 
-#: models/base.py:17
+#: models/base.py:19
 msgid "Created"
 msgstr "Aangemaakt"
 
-#: models/base.py:19
+#: models/base.py:21
 msgid "Creator naam"
 msgstr "Naam auteur"
 
-#: models/base.py:22
-msgid "Last changed"
-msgstr "Laatst gewijzigd"
-
-#: models/base.py:28
+#: models/base.py:25
 msgid "Toon eigenaar"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:11
+#: models/base.py:30
+msgid "Temporary"
+msgstr "Tijdelijk"
+
+#: templates/djinn_contenttypes/base_add.html:12
+#, python-format
+msgid "New %(ct_name)s"
+msgstr "Nieuw %(ct_name)s"
+
+#: templates/djinn_contenttypes/base_add.html:22
+#: templates/djinn_contenttypes/base_edit.html:28
 msgid "Please correct the following errors"
 msgstr "Verbeter de onderstaande fouten"
+
+#: templates/djinn_contenttypes/base_add.html:47
+#: templates/djinn_contenttypes/base_edit.html:53
+msgid "Save"
+msgstr "Opslaan"
+
+#: templates/djinn_contenttypes/base_add.html:51
+#: templates/djinn_contenttypes/base_edit.html:57
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: templates/djinn_contenttypes/base_edit.html:14
+#, python-format
+msgid "Edit %(object_name)s"
+msgstr "%(object_name)s bewerken"
+
+#: templates/djinn_contenttypes/base_edit.html:16
+#, python-format
+msgid "New %(object_name)s"
+msgstr "Nieuw %(object_name)s"
+
+#: templates/djinn_contenttypes/base_edit.html:66
+#, python-format
+msgid "Delete this %(content_name)s"
+msgstr "Verwijder dit %(content_name)s"
 
 #: templates/djinn_contenttypes/snippets/confirm_delete.html:3
 #, python-format
 msgid "Are you sure you want to delete %(object)s"
 msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
 
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+#: templates/djinn_contenttypes/snippets/confirm_delete.html:10
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:14
-msgid "Cancel"
-msgstr "Annuleren"
-
+#~ msgid "Last changed"
+#~ msgstr "Laatst gewijzigd"

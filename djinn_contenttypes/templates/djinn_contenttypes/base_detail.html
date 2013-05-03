@@ -1,0 +1,30 @@
+{% extends "layout-8x4.html" %}
+
+{% load contentblock_tags %}
+{% load contentutil_tags %}
+{% load pgcomment_tags %}
+
+{% block body_class %}ct {{ object.ct_name }} view{% endblock %}
+
+{% block left-pane %}
+
+<article>
+
+  {% block header %}
+  <header>
+    <h1>{{ object.title }}</h1>
+  </header>
+  {% contentitem_stats object %}
+  {% endblock %}
+
+  {% block content %}
+  {% endblock %}
+
+  {% if object|implements:"CommentableMixin" %}
+  {% comments_for object %}
+  {% endif %}
+</article>
+{% endblock %}
+
+{% block right-pane %}
+{% endblock %}

@@ -7,22 +7,19 @@ from pgauth.base import LocalRoleMixin, Role
 from pgauth.models import UserGroup
 from pgauth.settings import VIEWER_ROLE_ID
 from sharing import SharingMixin
+from relatable import RelatableMixin
 
-class BaseContent(models.Model, LocalRoleMixin, SharingMixin):
+
+class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     """ All Djinn content extends this base class. """
 
-    title = models.TextField(_('Title'))
+    title = models.CharField(_('Title'), max_length=200)
 
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     creator = models.ForeignKey(User, related_name='%(class)s_creator')
     removed_creator_name = models.CharField(_('Creator naam'), max_length=100, 
                                             blank=True, null=True)
-
-    changed = models.DateTimeField(_('Last changed'), auto_now=True) 
-    
-    changed_by = models.ForeignKey(User, related_name='%(class)s_changed_by')
-
     userkeywords = models.CharField(_('Keywords'), max_length=500,
                     null=True, blank=True)
     show_owner = models.BooleanField(_('Toon eigenaar'), default=True)
@@ -30,6 +27,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin):
         UserGroup,
         related_name='%(class)s_parentusergroup',
         null=True, blank=True, on_delete=models.SET_NULL)
+    is_tmp = models.BooleanField(_('Temporary'), default=False)
 
     def get_cache_key(self):
 
@@ -41,7 +39,6 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin):
             self.userkeywords = self.userkeywords.replace("'",'')
             self.userkeywords = " ".join(self.userkeywords.split()[:10])
 
-
         super(BaseContent, self).save(*args, **kwargs)
 
         if not self.get_owner():
@@ -50,7 +47,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin):
     @property
     def slug(self):
 
-        """ Slug is (and should) implemented as property on all
+        """ Slug is (and should be) implemented as property on all
         content classes"""
 
         raise NotImplementedError('slug property must be implemented '
@@ -59,7 +56,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin):
     @property
     def ct_class(self):
 
-        """ Use this method at your own peril..."""
+        """ Use this method at your own peril... it's expensive"""
 
         return ContentType.objects.get_for_model(self.__class__)
 

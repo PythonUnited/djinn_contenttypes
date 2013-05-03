@@ -4,11 +4,11 @@
 
 <form id="delete_form" action="{{ url }}" method="POST">
   {% csrf_token %}
-</form>
 
-<a href="#" class="btn btn-primary submit" 
-   id="delete_submit"
-   onclick="$('#delete_form').submit(); $('#delete_submit').attr('disabled', 'disabled');">
-  {% trans "Delete" %}
-</a>
-<a href="#" class="btn cancel">{% trans "Cancel" %}</a>
+  <div class="btn-group form-controls">
+    <button type="submit" class="btn btn-primary protected">
+      {% trans "Delete" %}
+    </button>
+    <a href="#" class="btn cancel">{% trans "Cancel" %}</a>
+  </div>
+</form>

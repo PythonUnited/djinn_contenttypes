@@ -10,59 +10,71 @@ from pgutils.exception_handlers import Http403
 from djinn_contenttypes.registry import CTRegistry
 
 
-VIEW = 'contenttypes.view'
-EDIT = 'contenttypes.change_contenttype'
-
-
-class DetailView(BaseDetailView):
-
-    """ Detail view for simple content, not related, etc. All intranet
-    views should extend this view.
-    """
+class TemplateResolverMixin(object):
 
     def get_template_names(self):
 
         if self.request.GET.get("modal", False):
-            return ["%s/snippets/%s_modal_detail.html" % (self.model.__module__.split(".")[0],
-                                             self.model.__name__.lower())]
+            modal = "_modal"
         else:
-            return ["%s/%s_detail.html" % (self.model.__module__.split(".")[0],
-                                           self.model.__name__.lower())]
+            modal = ""
 
-    def get_object(self, queryset=None):
+        return ["%s/%s_%s%s.html" % (
+                self.model.__module__.split(".")[0],
+                self.model.__name__.lower(),
+                self.mode,
+                modal),
+                "djinn_contenttypes/base_%s.html" % self.mode
+                ]
 
-        obj = super(DetailView, self).get_object(queryset=queryset)
 
-        info = CTRegistry.get(obj.ct_name)
+class ViewContextMixin(object):
 
-        if not self.request.user.has_perm(info.get("view_permission", VIEW), 
-                                          obj=obj):
-            raise Http403()
-
-        return obj
-    
     def get_context_data(self, **kwargs):
 
         """ Always add self as "view" so as to be able to call methods
         and properties on view """
 
-        ctx = super(DetailView, self).get_context_data(**kwargs)
+        ctx = kwargs
+        ctx.update({"view": self, "object": self.object})
 
-        ctx.update({"view": self})
-
-        return ctx    
+        return ctx
 
 
-class CreateView(BaseCreateView):
+class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
+
+    """ Detail view for simple content, not related, etc. All intranet
+    views should extend this view.
+    """
+
+    mode = "detail"
+
+    def get_object(self, queryset=None):
+
+        obj = super(DetailView, self).get_object(queryset=queryset)
+
+        perm = CTRegistry.get(obj.ct_name).get("view_permission", 
+                                               'contenttypes.view')
+
+        if not self.request.user.has_perm(perm, obj=obj):
+            raise Http403()
+
+        return obj
+
+
+class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
+
+    mode = "add"
 
     def get_form_kwargs(self):
-
-        """ Allow for missing input values for owner, ... """
+        """
+        Returns the keyword arguments for instanciating the form.
+        """
 
         kwargs = super(CreateView, self).get_form_kwargs()
 
         if self.request.method == "POST":
-
+    
             del kwargs['data']
 
             data = QueryDict("", mutable=True)
@@ -70,48 +82,67 @@ class CreateView(BaseCreateView):
             for key in self.request.POST.keys():
                 data[key] = self.request.POST[key]
 
-            if not data.has_key("owner"):
-                data["owner"] = "userprofile:%s" % self.request.user.id
-
-            data['changed_by'] = data["creator"] = self.request.user.id
+            data['creator'] = data['owner'] = self.request.user.id
 
             kwargs.update({"data": data})
 
         return kwargs
 
-    def get_template_names(self):
+    def get_context_data(self, **kwargs):
 
-        return ["%s/%s_edit.html" % (self.model.__module__.split(".")[0],
-                                       self.model.__name__.lower())]
+        ctx = super(CreateView, self).get_context_data(**kwargs)
+        ctx.update({"ct_name": self.model.__name__.lower()})
 
-class UpdateView(BaseUpdateView):
+        return ctx
 
-    def get_form_kwargs(self):
+    def post(self, request, *args, **kwargs):
 
-        """ Allow for missing input values for owner, ... """
+        if self.request.POST.get('action', None) == "cancel":
 
-        kwargs = super(UpdateView, self).get_form_kwargs()
+            # There may be a temporary object...
+            try:
+                self.object = self.get_object()
 
-        if self.request.method == "POST":
+                if getattr(self.object, "is_tmp", False):
+                    self.object.delete()
+            except:
+                pass
 
-            del kwargs['data']
+            return HttpResponseRedirect(
+                request.user.profile.get_absolute_url())
+        else:
+            return super(CreateView, self).post(request, *args, **kwargs)
 
-            data = QueryDict("", mutable=True)
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.is_tmp = False
+        
+        return HttpResponseRedirect(self.get_success_url())
 
-            for key in self.request.POST.keys():
-                data[key] = self.request.POST[key]
 
-            data['changed_by'] = data["creator"] = self.request.user.id
+class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
-            kwargs.update({"data": data})
+    mode = "edit"
 
-        return kwargs
+    def get_object(self, queryset=None):
 
-    def get_template_names(self):
+        obj = super(DetailView, self).get_object(queryset=queryset)
 
-        return ["%s/%s_edit.html" % (self.model.__module__.split(".")[0],
-                                       self.model.__name__.lower()),
-                "%s_edit.html" % self.object.ct_name]
+        perm = CTRegistry.get(obj.ct_name).get(
+            "edit_permission", 
+            'contenttypes.change_contenttype')
+
+        if not self.request.user.has_perm(perm, obj=obj):
+            raise Http403()
+
+        return obj
+
+    @property
+    def delete_url(self):
+
+        return reverse("%s_delete_%s" % (self.object.app_label,
+                                         self.object.ct_name),
+                       kwargs={'pk': self.object.id}),
 
     @models.permalink
     def get_success_url(self):
@@ -133,31 +164,10 @@ class UpdateView(BaseUpdateView):
 
         self.object = self.get_object()
 
-        if self.request.POST.get('action', None) == "Afbreken" or \
-                self.request.POST.get('action', None) == "Annuleren":
-            
-            if getattr(self.object, "is_initiated", False):
-                self.object.delete()
-                
-                url = self.request.user.profile.get_absolute_url()
-                return HttpResponseRedirect(url)
-            else:
-                return HttpResponseRedirect(self.object.get_absolute_url())
+        if self.request.POST.get('action', None) == "cancel":            
+            return HttpResponseRedirect(self.object.get_absolute_url())
         else:
-
-            form_class = self.get_form_class()
-            form = self.get_form(form_class)
-
-            created = getattr(self.object, "is_initiated", True)
-
-            if form.is_valid():
-                if hasattr(self.object, "is_initiated"):
-                    self.object.is_initiated = False
-                self.form_valid(form)
-                
-                return HttpResponseRedirect(self.get_success_url())
-            else:
-                return self.form_invalid(form)
+            return super(UpdateView, self).post(request, *args, **kwargs)
 
 
 class DeleteView(BaseDeleteView):
@@ -173,11 +183,6 @@ class DeleteView(BaseDeleteView):
         
             return HttpResponseRedirect(self.get_success_url())        
         except:
-            context = super(BaseDeleteView, self).get_context_data(**kwargs)
-            context['message'] = "Het verwijderen is mislukt."
-            context['object'] = self.object
-
-            # TODO: return to detail view
             return HttpResponseRedirect(self.get_success_url())        
 
     def get_success_url(self):
