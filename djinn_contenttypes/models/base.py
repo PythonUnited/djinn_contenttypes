@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
@@ -15,8 +14,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     """ All Djinn content extends this base class. """
 
     title = models.CharField(_('Title'), max_length=200)
-
     created = models.DateTimeField(_('Created'), auto_now_add=True)
+    changed = models.DateTimeField(_('Changed'), auto_now=True)
     creator = models.ForeignKey(User, related_name='%(class)s_creator')
     removed_creator_name = models.CharField(_('Creator naam'), max_length=100, 
                                             blank=True, null=True)

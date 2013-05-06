@@ -47,12 +47,12 @@
   {% endblock %}
 
   {% block formcontrols %}
-  <div class="btn-group form-controls">
+  <div class="btn-group form-actions">
     <button class="btn btn-primary protected" type="submit" 
             value="save" name="action">
       {% trans "Save" %}
     </button>
-    <button class="btn btn-primary protected" type="submit" 
+    <button class="btn protected" type="submit" 
             value="cancel" name="action">
       {% trans "Cancel" %}
     </button>
@@ -63,7 +63,7 @@
        href="{{ view.delete_url }}"
        data-target="#MyModal">
       {% with object_name=object.ct_name %}
-      {% blocktrans %}Delete this {{ content_name }}{% endblocktrans %}
+      {% blocktrans %}Delete this {{ object_name }}{% endblocktrans %}
       {% endwith %}
     </a>
     {% endifpermission %}

@@ -2,7 +2,7 @@
 
 <p>{% blocktrans %}Are you sure you want to delete {{ object }}{% endblocktrans %}</p>
 
-<form id="delete_form" action="{{ url }}" method="POST">
+<form id="delete_form" action="{{ view.delete_url }}" method="POST">
   {% csrf_token %}
 
   <div class="btn-group form-controls">

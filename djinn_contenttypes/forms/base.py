@@ -11,15 +11,37 @@ from djinn_contenttypes.utils import get_object_by_ctype_id
 from djinn_contenttypes.models.base import BaseContent
 
 
-class BaseForm(forms.ModelForm):
+class PartialUpdateMixin:
+
+    def update(self, commit=True):
+
+        """ Allow for updates of only the fields available in the form """
+
+        for f in self.instance._meta.fields:
+            if f.attname in self.fields:
+                setattr(self.instance, f.attname, 
+                        self.cleaned_data[f.attname])
+            if commit:
+                try: 
+                    self.instance.save()
+                except: 
+                    return False
+            return self.instance
+
+
+class BaseForm(PartialUpdateMixin, forms.ModelForm):
+
+    title = forms.CharField(label=_("Title"),
+                            max_length=255,
+                            widget=forms.TextInput())
+
+
+class BaseAddForm(BaseForm):
 
     creator = forms.ModelChoiceField(label=_("Creator"),
                                      queryset=User.objects,
                                      widget=forms.HiddenInput())
 
-    title = forms.CharField(label=_("Title"),
-                            max_length=255,
-                            widget=forms.TextInput())
 
 class BaseContentForm(BaseForm):
 

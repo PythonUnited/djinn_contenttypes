@@ -49,22 +49,39 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
 
     mode = "detail"
 
-    def get_object(self, queryset=None):
+    def get(self, request, *args, **kwargs):
 
-        obj = super(DetailView, self).get_object(queryset=queryset)
+        """ We need our own implementation of GET, to be able to do permission
+        checks on the object """
 
-        perm = CTRegistry.get(obj.ct_name).get("view_permission", 
+        self.object = self.get_object()
+
+        perm = CTRegistry.get(self.object.ct_name).get("view_permission", 
                                                'contenttypes.view')
 
-        if not self.request.user.has_perm(perm, obj=obj):
+        if not self.request.user.has_perm(perm, obj=self.object):
             raise Http403()
 
-        return obj
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
     mode = "add"
+
+    def get(self, request, *args, **kwargs):
+
+        """ Override get so as to be able to check permissions """
+
+        perm = CTRegistry.get(self.model.__name__.lower()).get(
+            "add_permission", 
+            'contenttypes.add_contenttype')
+
+        if not self.request.user.has_perm(perm):
+            raise Http403()
+        
+        return super(CreateView, self).get(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         """
@@ -97,6 +114,13 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
     def post(self, request, *args, **kwargs):
 
+        perm = CTRegistry.get(self.model.__name__.lower()).get(
+            "add_permission", 
+            'contenttypes.add_contenttype')
+
+        if not self.request.user.has_perm(perm):
+            raise Http403()
+
         if self.request.POST.get('action', None) == "cancel":
 
             # There may be a temporary object...
@@ -116,7 +140,8 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
     def form_valid(self, form):
         self.object = form.save()
         self.object.is_tmp = False
-        
+        self.object.set_owner(self.request.user)
+
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -124,25 +149,12 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
     mode = "edit"
 
-    def get_object(self, queryset=None):
-
-        obj = super(DetailView, self).get_object(queryset=queryset)
-
-        perm = CTRegistry.get(obj.ct_name).get(
-            "edit_permission", 
-            'contenttypes.change_contenttype')
-
-        if not self.request.user.has_perm(perm, obj=obj):
-            raise Http403()
-
-        return obj
-
     @property
     def delete_url(self):
 
         return reverse("%s_delete_%s" % (self.object.app_label,
                                          self.object.ct_name),
-                       kwargs={'pk': self.object.id}),
+                       kwargs={'pk': self.object.id})
 
     @models.permalink
     def get_success_url(self):
@@ -150,10 +162,24 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
         """ Return the URL to which the edit/create action should
         return upon success"""
 
-        obj = self.get_object()
+        return ('%s_view_%s' % (self.object.app_label, 
+                                self.object.ct_name), (), 
+                {"slug":self.object.slug, "pk": str(self.object.id)})
 
-        return ('%s_view_%s' % (obj.app_label, obj.ct_name), (), 
-                {"slug":obj.slug, "pk": str(obj.id)})
+    def get(self, request, *args, **kwargs):
+
+        """ Check permissions for editing """
+
+        self.object = self.get_object()
+
+        perm = CTRegistry.get(self.object.ct_name).get(
+            "edit_permission", 
+            'contenttypes.change_contenttype')
+
+        if not self.request.user.has_perm(perm, obj=self.object):
+            raise Http403()
+
+        return super(UpdateView, self).post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
 
@@ -164,19 +190,37 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
         self.object = self.get_object()
 
+        perm = CTRegistry.get(self.object.ct_name).get(
+            "edit_permission", 
+            'contenttypes.change_contenttype')
+
+        if not self.request.user.has_perm(perm, obj=self.object):
+            raise Http403()
+
         if self.request.POST.get('action', None) == "cancel":            
             return HttpResponseRedirect(self.object.get_absolute_url())
         else:
             return super(UpdateView, self).post(request, *args, **kwargs)
 
+    def form_valid(self, form):
+        self.object = form.update()
 
-class DeleteView(BaseDeleteView):
+        return HttpResponseRedirect(self.get_success_url())
+
+class DeleteView(ViewContextMixin, BaseDeleteView):
 
     template_name = "djinn_contenttypes/snippets/confirm_delete.html"
 
     def delete(self, request, *args, **kwargs):
 
         self.object = self.get_object()
+
+        perm = CTRegistry.get(self.object.ct_name).get(
+            "delete_permission", 
+            'contenttypes.delete_contenttype')
+
+        if not self.request.user.has_perm(perm, obj=self.object):
+            raise Http403()
 
         try:
             self.object.delete()
@@ -192,17 +236,12 @@ class DeleteView(BaseDeleteView):
 
         return self.request.user.profile.get_absolute_url()
 
-    def get_context_data(self, **kwargs):
+    @property
+    def delete_url(self):
 
-        context = super(DeleteView, self).get_context_data(**kwargs)
-
-        data = {"url": reverse("%s_delete_%s" % (context['object'].app_label,
-                                                 context['object'].ct_name),
-                               kwargs={'pk': context['object'].id})}
-
-        context.update(data)
-
-        return context
+        return reverse("%s_delete_%s" % (self.object.app_label,
+                                         self.object.ct_name),
+                       kwargs={'pk': self.object.id})
 
     def get(self, request, *args, **kwargs):
 
