@@ -1,9 +1,5 @@
-{% extends "layout-8x4.html" %}
+{% extends "layout-modal.html" %}
 {% load i18n %}
-
-{% block body_class %}ct {{ ct_name }} edit{% endblock %}
-
-{% block left-pane %}
 
 {% block header %}
 
@@ -14,6 +10,8 @@
 </header>
 
 {% endblock %}
+
+{% block body %}
 
 {% block errors %}
   
@@ -33,7 +31,7 @@
 {% endblock %}
 
 {% block form %}
-<form action="" method="POST">
+<form action="{{ view.add_url }}" method="POST">
   {% csrf_token %}
 
   {% block formfields %}

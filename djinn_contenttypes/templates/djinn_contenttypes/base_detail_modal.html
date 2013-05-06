@@ -1,0 +1,16 @@
+{% extends "layout-modal.html" %}
+
+{% load contentblock_tags %}
+{% load contentutil_tags %}
+
+{% block header %}
+<header>
+  <h1>{{ object.title }}</h1>
+</header>
+{% contentitem_stats object %}
+{% endblock %}
+
+
+{% block body %}
+{% endblock %}
+

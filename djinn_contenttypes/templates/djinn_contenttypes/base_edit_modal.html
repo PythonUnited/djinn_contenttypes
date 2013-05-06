@@ -1,20 +1,23 @@
-{% extends "layout-8x4.html" %}
-{% load i18n %}
-
-{% block body_class %}ct {{ ct_name }} edit{% endblock %}
-
-{% block left-pane %}
+{% extends "layout-modal.html" %}
+{% load i18n auth_tags %}
 
 {% block header %}
 
 <header>
   <h1>
-    {% blocktrans %}New {{ view.ct_name }}{% endblocktrans %}
+    {% with object_name=object.ct_name %}
+    {% if object %}
+    {% blocktrans %}Edit {{ object_name }}{% endblocktrans %}
+    {% else %}
+    {% blocktrans %}New {{ object_name }}{% endblocktrans %}
+    {% endif %}
+    {% endwith %}
   </h1>
 </header>
 
 {% endblock %}
 
+{% block body %}
 {% block errors %}
   
 {% if form.errors %}
@@ -33,7 +36,7 @@
 {% endblock %}
 
 {% block form %}
-<form action="" method="POST">
+<form action="{{ view.edit_url }}" method="POST">
   {% csrf_token %}
 
   {% block formfields %}
@@ -41,7 +44,7 @@
   {% endblock %}
 
   {% block formcontrols %}
-  <div class="form-actions">
+  <div class="btn-group form-actions">
     <button class="btn btn-primary protected" type="submit" 
             value="save" name="action">
       {% trans "Save" %}

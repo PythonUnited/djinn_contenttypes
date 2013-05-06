@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Permission
+from django.template.defaultfilters import slugify
 from pgauth.base import LocalRoleMixin, Role
 from pgauth.models import UserGroup
 from pgauth.settings import VIEWER_ROLE_ID
@@ -43,14 +44,14 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         if not self.get_owner():
             self.set_owner(self.creator)
 
+    def __unicode__(self):
+
+        return self.title
+
     @property
     def slug(self):
 
-        """ Slug is (and should be) implemented as property on all
-        content classes"""
-
-        raise NotImplementedError('slug property must be implemented '
-                                  'in class "%s"' % self.ct_class)
+        return slugify(self.title)
 
     @property
     def ct_class(self):

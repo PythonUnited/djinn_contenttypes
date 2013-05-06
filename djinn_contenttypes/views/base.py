@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
 from django.views.generic.edit import CreateView as BaseCreateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.db import models
 from django.core.urlresolvers import reverse
 from pgutils.exception_handlers import Http403
@@ -12,20 +12,48 @@ from djinn_contenttypes.registry import CTRegistry
 
 class TemplateResolverMixin(object):
 
+    @property
+    def app_label(self):
+        try:
+            return self.object.app_label
+        except:
+            return self.model.__module__.split(".")[0]
+
+    @property
+    def ct_name(self):
+        try:
+            return self.object.ct_name
+        except:
+            return self.model.__name__.lower()            
+
     def get_template_names(self):
 
-        if self.request.GET.get("modal", False):
+        if self.request.GET.get("modal", False) or self.request.is_ajax():
             modal = "_modal"
         else:
             modal = ""
 
-        return ["%s/%s_%s%s.html" % (
-                self.model.__module__.split(".")[0],
-                self.model.__name__.lower(),
-                self.mode,
+        return ["%s/%s_%s%s.html" % (self.app_label, self.ct_name, self.mode,
                 modal),
-                "djinn_contenttypes/base_%s.html" % self.mode
+                "djinn_contenttypes/base_%s%s.html" % (self.mode, modal)
                 ]
+
+    @property
+    def delete_url(self):
+
+        return reverse("%s_delete_%s" % (self.app_label, self.ct_name),
+                       kwargs={'pk': self.object.id})
+
+    @property
+    def add_url(self):
+
+        return reverse("%s_add_%s" % (self.app_label, self.ct_name))
+
+    @property
+    def edit_url(self):
+
+        return reverse("%s_edit_%s" % (self.app_label, self.ct_name),
+                       kwargs={'pk': self.object.id})
 
 
 class ViewContextMixin(object):
@@ -48,6 +76,22 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
     """
 
     mode = "detail"
+
+    def get_template_names(self):
+
+        """ If the request is Ajax, and no one asked for a modal view,
+        assume that we need to return a record like view"""
+
+        templates = super(DetailView, self).get_template_names()
+
+        if self.request.is_ajax() and \
+                not self.request.REQUEST.get("modal", False):
+            templates = ["%s/snippets/%s.html" % 
+                         (self.app_label, self.ct_name)] \
+                + templates
+
+        return templates
+
 
     def get(self, request, *args, **kwargs):
 
@@ -105,13 +149,6 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
         return kwargs
 
-    def get_context_data(self, **kwargs):
-
-        ctx = super(CreateView, self).get_context_data(**kwargs)
-        ctx.update({"ct_name": self.model.__name__.lower()})
-
-        return ctx
-
     def post(self, request, *args, **kwargs):
 
         perm = CTRegistry.get(self.model.__name__.lower()).get(
@@ -148,13 +185,6 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
     mode = "edit"
-
-    @property
-    def delete_url(self):
-
-        return reverse("%s_delete_%s" % (self.object.app_label,
-                                         self.object.ct_name),
-                       kwargs={'pk': self.object.id})
 
     @models.permalink
     def get_success_url(self):
@@ -224,24 +254,20 @@ class DeleteView(ViewContextMixin, BaseDeleteView):
 
         try:
             self.object.delete()
-        
-            return HttpResponseRedirect(self.get_success_url())        
         except:
-            return HttpResponseRedirect(self.get_success_url())        
+            pass
 
+        if self.request.is_ajax():
+            return HttpResponse("Bye bye", content_type='text/plain')
+        else:
+            return HttpResponseRedirect(self.get_success_url())        
+        
     def get_success_url(self):
 
         """ Return the URL to which the edit/create action should
         return upon success"""
 
         return self.request.user.profile.get_absolute_url()
-
-    @property
-    def delete_url(self):
-
-        return reverse("%s_delete_%s" % (self.object.app_label,
-                                         self.object.ct_name),
-                       kwargs={'pk': self.object.id})
 
     def get(self, request, *args, **kwargs):
 
