@@ -35,12 +35,8 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
                             max_length=255,
                             widget=forms.TextInput())
 
-
-class BaseAddForm(BaseForm):
-
-    creator = forms.ModelChoiceField(label=_("Creator"),
-                                     queryset=User.objects,
-                                     widget=forms.HiddenInput())
+    class Meta:
+        exclude = ["creator", "changed_by"]
 
 
 class BaseContentForm(BaseForm):
@@ -61,8 +57,8 @@ class BaseContentForm(BaseForm):
                                      widget=forms.DateTimeInput(
                 attrs={'class': 'datetime'},
                 format="%d-%m-%Y %H:%M"
-                )
-                                     )                          
+                ))
+     
     userkeywords = forms.CharField(label=_("Keywords"),
                                    required=False,
                                    widget=KeywordField(

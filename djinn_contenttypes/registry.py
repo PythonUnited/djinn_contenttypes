@@ -33,7 +33,7 @@ class CTRegistry(object):
         Fetch all details for contenttype with name as a dict.
         """
 
-        return CTRegistry.content_types.get(name, None)
+        return CTRegistry.content_types.get(name, {})
 
     @staticmethod
     def get_attr(name, attr, default=None):

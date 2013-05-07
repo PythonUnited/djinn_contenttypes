@@ -8,6 +8,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from pgutils.exception_handlers import Http403
 from djinn_contenttypes.registry import CTRegistry
+from djinn_contenttypes.utils import get_object_by_ctype_id
 
 
 class TemplateResolverMixin(object):
@@ -55,6 +56,12 @@ class TemplateResolverMixin(object):
         return reverse("%s_edit_%s" % (self.app_label, self.ct_name),
                        kwargs={'pk': self.object.id})
 
+    @property
+    def view_url(self):
+
+        return reverse("%s_detail_%s" % (self.app_label, self.ct_name),
+                       kwargs={'pk': self.object.id})
+
 
 class ViewContextMixin(object):
 
@@ -100,8 +107,8 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
 
         self.object = self.get_object()
 
-        perm = CTRegistry.get(self.object.ct_name).get("view_permission", 
-                                               'contenttypes.view')
+        perm = CTRegistry.get(self.ct_name).get("view_permission", 
+                                                'contenttypes.view')
 
         if not self.request.user.has_perm(perm, obj=self.object):
             raise Http403()
@@ -110,50 +117,63 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
         return self.render_to_response(context)
 
 
+class CTDetailView(DetailView):
+    
+    """ Detailview that applies to any content, determined by the url parts """
+
+    def get_object(self, queryset=None):
+
+        """ Retrieve context from URL parts app, ctype and id."""
+
+        return get_object_by_ctype_id(
+            self.kwargs['ctype'], 
+            self.kwargs.get('id', self.kwargs.get('pk', None)))
+
+
 class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
     mode = "add"
+    create_tmp_object = False
+
+    @models.permalink
+    def get_success_url(self):
+
+        """ Return the URL to which the edit/create action should
+        return upon success"""
+
+        return ('%s_view_%s' % (self.app_label, self.ct_name), (), 
+                {"slug":self.object.slug, "pk": str(self.object.id)})
+
+    def get_object(self, queryset=None):
+
+        if not self.create_tmp_object:
+            return None
+        else:
+            return self.model.objects.create(creator=self.request.user,
+                                             changed_by=self.request.user,
+                                             )
 
     def get(self, request, *args, **kwargs):
 
         """ Override get so as to be able to check permissions """
 
-        perm = CTRegistry.get(self.model.__name__.lower()).get(
-            "add_permission", 
-            'contenttypes.add_contenttype')
+        perm = CTRegistry.get(self.ct_name).get("add_permission", 
+                                                'contenttypes.add_contenttype')
 
         if not self.request.user.has_perm(perm):
             raise Http403()
         
-        return super(CreateView, self).get(request, *args, **kwargs)
+        self.object = self.get_object()
 
-    def get_form_kwargs(self):
-        """
-        Returns the keyword arguments for instanciating the form.
-        """
-
-        kwargs = super(CreateView, self).get_form_kwargs()
-
-        if self.request.method == "POST":
-    
-            del kwargs['data']
-
-            data = QueryDict("", mutable=True)
-
-            for key in self.request.POST.keys():
-                data[key] = self.request.POST[key]
-
-            data['creator'] = data['owner'] = self.request.user.id
-
-            kwargs.update({"data": data})
-
-        return kwargs
+        if self.create_tmp_object:
+            return HttpResponseRedirect(self.edit_url)
+        else:
+            return super(CreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
 
-        perm = CTRegistry.get(self.model.__name__.lower()).get(
-            "add_permission", 
-            'contenttypes.add_contenttype')
+        perm = CTRegistry.get(self.ct_name).get("add_permission", 
+                                                'contenttypes.add_contenttype')
 
         if not self.request.user.has_perm(perm):
             raise Http403()
@@ -175,11 +195,23 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
             return super(CreateView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.save()
-        self.object.is_tmp = False
-        self.object.set_owner(self.request.user)
 
+        self.object = form.save(commit=False)
+        self.object.creator = self.request.user
+        self.object.changed_by = self.request.user
+        self.object.is_tmp = False
+        self.object.save()
+
+        try:
+            self.object.set_owner(self.request.user)
+        except:
+            pass
+            
         return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form),
+                                       status=202)
 
 
 class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
@@ -192,8 +224,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
         """ Return the URL to which the edit/create action should
         return upon success"""
 
-        return ('%s_view_%s' % (self.object.app_label, 
-                                self.object.ct_name), (), 
+        return ('%s_view_%s' % (self.app_label, self.ct_name), (), 
                 {"slug":self.object.slug, "pk": str(self.object.id)})
 
     def get(self, request, *args, **kwargs):
@@ -202,7 +233,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
         self.object = self.get_object()
 
-        perm = CTRegistry.get(self.object.ct_name).get(
+        perm = CTRegistry.get(self.ct_name).get(
             "edit_permission", 
             'contenttypes.change_contenttype')
 
@@ -220,7 +251,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
 
         self.object = self.get_object()
 
-        perm = CTRegistry.get(self.object.ct_name).get(
+        perm = CTRegistry.get(self.ct_name).get(
             "edit_permission", 
             'contenttypes.change_contenttype')
 
@@ -233,19 +264,26 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             return super(UpdateView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.update()
+        self.object = form.update(commit=False)
+        self.object.changed_by = self.request.user
+        self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
 
-class DeleteView(ViewContextMixin, BaseDeleteView):
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form),
+                                       status=202)
 
-    template_name = "djinn_contenttypes/snippets/confirm_delete.html"
+
+class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
+
+    mode = "delete"
 
     def delete(self, request, *args, **kwargs):
 
         self.object = self.get_object()
 
-        perm = CTRegistry.get(self.object.ct_name).get(
+        perm = CTRegistry.get(self.ct_name).get(
             "delete_permission", 
             'contenttypes.delete_contenttype')
 
@@ -253,9 +291,12 @@ class DeleteView(ViewContextMixin, BaseDeleteView):
             raise Http403()
 
         try:
+            # enable signal handlers to access last change info
+            #
+            self.object.changed_by = self.request.user
             self.object.delete()
         except:
-            pass
+            return HttpResponseRedirect(self.view_url)
 
         if self.request.is_ajax():
             return HttpResponse("Bye bye", content_type='text/plain')
@@ -275,4 +316,5 @@ class DeleteView(ViewContextMixin, BaseDeleteView):
 
         self.object = self.get_object()
         context = self.get_context_data(object=self.object, **kwargs)
+
         return self.render_to_response(context, mimetype="text/plain")

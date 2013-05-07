@@ -18,6 +18,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     changed = models.DateTimeField(_('Changed'), auto_now=True)
     creator = models.ForeignKey(User, related_name='%(class)s_creator')
+    changed_by = models.ForeignKey(User, related_name='%(class)s_changed_by')
     removed_creator_name = models.CharField(_('Creator naam'), max_length=100, 
                                             blank=True, null=True)
     userkeywords = models.CharField(_('Keywords'), max_length=500,

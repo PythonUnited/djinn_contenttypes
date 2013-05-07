@@ -91,7 +91,12 @@ class RelatableMixin:
                                    tgt_content_type=target.ct_class,
                                    tgt_object_id=target.id).delete()
 
-    def rm_all_relations(self):
+    def rm_all_relations(self, inverse=True):
 
-        SimpleRelation.objects.filter(src_content_type=self.ct_class,
-                                      src_object_id=self.id).delete()
+        """ Remove all relations. If inverse is true=ish, also remove
+        relations where self is the target. """
+
+        self.get_relations().delete()
+        if inverse:
+            self.get_relations(inverse=True).delete()
+
