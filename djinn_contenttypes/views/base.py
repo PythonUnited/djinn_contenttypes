@@ -7,25 +7,21 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.db import models
 from django.core.urlresolvers import reverse
 from pgutils.exception_handlers import Http403
+from djinn.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id
+from djinn_contenttypes.models.base import BaseContent
 
 
 class TemplateResolverMixin(object):
 
     @property
     def app_label(self):
-        try:
-            return self.object.app_label
-        except:
-            return self.model.__module__.split(".")[0]
+        return self.model.__module__.split(".")[0]
 
     @property
     def ct_name(self):
-        try:
-            return self.object.ct_name
-        except:
-            return self.model.__name__.lower()            
+        return self.model.__name__.lower()            
 
     def get_template_names(self):
 
@@ -48,7 +44,8 @@ class TemplateResolverMixin(object):
     @property
     def add_url(self):
 
-        return reverse("%s_add_%s" % (self.app_label, self.ct_name))
+        return reverse("%s_add_%s" % (self.app_label, self.ct_name),
+                       kwargs=self.kwargs)
 
     @property
     def edit_url(self):
@@ -59,8 +56,12 @@ class TemplateResolverMixin(object):
     @property
     def view_url(self):
 
-        return reverse("%s_detail_%s" % (self.app_label, self.ct_name),
-                       kwargs={'pk': self.object.id})
+        kwargs = {"pk": self.object.id}
+
+        if hasattr(self.object, "slug"):
+            kwargs.update({"slug": self.object.slug})
+        
+        return ('%s_view_%s' % (self.app_label, self.ct_name), (), kwargs)
 
 
 class ViewContextMixin(object):
@@ -133,20 +134,25 @@ class CTDetailView(DetailView):
 class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
     mode = "add"
-    create_tmp_object = False
+    fk_fields = []
+
+    def get_initial(self):
+
+        initial = {}
+
+        for fld in self.fk_fields:
+            initial[fld] = self.kwargs[fld]
+
+        return initial
 
     @models.permalink
     def get_success_url(self):
 
-        """ Return the URL to which the edit/create action should
-        return upon success"""
-
-        return ('%s_view_%s' % (self.app_label, self.ct_name), (), 
-                {"slug":self.object.slug, "pk": str(self.object.id)})
+        return self.view_url
 
     def get_object(self, queryset=None):
 
-        if not self.create_tmp_object:
+        if not getattr(self.model, "create_tmp_object", False):
             return None
         else:
             return self.model.objects.create(creator=self.request.user,
@@ -165,7 +171,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
         
         self.object = self.get_object()
 
-        if self.create_tmp_object:
+        if getattr(self.model, "create_tmp_object", False):
             return HttpResponseRedirect(self.edit_url)
         else:
             return super(CreateView, self).get(request, *args, **kwargs)
@@ -197,16 +203,14 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
     def form_valid(self, form):
 
         self.object = form.save(commit=False)
-        self.object.creator = self.request.user
-        self.object.changed_by = self.request.user
-        self.object.is_tmp = False
+
+        if implements(self.object, BaseContent):
+            self.object.creator = self.request.user
+            self.object.changed_by = self.request.user
+            self.object.is_tmp = False
+
         self.object.save()
 
-        try:
-            self.object.set_owner(self.request.user)
-        except:
-            pass
-            
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
@@ -221,11 +225,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
     @models.permalink
     def get_success_url(self):
 
-        """ Return the URL to which the edit/create action should
-        return upon success"""
-
-        return ('%s_view_%s' % (self.app_label, self.ct_name), (), 
-                {"slug":self.object.slug, "pk": str(self.object.id)})
+        return self.view_url
 
     def get(self, request, *args, **kwargs):
 
@@ -264,8 +264,14 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             return super(UpdateView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object = form.update(commit=False)
-        self.object.changed_by = self.request.user
+        if hasattr(form, "update"):
+            self.object = form.update(commit=False)
+        else:
+            self.object = form.save(commit=False)            
+
+        if implements(self.object, BaseContent):
+            self.object.changed_by = self.request.user
+
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -293,7 +299,9 @@ class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
         try:
             # enable signal handlers to access last change info
             #
-            self.object.changed_by = self.request.user
+            if implements(self.object, BaseContent):
+                self.object.changed_by = self.request.user
+
             self.object.delete()
         except:
             return HttpResponseRedirect(self.view_url)

@@ -30,6 +30,10 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         null=True, blank=True, on_delete=models.SET_NULL)
     is_tmp = models.BooleanField(_('Temporary'), default=False)
 
+    # Create a temporary object during add?
+    #
+    create_tmp_object = False
+
     def get_cache_key(self):
 
         return "%s_%s_%s" % (self.app_label, self.ct_name, self.id)
@@ -204,3 +208,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     class Meta:
         abstract = True
+
+
+class FKContentMixin(object):
+
+    """ Marker class for content that has a foreign key to some parent """
