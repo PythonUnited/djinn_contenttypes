@@ -25,6 +25,9 @@ class TemplateResolverMixin(object):
 
     def get_template_names(self):
 
+        if self.template_name:
+            return [self.template_name]
+
         if self.request.GET.get("modal", False) or self.request.is_ajax():
             modal = "_modal"
         else:
@@ -75,6 +78,20 @@ class ViewContextMixin(object):
         ctx.update({"view": self, "object": self.object})
 
         return ctx
+
+
+class MimeTypeMixin(object):
+
+    mimetype = "text/html"
+
+    def render_to_response(self, context, **response_kwargs):
+        
+        """ Override so as to add mimetype """
+
+        response_kwargs['mimetype'] = self.mimetype
+
+        return super(MimeTypeMixin, self).render_to_response(
+            context, **response_kwargs)
 
 
 class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
@@ -210,6 +227,9 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
             self.object.is_tmp = False
 
         self.object.save()
+
+        if implements(self.object, BaseContent):
+            self.object.set_owner(self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 

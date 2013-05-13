@@ -43,11 +43,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         if self.userkeywords:
             self.userkeywords = self.userkeywords.replace("'",'')
             self.userkeywords = " ".join(self.userkeywords.split()[:10])
-
         super(BaseContent, self).save(*args, **kwargs)
-
-        if not self.get_owner():
-            self.set_owner(self.creator)
 
     def __unicode__(self):
 
