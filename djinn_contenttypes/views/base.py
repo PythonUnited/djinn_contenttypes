@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.db import models
 from django.core.urlresolvers import reverse
 from pgutils.exception_handlers import Http403
-from djinn.utils import implements, extends
+from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id
 from djinn_contenttypes.models.base import BaseContent

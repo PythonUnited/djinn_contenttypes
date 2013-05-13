@@ -2,7 +2,7 @@ from pgauth.base import Role
 from pgauth.settings import VIEWER_ROLE_ID, EDITOR_ROLE_ID
 from pgevents.settings import SHARE_CONTENT
 from pgevents.events import Events
-from pgcontent.utils import get_object_by_ctype_id
+from djinn_contenttypes.utils import get_object_by_ctype_id
 
 
 class SharingMixin(object):

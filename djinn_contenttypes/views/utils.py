@@ -1,28 +1,33 @@
 import sys
 from django.db import models 
 from django.conf.urls.defaults import url, patterns
-from djinn.utils import extends
+from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
 from base import DetailView, CreateView, UpdateView, DeleteView
 
 
-def generate_model_urls(model, view=True, edit=True, add=True, 
-                        delete=True):
+def generate_model_urls(*models, **kwargs):
 
-    """ Generate the urls for a view, given the conventions used by Djinn """
+    """ Generate the urls for a view, given the conventions used by
+    Djinn.  To be able to find specific views and forms, these need to
+    be imported.  Best do this in urls.py where you'll most likely
+    call this function to generate your urls.
+    """
 
     views = []
-    modelname = model.__name__.lower()
-    modulename = model.__module__.split(".")[0]
 
-    if view:
-        views.append(generate_view_url(model, modelname, modulename))
-    if edit:
-        views.append(generate_edit_url(model, modelname, modulename))
-    if add:
-        views.append(generate_add_url(model, modelname, modulename))
-    if delete:
-        views.append(generate_delete_url(model, modelname, modulename))
+    for model in models:
+        modelname = model.__name__.lower()
+        modulename = model.__module__.split(".")[0]
+
+        if kwargs.get("view", True):
+            views.append(generate_view_url(model, modelname, modulename))
+        if kwargs.get("edit", True):
+            views.append(generate_edit_url(model, modelname, modulename))
+        if kwargs.get("add", True):
+            views.append(generate_add_url(model, modelname, modulename))
+        if kwargs.get("delete", True):
+            views.append(generate_delete_url(model, modelname, modulename))
 
     return patterns("", *views)
 

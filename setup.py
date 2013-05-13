@@ -7,7 +7,7 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'django', 'djinn'
+    'django', 'djinn_core'
     ]
 
 setup(name='djinn_contenttypes',
