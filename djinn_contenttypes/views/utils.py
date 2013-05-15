@@ -104,7 +104,15 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
     modelname = model.__name__.lower()
 
     try:
-        view_class = getattr(getattr(sys.modules[modulename].views, modelname),
+        module = __import__("%s.views.%s" % (modulename, modelname))
+    except ImportError:
+        try:
+            module = __import__("%s.views" % modulename)
+        except ImportError:
+            pass
+
+    try:
+        view_class = getattr(getattr(getattr(module, "views"), modelname),
                              viewclassname)
     except:
         view_class = default
@@ -115,19 +123,28 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
 
 def find_form_class(model, modulename):
 
-    """ Try to find form class either in forms or in a separate file
-    within forms """
+    """ Try to find form class either in forms.py or in a separate file
+    within forms named after the lower case model class """
 
     formclassname = "%sForm" % model.__name__
     modelname = model.__name__.lower()
+    form_class = None
 
     try:
-        form_class = getattr(getattr(sys.modules[modulename].forms, modelname),
+        module = __import__("%s.forms.%s" % (modulename, modelname))
+    except ImportError:
+        try:
+            module = __import__("%s.forms" % modulename)
+        except ImportError:
+            pass
+
+    try:
+        form_class = getattr(getattr(getattr(module, "forms"), modelname),
                              formclassname)
     except:
         try:
-            form_class = getattr(sys.modules[modulename].forms, formclassname)
+            form_class = getattr(getattr(module, "forms"), formclassname)
         except:
-            form_class = None
+            pass
 
     return form_class
