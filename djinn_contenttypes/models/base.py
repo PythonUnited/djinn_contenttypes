@@ -23,7 +23,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
                                             blank=True, null=True)
     userkeywords = models.CharField(_('Keywords'), max_length=500,
                     null=True, blank=True)
-    show_owner = models.BooleanField(_('Toon eigenaar'), default=True)
+    show_owner = models.BooleanField(_('Show owner'), default=True)
     parentusergroup = models.ForeignKey(
         UserGroup,
         related_name='%(class)s_parentusergroup',

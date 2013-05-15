@@ -1,7 +1,7 @@
 {% extends "layout-8x4.html" %}
-{% load i18n %}
+{% load i18n bootstrap %}
 
-{% block body_class %}ct {{ ct_name }} edit{% endblock %}
+{% block body_class %}ct {{ view.ct_name }} edit{% endblock %}
 
 {% block left-pane %}
 
@@ -9,7 +9,7 @@
 
 <header>
   <h1>
-    {% blocktrans %}New {{ view.ct_name }}{% endblocktrans %}
+    {% trans "New" %} {{ view.ct_label }}
   </h1>
 </header>
 
@@ -37,7 +37,7 @@
   {% csrf_token %}
 
   {% block formfields %}
-  {{ form.as_p }}
+  {{ form|bootstrap }}
   {% endblock %}
 
   {% block formcontrols %}

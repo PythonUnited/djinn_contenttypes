@@ -1,5 +1,5 @@
 {% extends "layout-8x4.html" %}
-{% load i18n auth_tags %}
+{% load i18n auth_tags bootstrap %}
 
 {% block body_class %}ct {{ object.ct_name }} edit{% endblock %}
 
@@ -9,13 +9,11 @@
 
 <header>
   <h1>
-    {% with object_name=object.ct_name %}
     {% if object %}
-    {% blocktrans %}Edit {{ object_name }}{% endblocktrans %}
+    {% trans "Edit" %} {{ view.ct_label }}
     {% else %}
-    {% blocktrans %}New {{ object_name }}{% endblocktrans %}
+    {% trans "New" %} {{ view.ct_label }}
     {% endif %}
-    {% endwith %}
   </h1>
 </header>
 
@@ -43,7 +41,7 @@
   {% csrf_token %}
 
   {% block formfields %}
-  {{ form.as_p }}
+  {{ form|bootstrap }}
   {% endblock %}
 
   {% block formcontrols %}
@@ -62,7 +60,7 @@
        data-toggle="modal"
        href="{{ view.delete_url }}"
        data-target="#MyModal">
-      {% with object_name=object.ct_name %}
+      {% with object_name=view.ct_label %}
       {% blocktrans %}Delete this {{ object_name }}{% endblocktrans %}
       {% endwith %}
     </a>

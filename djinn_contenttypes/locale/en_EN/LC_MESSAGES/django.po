@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-03 15:40+0200\n"
+"POT-Creation-Date: 2013-05-14 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,111 +17,126 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms/base.py:16
-msgid "Creator"
-msgstr ""
-
-#: forms/base.py:20 models/base.py:17
+#: forms/base.py:34 models/base.py:17
 msgid "Title"
 msgstr ""
 
-#: forms/base.py:26
+#: forms/base.py:44
 msgid "Add to group"
 msgstr ""
 
-#: forms/base.py:30
+#: forms/base.py:48
 msgid "Publish from"
 msgstr ""
 
-#: forms/base.py:37
+#: forms/base.py:55
 msgid "Publiceren till"
 msgstr ""
 
-#: forms/base.py:44 models/base.py:23
+#: forms/base.py:62 models/base.py:24
 msgid "Keywords"
 msgstr ""
 
-#: forms/base.py:52
+#: forms/base.py:70
 msgid "Related content"
 msgstr ""
 
-#: forms/base.py:56
+#: forms/base.py:74
 msgid "Add link"
 msgstr ""
 
-#: forms/base.py:59
+#: forms/base.py:77
 msgid "Owner"
 msgstr ""
 
-#: forms/base.py:62
+#: forms/base.py:80
 msgid "Change owner"
 msgstr ""
 
-#: forms/base.py:65
+#: forms/base.py:83
 msgid "Shares"
 msgstr ""
 
-#: forms/base.py:67
+#: forms/base.py:85
 msgid "Add user or group"
 msgstr ""
 
-#: models/base.py:19
+#: models/base.py:18
 msgid "Created"
 msgstr ""
 
-#: models/base.py:21
+#: models/base.py:19
+msgid "Changed"
+msgstr ""
+
+#: models/base.py:22
 msgid "Creator naam"
 msgstr ""
 
-#: models/base.py:25
-msgid "Toon eigenaar"
+#: models/base.py:26
+msgid "Show owner"
 msgstr ""
 
-#: models/base.py:30
+#: models/base.py:31
 msgid "Temporary"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:12
-#, python-format
-msgid "New %(ct_name)s"
+#: templates/djinn_contenttypes/base_edit.html:15
+msgid "New"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:22
-#: templates/djinn_contenttypes/base_edit.html:28
+#: templates/djinn_contenttypes/base_add_modal.html:20
+#: templates/djinn_contenttypes/base_edit.html:26
+#: templates/djinn_contenttypes/base_edit_modal.html:25
 msgid "Please correct the following errors"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:47
-#: templates/djinn_contenttypes/base_edit.html:53
+#: templates/djinn_contenttypes/base_add_modal.html:45
+#: templates/djinn_contenttypes/base_edit.html:51
+#: templates/djinn_contenttypes/base_edit_modal.html:50
 msgid "Save"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:51
-#: templates/djinn_contenttypes/base_edit.html:57
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:12
+#: templates/djinn_contenttypes/base_add_modal.html:48
+#: templates/djinn_contenttypes/base_delete_modal.html:12
+#: templates/djinn_contenttypes/base_edit.html:55
+#: templates/djinn_contenttypes/base_edit_modal.html:53
 msgid "Cancel"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:14
+#: templates/djinn_contenttypes/base_add_modal.html:8
 #, python-format
-msgid "Edit %(object_name)s"
+msgid "New %(view.ct_name)s"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:16
-#, python-format
-msgid "New %(object_name)s"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:66
-#, python-format
-msgid "Delete this %(content_name)s"
-msgstr ""
-
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:3
+#: templates/djinn_contenttypes/base_delete_modal.html:3
 #, python-format
 msgid "Are you sure you want to delete %(object)s"
 msgstr ""
 
-#: templates/djinn_contenttypes/snippets/confirm_delete.html:10
+#: templates/djinn_contenttypes/base_delete_modal.html:10
 msgid "Delete"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:13
+msgid "Edit"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:64
+#, python-format
+msgid "Delete this %(object_name)s"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit_modal.html:10
+#, python-format
+msgid "Edit %(object_name)s"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit_modal.html:12
+#, python-format
+msgid "New %(object_name)s"
 msgstr ""

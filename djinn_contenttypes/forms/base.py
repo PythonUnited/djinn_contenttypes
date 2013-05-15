@@ -29,6 +29,16 @@ class PartialUpdateMixin:
             return self.instance
 
 
+class MetaFieldsMixin(object):
+
+    """ This mixin actually honours the fields setting of the meta info """
+
+    def __iter__(self):
+
+        for name in [name for name in self.fields if name in self._meta.fields]:
+            yield self[name]
+
+
 class BaseForm(PartialUpdateMixin, forms.ModelForm):
 
     title = forms.CharField(label=_("Title"),

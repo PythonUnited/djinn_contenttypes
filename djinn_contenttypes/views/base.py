@@ -3,10 +3,11 @@ from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
 from django.views.generic.edit import CreateView as BaseCreateView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, \
+    HttpResponseForbidden
 from django.db import models
 from django.core.urlresolvers import reverse
-from pgutils.exception_handlers import Http403
+from django.utils.translation import ugettext_lazy as _
 from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id
@@ -22,6 +23,10 @@ class TemplateResolverMixin(object):
     @property
     def ct_name(self):
         return self.model.__name__.lower()            
+
+    @property
+    def ct_label(self):
+        return _(self.model.__name__)
 
     def get_template_names(self):
 
@@ -129,7 +134,7 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
                                                 'contenttypes.view')
 
         if not self.request.user.has_perm(perm, obj=self.object):
-            raise Http403()
+            return HttpResponseForbidden()
 
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -184,7 +189,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
                                                 'contenttypes.add_contenttype')
 
         if not self.request.user.has_perm(perm):
-            raise Http403()
+            return HttpResponseForbidden()
         
         self.object = self.get_object()
 
@@ -199,7 +204,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
                                                 'contenttypes.add_contenttype')
 
         if not self.request.user.has_perm(perm):
-            raise Http403()
+            return HttpResponseForbidden()
 
         if self.request.POST.get('action', None) == "cancel":
 
@@ -258,7 +263,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             'contenttypes.change_contenttype')
 
         if not self.request.user.has_perm(perm, obj=self.object):
-            raise Http403()
+            return HttpResponseForbidden()
 
         return super(UpdateView, self).post(request, *args, **kwargs)
 
@@ -276,7 +281,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             'contenttypes.change_contenttype')
 
         if not self.request.user.has_perm(perm, obj=self.object):
-            raise Http403()
+            return HttpResponseForbidden()
 
         if self.request.POST.get('action', None) == "cancel":            
             return HttpResponseRedirect(self.object.get_absolute_url())
@@ -314,7 +319,7 @@ class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
             'contenttypes.delete_contenttype')
 
         if not self.request.user.has_perm(perm, obj=self.object):
-            raise Http403()
+            return HttpResponseForbidden()
 
         try:
             # enable signal handlers to access last change info
