@@ -1,9 +1,9 @@
-{% extends "layout-8x4.html" %}
+{% extends "base.html" %}
 {% load i18n auth_tags bootstrap %}
 
 {% block body_class %}ct {{ object.ct_name }} edit{% endblock %}
 
-{% block left-pane %}
+{% block container %}
 
 {% block header %}
 
@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block form %}
-<form action="" method="POST">
+<form action="" method="POST" id="editform">
   {% csrf_token %}
 
   {% block formfields %}
