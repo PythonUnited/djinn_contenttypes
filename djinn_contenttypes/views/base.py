@@ -137,7 +137,12 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
             return HttpResponseForbidden()
 
         context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+        mimetype = "text/html"
+
+        if self.request.is_ajax():
+            mimetype = "text/plain"
+
+        return self.render_to_response(context, mimetype=mimetype)
 
 
 class CTDetailView(DetailView):
