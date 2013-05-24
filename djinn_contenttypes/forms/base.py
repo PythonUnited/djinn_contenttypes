@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from pgauth.models import UserGroup
 from pgcontent.fields import OwnerField, \
     RelatedContentField, SharesField, KeywordField
 from pgcontent.widgets.content import RelatedContentWidget
@@ -53,7 +54,7 @@ class BaseContentForm(BaseForm):
 
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
-                                             queryset=None)
+                                             queryset=UserGroup.objects.all())
     
     publish_from = forms.DateTimeField(label=_("Publish from"),
                                        required=False,

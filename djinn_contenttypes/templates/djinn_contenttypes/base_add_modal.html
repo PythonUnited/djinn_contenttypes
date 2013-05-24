@@ -1,12 +1,10 @@
 {% extends "layout-modal.html" %}
-{% load i18n %}
+{% load i18n bootstrap %}
 
 {% block header %}
 
 <header>
-  <h1>
-    {% blocktrans %}New {{ view.ct_name }}{% endblocktrans %}
-  </h1>
+  <h2>{% trans "New" %} {{ view.ct_label }}</h2>
 </header>
 
 {% endblock %}
@@ -14,20 +12,6 @@
 {% block body %}
 
 {% block errors %}
-  
-{% if form.errors %}
-<div class="alert alert-error">
-  <strong>{% trans "Please correct the following errors" %}</strong>
-  <ul class="basic-list">    
-    {% for field in form %}
-    {% if field.errors %}
-    <li><strong>{{ field.label }}</strong>: {{ field.errors }}</li>
-    {% endif %}
-    {% endfor %}    
-  </ul>
-</div>
-{% endif %}
-
 {% endblock %}
 
 {% block form %}
@@ -35,7 +19,7 @@
   {% csrf_token %}
 
   {% block formfields %}
-  {{ form.as_p }}
+  {{ form|bootstrap }}
   {% endblock %}
 
   {% block formcontrols %}

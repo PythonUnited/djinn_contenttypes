@@ -183,7 +183,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
             return None
         else:
             return self.model.objects.create(creator=self.request.user,
-                                             changed_by=self.request.user,
+                                             changed_by=self.request.user
                                              )
 
     def get(self, request, *args, **kwargs):
@@ -199,6 +199,21 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
         self.object = self.get_object()
 
         if getattr(self.model, "create_tmp_object", False):
+
+            # Set any data that is available, i.e. through initial data
+            #
+            if self.get_initial():
+                form_class = self.get_form_class()
+                form = form_class(data=self.get_initial(), 
+                                  **self.get_form_kwargs())
+                form.cleaned_data = {}
+
+                for field in self.get_initial().keys():
+                    value = form.fields[field].clean(form.data[field])
+                    setattr(self.object, field, value)
+
+                self.object.save()
+
             return HttpResponseRedirect(self.edit_url)
         else:
             return super(CreateView, self).get(request, *args, **kwargs)
