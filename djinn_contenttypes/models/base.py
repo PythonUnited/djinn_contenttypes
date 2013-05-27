@@ -100,6 +100,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         return True
 
+    @property
+    def permission_authority(self):
+        
+        return self
+
     def is_published(self):
         '''
         By default everything is published

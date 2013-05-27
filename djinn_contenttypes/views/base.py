@@ -338,7 +338,8 @@ class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
             "delete_permission", 
             'contenttypes.delete_contenttype')
 
-        if not self.request.user.has_perm(perm, obj=self.object):
+        if not self.request.user.has_perm(perm, 
+                                          obj=self.object.permission_authority):
             return HttpResponseForbidden()
 
         try:
