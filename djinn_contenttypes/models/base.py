@@ -102,6 +102,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     @property
     def permission_authority(self):
+
+        """ Return the permission authority for this object. This is
+        usually the object itself, but in some cases, for example
+        child objects like user profile phonenumbers, the check may be
+        deferred to the parent object """
         
         return self
 

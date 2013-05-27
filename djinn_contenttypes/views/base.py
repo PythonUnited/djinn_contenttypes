@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
-from djinn_contenttypes.utils import get_object_by_ctype_id
+from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
 
 
@@ -133,7 +133,7 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
         perm = CTRegistry.get(self.ct_name).get("view_permission", 
                                                 'contenttypes.view')
 
-        if not self.request.user.has_perm(perm, obj=self.object):
+        if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
         context = self.get_context_data(object=self.object)
@@ -282,7 +282,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             "edit_permission", 
             'contenttypes.change_contenttype')
 
-        if not self.request.user.has_perm(perm, obj=self.object):
+        if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
         return super(UpdateView, self).post(request, *args, **kwargs)
@@ -300,7 +300,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             "edit_permission", 
             'contenttypes.change_contenttype')
 
-        if not self.request.user.has_perm(perm, obj=self.object):
+        if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
         if self.request.POST.get('action', None) == "cancel":            
@@ -338,8 +338,7 @@ class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
             "delete_permission", 
             'contenttypes.delete_contenttype')
 
-        if not self.request.user.has_perm(perm, 
-                                          obj=self.object.permission_authority):
+        if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
         try:

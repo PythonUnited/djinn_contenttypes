@@ -2,6 +2,14 @@ from settings import URN_SCHEMA
 from pgcontent.utils import get_object_by_ctype_id
 
 
+def has_permission(perm, user, obj):
+
+    """ Check whether the user has the permisson on the object (or the
+    objects' permission_authority)."""
+
+    return user.has_perm(perm, obj=getattr(obj, "permission_authority", obj))
+
+
 def object_to_urn(object):
 
     return URN_SCHEMA % {'object_app': object.app_label,
