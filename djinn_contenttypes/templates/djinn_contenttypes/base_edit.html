@@ -46,17 +46,17 @@
 
   {% block formcontrols %}
   <div class="btn-group form-actions">
-    <button class="btn btn-primary protected" type="submit" 
+    <button class="btn btn-primary protected save-action" type="submit" 
             value="save" name="action">
       {% trans "Save" %}
     </button>
-    <button class="btn protected" type="submit" 
+    <button class="btn protected cancel-action" type="submit" 
             value="cancel" name="action">
       {% trans "Cancel" %}
     </button>
     {% if object %}
     {% ifpermission object request.user contenttypes.delete_contenttype %}
-    <a class="btn btn-danger"
+    <a class="btn btn-danger delete-action"
        data-toggle="modal"
        href="{{ view.delete_url }}"
        data-target="#MyModal">
