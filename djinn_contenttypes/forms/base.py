@@ -72,6 +72,7 @@ class BaseContentForm(BaseForm):
      
     userkeywords = forms.CharField(label=_("Keywords"),
                                    required=False,
+                                   help_text=_("Enter keywords separated by spaces"),
                                    widget=KeywordField(
                 attrs={'class': 'full',
                        'autocomplete': 'off'})

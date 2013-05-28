@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-14 14:45+0200\n"
+"POT-Creation-Date: 2013-05-28 13:27+0200\n"
 "PO-Revision-Date: 2013-05-14 14:45+0100\n"
 "Last-Translator: Duco Dokter <dokter@w20e.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,49 +18,51 @@ msgstr ""
 "X-Poedit-Language: Dutch\n"
 "X-Poedit-Country: NETHERLANDS\n"
 
-#: forms/base.py:34
-#: models/base.py:17
+#: forms/base.py:45 models/base.py:17
 msgid "Title"
 msgstr "Titel"
 
-#: forms/base.py:44
+#: forms/base.py:55
 msgid "Add to group"
 msgstr "Toevoegen aan groep"
 
-#: forms/base.py:48
+#: forms/base.py:59
 msgid "Publish from"
 msgstr "Publiceren vanaf"
 
-#: forms/base.py:55
+#: forms/base.py:66
 msgid "Publiceren till"
 msgstr "Publiceren tot"
 
-#: forms/base.py:62
-#: models/base.py:24
+#: forms/base.py:73 models/base.py:24
 msgid "Keywords"
 msgstr "Trefwoorden"
 
-#: forms/base.py:70
+#: forms/base.py:75
+msgid "Enter keywords separated by spaces"
+msgstr ""
+
+#: forms/base.py:82
 msgid "Related content"
 msgstr "Gerelateerde inhoud"
 
-#: forms/base.py:74
+#: forms/base.py:86
 msgid "Add link"
 msgstr "Voeg link toe"
 
-#: forms/base.py:77
+#: forms/base.py:89
 msgid "Owner"
 msgstr "Eigenaar"
 
-#: forms/base.py:80
+#: forms/base.py:92
 msgid "Change owner"
 msgstr "Wijzig eigenaar"
 
-#: forms/base.py:83
+#: forms/base.py:95
 msgid "Shares"
 msgstr "Gedeeld met"
 
-#: forms/base.py:85
+#: forms/base.py:97
 msgid "Add user or group"
 msgstr "Voeg gebruiker of groep to"
 
@@ -84,37 +86,31 @@ msgstr "Toon eigenaar"
 msgid "Temporary"
 msgstr "Tijdelijk"
 
-#: templates/djinn_contenttypes/base_add.html:12
+#: templates/djinn_contenttypes/base_add.html:11
+#: templates/djinn_contenttypes/base_add_modal.html:7
 #: templates/djinn_contenttypes/base_edit.html:15
 msgid "New"
 msgstr "Nieuw"
 
-#: templates/djinn_contenttypes/base_add.html:22
-#: templates/djinn_contenttypes/base_add_modal.html:20
+#: templates/djinn_contenttypes/base_add.html:20
 #: templates/djinn_contenttypes/base_edit.html:26
-#: templates/djinn_contenttypes/base_edit_modal.html:25
 msgid "Please correct the following errors"
 msgstr "Verbeter de onderstaande fouten"
 
-#: templates/djinn_contenttypes/base_add.html:47
-#: templates/djinn_contenttypes/base_add_modal.html:45
+#: templates/djinn_contenttypes/base_add.html:45
+#: templates/djinn_contenttypes/base_add_modal.html:29
 #: templates/djinn_contenttypes/base_edit.html:51
-#: templates/djinn_contenttypes/base_edit_modal.html:50
+#: templates/djinn_contenttypes/base_edit_modal.html:29
 msgid "Save"
 msgstr "Opslaan"
 
-#: templates/djinn_contenttypes/base_add.html:51
-#: templates/djinn_contenttypes/base_add_modal.html:48
+#: templates/djinn_contenttypes/base_add.html:49
+#: templates/djinn_contenttypes/base_add_modal.html:32
 #: templates/djinn_contenttypes/base_delete_modal.html:12
 #: templates/djinn_contenttypes/base_edit.html:55
-#: templates/djinn_contenttypes/base_edit_modal.html:53
+#: templates/djinn_contenttypes/base_edit_modal.html:32
 msgid "Cancel"
 msgstr "Annuleren"
-
-#: templates/djinn_contenttypes/base_add_modal.html:8
-#, python-format
-msgid "New %(view.ct_name)s"
-msgstr "Nieuw %(view.ct_name)s"
 
 #: templates/djinn_contenttypes/base_delete_modal.html:3
 #, python-format
@@ -126,6 +122,7 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #: templates/djinn_contenttypes/base_edit.html:13
+#: templates/djinn_contenttypes/base_edit_modal.html:7
 msgid "Edit"
 msgstr "Bewerk"
 
@@ -134,15 +131,14 @@ msgstr "Bewerk"
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
 
-#: templates/djinn_contenttypes/base_edit_modal.html:10
-#, python-format
-msgid "Edit %(object_name)s"
-msgstr "%(object_name)s bewerken"
+#~ msgid "New %(view.ct_name)s"
+#~ msgstr "Nieuw %(view.ct_name)s"
 
-#: templates/djinn_contenttypes/base_edit_modal.html:12
-#, python-format
-msgid "New %(object_name)s"
-msgstr "Nieuw %(object_name)s"
+#~ msgid "Edit %(object_name)s"
+#~ msgstr "%(object_name)s bewerken"
+
+#~ msgid "New %(object_name)s"
+#~ msgstr "Nieuw %(object_name)s"
 
 #~ msgid "%(view.ct_name)s"
 #~ msgstr "%(view.ct_name)s"
