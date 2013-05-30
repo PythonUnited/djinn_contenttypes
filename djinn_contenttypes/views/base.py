@@ -167,6 +167,9 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
         initial = {}
 
+        for fld in self.request.GET.keys():
+            initial[fld] = self.request.GET[fld]
+
         for fld in self.fk_fields:
             initial[fld] = self.kwargs[fld]
 
@@ -271,6 +274,15 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
     def get_success_url(self):
 
         return self.view_url
+
+    def get_initial(self):
+
+        initial = {}
+
+        for fld in self.request.GET.keys():
+            initial[fld] = self.request.GET[fld]
+
+        return initial
 
     def get(self, request, *args, **kwargs):
 

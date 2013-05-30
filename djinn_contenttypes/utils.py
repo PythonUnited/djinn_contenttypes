@@ -7,7 +7,12 @@ def has_permission(perm, user, obj):
     """ Check whether the user has the permisson on the object (or the
     objects' permission_authority)."""
 
-    return user.has_perm(perm, obj=getattr(obj, "permission_authority", obj))
+    authority = getattr(obj, "permission_authority", obj)
+
+    if not authority:
+        return True
+
+    return user.has_perm(perm, obj=authority)
 
 
 def object_to_urn(object):
