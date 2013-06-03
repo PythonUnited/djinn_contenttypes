@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from pgauth.models import UserGroup
 from pgcontent.fields import OwnerField, \
-    RelatedContentField, SharesField, KeywordField
+    RelatedContentField, SharesField
 from pgcontent.widgets.content import RelatedContentWidget
 from pgcontent.widgets.shares import SharesWidget
 from pgcontent.widgets.owner import OwnerWidget
@@ -73,7 +73,7 @@ class BaseContentForm(BaseForm):
     userkeywords = forms.CharField(label=_("Keywords"),
                                    required=False,
                                    help_text=_("Enter keywords separated by spaces"),
-                                   widget=KeywordField(
+                                   widget=forms.HiddenInput(
                 attrs={'class': 'full',
                        'autocomplete': 'off'})
                                    )
