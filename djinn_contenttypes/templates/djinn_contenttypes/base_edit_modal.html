@@ -4,7 +4,11 @@
 {% block header %}
 
 <header>
+  {% if form.labels.header %}
+  {{ form.labels.header }}
+  {% else %}
   <h2>{% trans "Edit" %} {{ view.ct_label }}</h2>
+  {% endif %}
 </header>
 
 {% endblock %}
@@ -26,10 +30,18 @@
   <div class="btn-group form-actions">
     <button class="btn btn-primary protected" type="submit" 
             value="save" name="action">
+      {% if form.labels.submit %}
+      {{ form.labels.submit }}
+      {% else %}
       {% trans "Save" %}
+      {% endif %}
     </button>
     <button class="btn cancel">
+      {% if form.labels.cancel %}
+      {{ form.labels.cancel }}
+      {% else %}
       {% trans "Cancel" %}
+      {% endif %}
     </button>
   </div>
   {% endblock %}

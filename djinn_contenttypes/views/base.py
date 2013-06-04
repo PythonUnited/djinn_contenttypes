@@ -112,6 +112,9 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
         """ If the request is Ajax, and no one asked for a modal view,
         assume that we need to return a record like view"""
 
+        if self.template_name:
+            return [self.template_name]
+
         templates = super(DetailView, self).get_template_names()
 
         if self.request.is_ajax() and \
