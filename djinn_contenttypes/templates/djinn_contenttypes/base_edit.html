@@ -60,9 +60,11 @@
        data-toggle="modal"
        href="{{ view.delete_url }}"
        data-target="#MyModal">
+      {% block delete_label %}
       {% with object_name=view.ct_label %}
       {% blocktrans %}Delete this {{ object_name }}{% endblocktrans %}
       {% endwith %}
+      {% endblock %}
     </a>
     {% endifpermission %}
     {% endif %}
