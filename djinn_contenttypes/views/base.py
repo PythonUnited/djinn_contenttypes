@@ -324,6 +324,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
             return super(UpdateView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
+
         if hasattr(form, "update"):
             self.object = form.update(commit=False)
         else:
