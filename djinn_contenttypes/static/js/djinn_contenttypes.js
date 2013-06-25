@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $(document).on("change", ".placeholder", function() {
-        $(this).removeClass("placeholder");
-      });
+
+    $('input').placehold();
+    $('textarea').placehold();
   });
