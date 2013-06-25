@@ -99,6 +99,19 @@ class MimeTypeMixin(object):
             context, **response_kwargs)
 
 
+class CTMixin(object):
+    
+    """ Detailview that applies to any content, determined by the url parts """
+
+    def get_object(self, queryset=None):
+
+        """ Retrieve context from URL parts app, ctype and id."""
+
+        return get_object_by_ctype_id(
+            self.kwargs['ctype'], 
+            self.kwargs.get('id', self.kwargs.get('pk', None)))
+
+
 class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
@@ -148,17 +161,9 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
         return self.render_to_response(context, mimetype=mimetype)
 
 
-class CTDetailView(DetailView):
+class CTDetailView(CTMixin, DetailView):
     
     """ Detailview that applies to any content, determined by the url parts """
-
-    def get_object(self, queryset=None):
-
-        """ Retrieve context from URL parts app, ctype and id."""
-
-        return get_object_by_ctype_id(
-            self.kwargs['ctype'], 
-            self.kwargs.get('id', self.kwargs.get('pk', None)))
 
 
 class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
