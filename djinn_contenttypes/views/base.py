@@ -138,7 +138,6 @@ class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
 
         return templates
 
-
     def get(self, request, *args, **kwargs):
 
         """ We need our own implementation of GET, to be able to do permission
