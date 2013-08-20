@@ -155,14 +155,14 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
                     name=VIEWER_ROLE_ID).select_related()
                 roles = roles | viewer
 
-        elif self.in_closed_group and kwargs.get("user", None):
+            elif self.in_closed_group and kwargs.get("user", None):
 
-            if kwargs['user'] in self.parentusergroup.members.all():
+                if kwargs['user'] in self.parentusergroup.members.all():
 
-                viewer = Role.objects.filter(
-                    name=VIEWER_ROLE_ID).select_related()
+                    viewer = Role.objects.filter(
+                        name=VIEWER_ROLE_ID).select_related()
 
-                roles = roles | viewer
+                    roles = roles | viewer
 
         return roles
 

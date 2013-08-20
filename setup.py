@@ -7,15 +7,15 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'django', 'djinn_core', 'django-bootstrap-form'
+    'django', 'djinn_core', 'djinn_utils', 'django-bootstrap-form'
     ]
 
 setup(name='djinn_contenttypes',
-      version="1.0.0-snapshot",
-      description='PythonUnited Intranet Forms',
+      version="1.0.0",
+      description='Djinn Intranet Contenttypes framework',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Framework :: Django",
         "Intended Audience :: Developers",
         "License :: Freely Distributable",
@@ -27,7 +27,7 @@ setup(name='djinn_contenttypes',
       author_email='info@pythonunited.com',
       license='beer-ware',
       url='https://github.com/PythonUnited/djinn-contenttypes',
-      keywords='Djinn Core',
+      keywords='Djinn Contenttypes',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
