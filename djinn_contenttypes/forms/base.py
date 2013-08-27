@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from pgauth.models import UserGroup
 from pgcontent.fields import OwnerField, \
@@ -9,7 +8,6 @@ from pgcontent.widgets.shares import SharesWidget
 from pgcontent.widgets.owner import OwnerWidget
 from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
 from djinn_contenttypes.utils import get_object_by_ctype_id
-from djinn_contenttypes.models.base import BaseContent
 
 
 class PartialUpdateMixin:
@@ -134,6 +132,7 @@ class BaseContentForm(BaseForm):
         obj = super(BaseContentForm, self).save(commit=commit)
 
         # Related
+        # TODO: move to widget
         #
         for ctype, cid in self.cleaned_data.get('related', {'rm': [],
                                                             'add': []})['rm']:
