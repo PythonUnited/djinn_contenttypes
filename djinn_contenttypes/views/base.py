@@ -12,7 +12,7 @@ from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
-
+from pgauth.models import UserGroup
 
 class TemplateResolverMixin(object):
 
@@ -203,7 +203,12 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
         perm = CTRegistry.get(self.ct_name).get("add_permission", 
                                                 'contenttypes.add_contenttype')
 
-        if not self.request.user.has_perm(perm):
+        pugid = kwargs.get('parentusergroup', None)
+        if pugid:
+            theobj = UserGroup.objects.get(id=int(pugid)).profile
+        else:
+            theobj = None
+        if not self.request.user.has_perm(perm, obj=theobj):
             return HttpResponseForbidden()
         
         self.object = self.get_object()
@@ -233,7 +238,12 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
         perm = CTRegistry.get(self.ct_name).get("add_permission", 
                                                 'contenttypes.add_contenttype')
 
-        if not self.request.user.has_perm(perm):
+        pugid = kwargs.get('parentusergroup', None)
+        if pugid:
+            theobj = UserGroup.objects.get(id=int(pugid)).profile
+        else:
+            theobj = None
+        if not self.request.user.has_perm(perm, obj=theobj):
             return HttpResponseForbidden()
 
         if self.request.POST.get('action', None) == "cancel":
@@ -368,7 +378,7 @@ class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
                 self.object.changed_by = self.request.user
 
             self.object.delete()
-        except:
+        except Exception, ex:
             return HttpResponseRedirect(self.view_url)
 
         if self.request.is_ajax():
