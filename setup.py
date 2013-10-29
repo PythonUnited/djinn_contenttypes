@@ -11,7 +11,7 @@ requires = [
     ]
 
 setup(name='djinn_contenttypes',
-      version="1.0.1",
+      version="1.0.2",
       description='Djinn Intranet Contenttypes framework',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[

@@ -1,6 +1,10 @@
+1.0.2
+=====
+ * Added name override option to url generate, to enable dynamic models
+
 1.0.1
 =====
-* Added check on group permission, if content is placed in a group
+ * Added check on group permission, if content is placed in a group
 
 1.0.0
 =====
