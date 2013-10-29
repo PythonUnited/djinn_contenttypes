@@ -14,6 +14,7 @@ from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
 from pgauth.models import UserGroup
 
+
 class TemplateResolverMixin(object):
 
     @property

@@ -11,53 +11,79 @@ def generate_model_urls(*models, **kwargs):
     """ Generate the urls for a view, given the conventions used by
     Djinn.  To be able to find specific views and forms, these need to
     be imported.  Best do this in urls.py where you'll most likely
-    call this function to generate your urls.
+    call this function to generate your urls.  You may provide 'name'
+    in kwargs, to override the naming convention for view names
+    <modulename>_<mode>_<model>. This is handy for dynamic models, for
+    instance djinn_profiles.UserProfile. Provide name as a tuple of
+    (<module prefix>, <model>), i.e. name=("djinn_profiles", "userprofile")
     """
 
     views = []
+    name = kwargs.get("name", None)
 
     for model in models:
+
         modelname = model.__name__.lower()
         modulename = model.__module__.split(".")[0]
 
         if kwargs.get("view", True):
-            views.append(generate_view_url(model, modelname, modulename))
+            if name:
+                viewname = "%s_view_%s" % name
+            else:
+                viewname = None
+            views.append(generate_view_url(model, modelname, modulename, 
+                                           name=viewname))
         if kwargs.get("edit", True):
-            views.append(generate_edit_url(model, modelname, modulename))
+            if name:
+                editname = "%s_edit_%s" % name
+            else:
+                editname = None
+            views.append(generate_edit_url(model, modelname, modulename,
+                                           name=editname))
         if kwargs.get("add", True):
-            views.append(generate_add_url(model, modelname, modulename))
+            if name:
+                addname = "%s_add_%s" % name
+            else:
+                addname = None
+            views.append(generate_add_url(model, modelname, modulename,
+                                          name=addname))
         if kwargs.get("delete", True):
-            views.append(generate_delete_url(model, modelname, modulename))
+            if name:
+                delname = "%s_delete_%s" % name
+            else:
+                delname = None
+            views.append(generate_delete_url(model, modelname, modulename,
+                                             name=delname))
 
     return patterns("", *views)
 
 
-def generate_view_url(model, modelname, modulename):
+def generate_view_url(model, modelname, modulename, name=None):
 
     if hasattr(model, "slug"):
         expr = r"^%s/(?P<pk>[\d]+)/(?P<slug>[^\/]+)/?$" % modelname
     else:
         expr = r"^%s/(?P<pk>[\d]+)/?$" % modelname
 
-    name = "%s_view_%s" % (modulename, modelname)
+    name = name or "%s_view_%s" % (modulename, modelname)
     view = find_view(model, modulename)
 
     return url(expr, view, name=name)
 
 
-def generate_delete_url(model, modelname, modulename):
+def generate_delete_url(model, modelname, modulename, name=None):
 
     expr = r"^delete/%s/(?P<pk>[\d]+)/?$" % modelname
-    name = "%s_delete_%s" % (modulename, modelname)
+    name = name or "%s_delete_%s" % (modulename, modelname)
     view = find_view(model, modulename, suffix="DeleteView", default=DeleteView)
 
     return url(expr, view, name=name)
 
 
-def generate_add_url(model, modelname, modulename):
+def generate_add_url(model, modelname, modulename, name=None):
 
     expr = r"^add/%s/?$" % modelname
-    name = "%s_add_%s" % (modulename, modelname)
+    name = name or "%s_add_%s" % (modulename, modelname)
     form_class = find_form_class(model, modulename)
 
     kwargs = {}
@@ -81,10 +107,13 @@ def generate_add_url(model, modelname, modulename):
     return url(expr, view, name=name)
 
 
-def generate_edit_url(model, modelname, modulename):
+def generate_edit_url(model, modelname, modulename, name=None):
+
+    """ Generate edit URL. Override name by providing it in the
+    keyword arguments """
 
     expr = r"^edit/%s/(?P<pk>[\d]+)/?$" % modelname
-    name = "%s_edit_%s" % (modulename, modelname)
+    name = name or "%s_edit_%s" % (modulename, modelname)
     form_class = find_form_class(model, modulename)
 
     kwargs = {}
