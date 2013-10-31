@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse, \
 from django.db import models
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
@@ -384,6 +385,10 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
             self.object.changed_by = self.request.user
 
         self.object.save()
+
+        messages.success(self.request, _("Saved changes"))
+
+        import pdb; pdb.set_trace()
 
         return HttpResponseRedirect(self.get_success_url())
 

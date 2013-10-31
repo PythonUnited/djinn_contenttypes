@@ -1,5 +1,6 @@
 import sys
 from django.db import models 
+from django.db.models import get_model
 from django.conf.urls.defaults import url, patterns
 from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
@@ -60,7 +61,12 @@ def generate_model_urls(*models, **kwargs):
 
 def generate_view_url(model, modelname, modulename, name=None):
 
-    if hasattr(model, "slug"):
+    if model._meta.swapped:
+        real_model = get_model(*model._meta.swapped.split("."))
+    else:
+        real_model = model
+
+    if hasattr(real_model, "slug"):
         expr = r"^%s/(?P<pk>[\d]+)/(?P<slug>[^\/]+)/?$" % modelname
     else:
         expr = r"^%s/(?P<pk>[\d]+)/?$" % modelname
@@ -129,8 +135,14 @@ def generate_edit_url(model, modelname, modulename, name=None):
 
 def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
 
+    """ Try to find the view for the model. This checks the views.py
+    of the model's module, and also views.<modelname>.py """
+
     viewclassname = "%s%s" % (model.__name__, suffix)
     modelname = model.__name__.lower()
+
+    if model._meta.swapped:
+        modulename, modelname = model._meta.swapped.lower().split(".")
 
     try:
         module = __import__("%s.views.%s" % (modulename, modelname))
@@ -158,6 +170,9 @@ def find_form_class(model, modulename):
     formclassname = "%sForm" % model.__name__
     modelname = model.__name__.lower()
     form_class = None
+
+    if model._meta.swapped:
+        modulename, modelname = model._meta.swapped.split(".")
 
     try:
         module = __import__("%s.forms.%s" % (modulename, modelname))
