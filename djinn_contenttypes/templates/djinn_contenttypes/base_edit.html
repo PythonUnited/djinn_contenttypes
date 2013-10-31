@@ -9,7 +9,7 @@
 
 <header>
   <h1>
-    {% if object and not.object.is_tmp %}
+    {% if object and not object.is_tmp %}
     {% trans "Edit" %} {{ view.ct_label|lower }}
     {% else %}
     {% trans "New" %} {{ view.ct_label|lower }}

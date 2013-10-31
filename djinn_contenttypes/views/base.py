@@ -388,8 +388,6 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
 
         messages.success(self.request, _("Saved changes"))
 
-        import pdb; pdb.set_trace()
-
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
