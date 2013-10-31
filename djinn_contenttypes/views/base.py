@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView as BaseCreateView
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden
 from django.db import models
+from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from djinn_core.utils import implements, extends
@@ -113,10 +114,42 @@ class CTMixin(object):
             self.kwargs.get('id', self.kwargs.get('pk', None)))
 
 
-class DetailView(TemplateResolverMixin, ViewContextMixin, BaseDetailView):
+class SwappableMixin(object):
+
+    """ Allow for swapped models. This is an undocumented feature of
+    the meta class for now, that enables user defined overrides for
+    models (i.e. contrib.auth.User)"""
+
+    @property
+    def real_model(self):
+
+        if not self.model._meta.swapped:
+            return self.model
+        else:
+            module, model = self.model._meta.swapped.split(".")
+            return get_model(module, model)
+            
+    def get_queryset(self):
+
+        """ Override default get_queryset to allow for swappable models """
+
+        if self.queryset is None:
+            if self.model:
+                return self.real_model._default_manager.all()
+            else:
+                raise ImproperlyConfigured("%(cls)s is missing a queryset. Define "
+                                           "%(cls)s.model, %(cls)s.queryset, or override "
+                                           "%(cls)s.get_queryset()." % {
+                        'cls': self.__class__.__name__
+                        })
+        return self.queryset._clone()
+
+
+class DetailView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
+                 BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
-    views should extend this view.
+    detail views should extend this view.
     """
 
     mode = "detail"
@@ -166,7 +199,8 @@ class CTDetailView(CTMixin, DetailView):
     """ Detailview that applies to any content, determined by the url parts """
 
 
-class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
+class CreateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin, 
+                 BaseCreateView):
 
     mode = "add"
     fk_fields = []
@@ -190,12 +224,12 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
 
     def get_object(self, queryset=None):
 
-        if not getattr(self.model, "create_tmp_object", False):
+        if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            return self.model.objects.create(creator=self.request.user,
-                                             changed_by=self.request.user
-                                             )
+            return self.real_model.objects.create(creator=self.request.user,
+                                                  changed_by=self.request.user
+                                                  )
 
     def get(self, request, *args, **kwargs):
 
@@ -214,7 +248,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
         
         self.object = self.get_object()
 
-        if getattr(self.model, "create_tmp_object", False):
+        if getattr(self.real_model, "create_tmp_object", False):
 
             # Set any data that is available, i.e. through initial data
             #
@@ -284,7 +318,8 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, BaseCreateView):
                                        status=202)
 
 
-class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
+class UpdateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
+                 BaseUpdateView):
 
     mode = "edit"
 
@@ -357,7 +392,8 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, BaseUpdateView):
                                        status=202)
 
 
-class DeleteView(TemplateResolverMixin, ViewContextMixin, BaseDeleteView):
+class DeleteView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
+                 BaseDeleteView):
 
     mode = "delete"
 
