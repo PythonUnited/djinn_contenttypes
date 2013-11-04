@@ -37,7 +37,9 @@
 {% endblock %}
 
 {% block form %}
-<form action="" method="POST" id="editform">
+<form action="" method="POST" 
+      id="editform" {% block form_class %}{% endblock %}>
+
   {% csrf_token %}
 
   {% block formfields %}
