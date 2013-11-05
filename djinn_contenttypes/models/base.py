@@ -19,10 +19,10 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     changed = models.DateTimeField(_('Changed'), auto_now=True)
     creator = models.ForeignKey(User, related_name='%(class)s_creator')
     changed_by = models.ForeignKey(User, related_name='%(class)s_changed_by')
-    removed_creator_name = models.CharField(_('Creator naam'), max_length=100, 
+    removed_creator_name = models.CharField(_('Creator naam'), max_length=100,
                                             blank=True, null=True)
     userkeywords = models.CharField(_('Keywords'), max_length=500,
-                    null=True, blank=True)
+                                    null=True, blank=True)
     show_owner = models.BooleanField(_('Show owner'), default=True)
     parentusergroup = models.ForeignKey(
         UserGroup,
@@ -41,7 +41,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     def save(self, *args, **kwargs):
 
         if self.userkeywords:
-            self.userkeywords = self.userkeywords.replace("'",'')
+            self.userkeywords = self.userkeywords.replace("'", '')
             self.userkeywords = " ".join(self.userkeywords.split()[:10])
         super(BaseContent, self).save(*args, **kwargs)
 
@@ -77,7 +77,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     def ct_label(self):
 
         """ Display name """
-        
+
         return self.__class__.__name__
 
     @property
@@ -107,7 +107,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         usually the object itself, but in some cases, for example
         child objects like user profile phonenumbers, the check may be
         deferred to the parent object """
-        
+
         return self
 
     def is_published(self):
@@ -201,16 +201,12 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
             else:
                 _viewers.add("group_%d" % self.parentusergroup.id)
         elif self.parentusergroup and self.ct_name == "groupprofile":
-            _viewers.add("group_users")            
+            _viewers.add("group_users")
         elif not self.parentusergroup:
             _viewers.add("group_users")
 
         return list(_viewers)
 
-    def __unicode__(self):
-        if hasattr(self, 'title'):
-            return u"%s" % self.title
-        return "instance-%d" % self.id
 
     class Meta:
         abstract = True
