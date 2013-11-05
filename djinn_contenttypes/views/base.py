@@ -75,19 +75,6 @@ class TemplateResolverMixin(object):
         return ('%s_view_%s' % (self.app_label, self.ct_name), (), kwargs)
 
 
-class ViewContextMixin(object):
-
-    def get_context_data(self, **kwargs):
-
-        """ Always add self as "view" so as to be able to call methods
-        and properties on view """
-
-        ctx = kwargs
-        ctx.update({"view": self, "object": self.object})
-
-        return ctx
-
-
 class MimeTypeMixin(object):
 
     mimetype = "text/html"
@@ -146,8 +133,7 @@ class SwappableMixin(object):
         return self.queryset._clone()
 
 
-class DetailView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
-                 BaseDetailView):
+class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
     detail views should extend this view.
@@ -200,8 +186,7 @@ class CTDetailView(CTMixin, DetailView):
     """ Detailview that applies to any content, determined by the url parts """
 
 
-class CreateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin, 
-                 BaseCreateView):
+class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
     mode = "add"
     fk_fields = []
@@ -319,8 +304,7 @@ class CreateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
                                        status=202)
 
 
-class UpdateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
-                 BaseUpdateView):
+class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
     mode = "edit"
 
@@ -395,8 +379,7 @@ class UpdateView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
                                        status=202)
 
 
-class DeleteView(TemplateResolverMixin, ViewContextMixin, SwappableMixin,
-                 BaseDeleteView):
+class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
 
     mode = "delete"
 
