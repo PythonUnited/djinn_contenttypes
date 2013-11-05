@@ -19,28 +19,26 @@
 
 {% endblock %}
 
-{% block errors %}
-  
-{% if form.errors %}
-<div class="alert alert-error">
-  <strong>{% trans "Please correct the following errors" %}</strong>
-  <ul class="basic-list">    
-    {% for field in form %}
-    {% if field.errors %}
-    <li><strong>{{ field.label }}</strong>: {{ field.errors }}</li>
-    {% endif %}
-    {% endfor %}    
-  </ul>
-</div>
-{% endif %}
-
-{% endblock %}
-
 {% block form %}
 <form action="" method="POST" 
       id="editform" {% block form_class %}{% endblock %}>
 
   {% csrf_token %}
+
+  {% block errors %}
+  {% if form.errors %}
+  <div class="alert alert-error">
+    <strong>{% trans "Please correct the following errors" %}</strong>
+    <ul class="basic-list">    
+      {% for field in form %}
+      {% if field.errors %}
+      <li><strong>{{ field.label }}</strong>: {{ field.errors }}</li>
+      {% endif %}
+      {% endfor %}    
+    </ul>
+  </div>
+  {% endif %}
+  {% endblock %}
 
   {% block formfields %}
   {{ form|bootstrap }}
