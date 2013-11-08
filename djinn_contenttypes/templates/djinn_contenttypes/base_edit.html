@@ -19,6 +19,9 @@
 
 {% endblock %}
 
+{% block form_preamble %}
+{% endblock %}
+
 {% block form %}
 <form action="" method="POST" 
       id="editform" {% block form_class %}{% endblock %}>
@@ -55,7 +58,8 @@
       {% trans "Cancel" %}
     </button>
     {% if object %}
-    {% ifpermission object request.user contenttypes.delete_contenttype %}
+    {% with perm=object|del_permission %}
+    {% ifpermission object request.user perm %}
     <a class="btn btn-danger delete-action"
        data-toggle="modal"
        href="{{ view.delete_url }}"
@@ -67,6 +71,7 @@
       {% endblock %}
     </a>
     {% endifpermission %}
+    {% endwith %}
     {% endif %}
   </div>
   {% endblock %}

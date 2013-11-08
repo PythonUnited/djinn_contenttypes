@@ -13,6 +13,8 @@ class CTRegistry(object):
       add_permission   Permission to determine whether a user can add the CT
       view_permission  Permission to determine whether a user can use the CT in
                        search filters.
+      del_permission   Permission to determine whether a user can delete the CT
+      edit_permission  Permission to check whether a user can edit the CT
       name_plural      well...
       filter_label     Label to show in filter. If empty, not shown at all.
       group_add        Whether the CT can be added to group context
