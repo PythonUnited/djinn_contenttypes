@@ -372,6 +372,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
         self.object.save()
 
+        # Translators: edit form status message
         messages.success(self.request, _("Saved changes"))
         return HttpResponseRedirect(self.get_success_url())
 
