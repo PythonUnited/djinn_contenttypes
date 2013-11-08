@@ -1,4 +1,3 @@
-from django.http import QueryDict
 from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
@@ -10,11 +9,12 @@ from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from djinn_core.utils import implements, extends
+from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
 from pgauth.models import UserGroup
+from django.core.exceptions import ImproperlyConfigured
 
 
 class TemplateResolverMixin(object):
@@ -25,7 +25,7 @@ class TemplateResolverMixin(object):
 
     @property
     def ct_name(self):
-        return self.model.__name__.lower()            
+        return self.model.__name__.lower()
 
     @property
     def ct_label(self):
@@ -71,7 +71,7 @@ class TemplateResolverMixin(object):
 
         if hasattr(self.object, "slug"):
             kwargs.update({"slug": self.object.slug})
-        
+
         return ('%s_view_%s' % (self.app_label, self.ct_name), (), kwargs)
 
 
@@ -80,7 +80,7 @@ class MimeTypeMixin(object):
     mimetype = "text/html"
 
     def render_to_response(self, context, **response_kwargs):
-        
+
         """ Override so as to add mimetype """
 
         response_kwargs['mimetype'] = self.mimetype
@@ -90,7 +90,7 @@ class MimeTypeMixin(object):
 
 
 class CTMixin(object):
-    
+
     """ Detailview that applies to any content, determined by the url parts """
 
     def get_object(self, queryset=None):
@@ -98,7 +98,7 @@ class CTMixin(object):
         """ Retrieve context from URL parts app, ctype and id."""
 
         return get_object_by_ctype_id(
-            self.kwargs['ctype'], 
+            self.kwargs['ctype'],
             self.kwargs.get('id', self.kwargs.get('pk', None)))
 
 
@@ -116,7 +116,7 @@ class SwappableMixin(object):
         else:
             module, model = self.model._meta.swapped.split(".")
             return get_model(module, model)
-            
+
     def get_queryset(self):
 
         """ Override default get_queryset to allow for swappable models """
@@ -125,11 +125,12 @@ class SwappableMixin(object):
             if self.model:
                 return self.real_model._default_manager.all()
             else:
-                raise ImproperlyConfigured("%(cls)s is missing a queryset. Define "
-                                           "%(cls)s.model, %(cls)s.queryset, or override "
-                                           "%(cls)s.get_queryset()." % {
+                raise ImproperlyConfigured(
+                    "%(cls)s is missing a queryset. Define "
+                    "%(cls)s.model, %(cls)s.queryset, or override "
+                    "%(cls)s.get_queryset()." % {
                         'cls': self.__class__.__name__
-                        })
+                    })
         return self.queryset._clone()
 
 
@@ -153,7 +154,7 @@ class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
 
         if self.request.is_ajax() and \
                 not self.request.REQUEST.get("modal", False):
-            templates = ["%s/snippets/%s.html" % 
+            templates = ["%s/snippets/%s.html" %
                          (self.app_label, self.ct_name)] \
                 + templates
 
@@ -166,7 +167,7 @@ class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
 
         self.object = self.get_object()
 
-        perm = CTRegistry.get(self.ct_name).get("view_permission", 
+        perm = CTRegistry.get(self.ct_name).get("view_permission",
                                                 'contenttypes.view')
 
         if not has_permission(perm, self.request.user, self.object):
@@ -182,7 +183,7 @@ class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
 
 
 class CTDetailView(CTMixin, DetailView):
-    
+
     """ Detailview that applies to any content, determined by the url parts """
 
 
@@ -221,7 +222,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
         """ Override get so as to be able to check permissions """
 
-        perm = CTRegistry.get(self.ct_name).get("add_permission", 
+        perm = CTRegistry.get(self.ct_name).get("add_permission",
                                                 'contenttypes.add_contenttype')
 
         pugid = kwargs.get('parentusergroup', None)
@@ -231,7 +232,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
             theobj = None
         if not self.request.user.has_perm(perm, obj=theobj):
             return HttpResponseForbidden()
-        
+
         self.object = self.get_object()
 
         if getattr(self.real_model, "create_tmp_object", False):
@@ -240,7 +241,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
             #
             if self.get_initial():
                 form_class = self.get_form_class()
-                form = form_class(data=self.get_initial(), 
+                form = form_class(data=self.get_initial(),
                                   **self.get_form_kwargs())
                 form.cleaned_data = {}
 
@@ -256,7 +257,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
     def post(self, request, *args, **kwargs):
 
-        perm = CTRegistry.get(self.ct_name).get("add_permission", 
+        perm = CTRegistry.get(self.ct_name).get("add_permission",
                                                 'contenttypes.add_contenttype')
 
         pugid = kwargs.get('parentusergroup', None)
@@ -329,11 +330,12 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
         self.object = self.get_object()
 
         perm = CTRegistry.get(self.ct_name).get(
-            "edit_permission", 
+            "edit_permission",
             'contenttypes.change_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
+
 
         return super(UpdateView, self).post(request, *args, **kwargs)
 
@@ -347,13 +349,13 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
         self.object = self.get_object()
 
         perm = CTRegistry.get(self.ct_name).get(
-            "edit_permission", 
+            "edit_permission",
             'contenttypes.change_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
-        if self.request.POST.get('action', None) == "cancel":            
+        if self.request.POST.get('action', None) == "cancel":
             return HttpResponseRedirect(self.object.get_absolute_url())
         else:
             return super(UpdateView, self).post(request, *args, **kwargs)
@@ -363,7 +365,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
         if hasattr(form, "update"):
             self.object = form.update(commit=False)
         else:
-            self.object = form.save(commit=False)            
+            self.object = form.save(commit=False)
 
         if implements(self.object, BaseContent):
             self.object.changed_by = self.request.user
@@ -371,7 +373,6 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
         self.object.save()
 
         messages.success(self.request, _("Saved changes"))
-
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
@@ -388,7 +389,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
         self.object = self.get_object()
 
         perm = CTRegistry.get(self.ct_name).get(
-            "delete_permission", 
+            "delete_permission",
             'contenttypes.delete_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
@@ -407,8 +408,8 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
         if self.request.is_ajax():
             return HttpResponse("Bye bye", content_type='text/plain')
         else:
-            return HttpResponseRedirect(self.get_success_url())        
-        
+            return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
 
         """ Return the URL to which the edit/create action should
