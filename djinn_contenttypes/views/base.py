@@ -72,7 +72,8 @@ class TemplateResolverMixin(object):
         if hasattr(self.object, "slug"):
             kwargs.update({"slug": self.object.slug})
 
-        return ('%s_view_%s' % (self.app_label, self.ct_name), (), kwargs)
+        return reverse('%s_view_%s' % (self.app_label, self.ct_name),
+                       kwargs=kwargs)
 
 
 class MimeTypeMixin(object):
@@ -204,7 +205,6 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
         return initial
 
-    @models.permalink
     def get_success_url(self):
 
         return self.view_url
@@ -309,7 +309,6 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
     mode = "edit"
 
-    @models.permalink
     def get_success_url(self):
 
         return self.view_url
@@ -335,7 +334,6 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
         if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
-
 
         return super(UpdateView, self).post(request, *args, **kwargs)
 
@@ -403,7 +401,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
                 self.object.changed_by = self.request.user
 
             self.object.delete()
-        except Exception, ex:
+        except Exception:
             return HttpResponseRedirect(self.view_url)
 
         if self.request.is_ajax():
