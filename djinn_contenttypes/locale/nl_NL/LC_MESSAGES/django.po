@@ -2,21 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-12 15:35+0100\n"
-"PO-Revision-Date: 2013-05-14 14:45+0100\n"
-"Last-Translator: Duco Dokter <dokter@w20e.com>\n"
+"PO-Revision-Date: 2013-11-12 15:38+0100\n"
+"Last-Translator:   <bouma@egoactive.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Dutch\n"
+"Language: \n"
 "X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-Language: Dutch\n"
+"X-Translated-Using: django-rosetta 0.7.2\n"
 
 #: forms/base.py:43 models/base.py:17
 msgid "Title"
@@ -133,9 +134,8 @@ msgstr "Verwijder dit %(object_name)s"
 
 #. Translators: edit form status message
 #: views/base.py:376
-#, fuzzy
 msgid "Saved changes"
-msgstr "Laatst gewijzigd"
+msgstr "Wijzigingen opgeslagen"
 
 #~ msgid "New %(view.ct_name)s"
 #~ msgstr "Nieuw %(view.ct_name)s"
@@ -152,6 +152,5 @@ msgstr "Laatst gewijzigd"
 #~ msgid "%(object.ct_name)s"
 #~ msgstr "%(object.ct_name)s"
 
-#, fuzzy
 #~ msgid "Creator"
 #~ msgstr "Naam auteur"
