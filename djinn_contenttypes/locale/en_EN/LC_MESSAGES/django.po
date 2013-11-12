@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-28 13:27+0200\n"
+"POT-Creation-Date: 2013-11-12 15:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms/base.py:45 models/base.py:17
+#: forms/base.py:43 models/base.py:17
 msgid "Title"
 msgstr ""
 
-#: forms/base.py:55
+#: forms/base.py:53
 msgid "Add to group"
 msgstr ""
 
-#: forms/base.py:59
+#: forms/base.py:57
 msgid "Publish from"
 msgstr ""
 
-#: forms/base.py:66
+#: forms/base.py:64
 msgid "Publiceren till"
 msgstr ""
 
-#: forms/base.py:73 models/base.py:24
+#: forms/base.py:71 models/base.py:24
 msgid "Keywords"
 msgstr ""
 
-#: forms/base.py:75
+#: forms/base.py:73
 msgid "Enter keywords separated by spaces"
 msgstr ""
 
-#: forms/base.py:82
+#: forms/base.py:80
 msgid "Related content"
 msgstr ""
 
-#: forms/base.py:86
+#: forms/base.py:84
 msgid "Add link"
 msgstr ""
 
-#: forms/base.py:89
+#: forms/base.py:87
 msgid "Owner"
 msgstr ""
 
-#: forms/base.py:92
+#: forms/base.py:90
 msgid "Change owner"
 msgstr ""
 
-#: forms/base.py:95
+#: forms/base.py:93
 msgid "Shares"
 msgstr ""
 
-#: forms/base.py:97
+#: forms/base.py:95
 msgid "Add user or group"
 msgstr ""
 
@@ -86,28 +86,28 @@ msgid "Temporary"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:11
-#: templates/djinn_contenttypes/base_add_modal.html:7
+#: templates/djinn_contenttypes/base_add_modal.html:10
 #: templates/djinn_contenttypes/base_edit.html:15
 msgid "New"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:20
-#: templates/djinn_contenttypes/base_edit.html:26
+#: templates/djinn_contenttypes/base_edit.html:34
 msgid "Please correct the following errors"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:45
-#: templates/djinn_contenttypes/base_add_modal.html:29
-#: templates/djinn_contenttypes/base_edit.html:51
-#: templates/djinn_contenttypes/base_edit_modal.html:29
+#: templates/djinn_contenttypes/base_add_modal.html:36
+#: templates/djinn_contenttypes/base_edit.html:54
+#: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:49
-#: templates/djinn_contenttypes/base_add_modal.html:32
+#: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:55
-#: templates/djinn_contenttypes/base_edit_modal.html:32
+#: templates/djinn_contenttypes/base_edit.html:58
+#: templates/djinn_contenttypes/base_edit_modal.html:43
 msgid "Cancel"
 msgstr ""
 
@@ -121,11 +121,16 @@ msgid "Delete"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_edit.html:13
-#: templates/djinn_contenttypes/base_edit_modal.html:7
+#: templates/djinn_contenttypes/base_edit_modal.html:10
 msgid "Edit"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:64
+#: templates/djinn_contenttypes/base_edit.html:69
 #, python-format
 msgid "Delete this %(object_name)s"
+msgstr ""
+
+#. Translators: edit form status message
+#: views/base.py:376
+msgid "Saved changes"
 msgstr ""
