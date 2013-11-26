@@ -1,7 +1,7 @@
 class CTRegistry(object):
 
     """ Global registry for content types
-    
+
     The registry can take any attrivutes per content type, but the following
     attributes have active use so far:
 
@@ -28,6 +28,10 @@ class CTRegistry(object):
 
         CTRegistry.content_types[name] = register_dict
 
+        # Also register with full name e.g. app.ctname
+        CTRegistry.content_types["%s.%s" % (register_dict['app'], name)] = \
+            register_dict
+
     @staticmethod
     def get(name):
 
@@ -43,9 +47,11 @@ class CTRegistry(object):
         """ Fetch given attr. Return default if not set"""
 
         return CTRegistry.content_types.get(name, {}).get(attr, default)
-    
+
     @staticmethod
     def list_types(excludes=[]):
 
-        return filter(lambda x: x not in excludes, 
+        """ Only list the 'full' keys: those with the app id and model id """
+
+        return filter(lambda x: x not in excludes and "." in x,
                       CTRegistry.content_types.keys())
