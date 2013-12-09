@@ -109,7 +109,11 @@ class BaseContentForm(BaseForm, RelateMixin):
         # Translators: Contentype owner label
         label=_("Owner"),
         required=False,
-        widget=RelateSingleWidget(attrs={'searchfield': 'title_auto'})
+        widget=RelateSingleWidget(
+            attrs={'searchfield': 'title_auto',
+                   #Translators: content type owner hint
+                   'hint': _("Select a name")
+                   })
         )
 
     shares = LocalRoleField(
