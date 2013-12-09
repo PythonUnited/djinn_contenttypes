@@ -69,7 +69,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     def app_label(self):
 
         try:
-            return self.Meta.app_label
+            return self._meta.app_label
         except:
             return self.__module__.split(".")[0]
 

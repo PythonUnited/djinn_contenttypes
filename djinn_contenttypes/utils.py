@@ -17,8 +17,13 @@ def has_permission(perm, user, obj):
 
 def object_to_urn(object):
 
-    return URN_SCHEMA % {'object_app': object.app_label,
-                         'object_ctype': object.ct_name,
+    """ Create A URN for the given object """
+
+    app_label = getattr(object, "app_label", object._meta.app_label)
+    ct_name = getattr(object, object.ct_name, object.__class__.__name__.lower())
+
+    return URN_SCHEMA % {'object_app': app_label,
+                         'object_ctype': ct_name,
                          'object_id': object.id}
 
 

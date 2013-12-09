@@ -1,13 +1,11 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from pgauth.models import UserGroup
-from pgcontent.fields import OwnerField, \
-    RelatedContentField, SharesField
-from pgcontent.widgets.content import RelatedContentWidget
-from pgcontent.widgets.shares import SharesWidget
-from pgcontent.widgets.owner import OwnerWidget
-from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
-from djinn_contenttypes.utils import get_object_by_ctype_id
+from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
+from djinn_forms.fields.role import LocalRoleField, LocalRoleSingleField
+from djinn_forms.fields.relate import RelateField
+from djinn_forms.widgets.relate import RelateSingleWidget
+from djinn_forms.forms.relate import RelateMixin
 
 
 class PartialUpdateMixin:
@@ -18,12 +16,12 @@ class PartialUpdateMixin:
 
         for f in self.instance._meta.fields:
             if f.attname in self.fields:
-                setattr(self.instance, f.attname, 
+                setattr(self.instance, f.attname,
                         self.cleaned_data[f.attname])
             if commit:
-                try: 
+                try:
                     self.instance.save()
-                except: 
+                except:
                     return False
             return self.instance
 
@@ -34,12 +32,14 @@ class MetaFieldsMixin(object):
 
     def __iter__(self):
 
-        for name in [name for name in self.fields if name in self._meta.fields]:
+        for name in [name for name in self.fields if
+                     name in self._meta.fields]:
             yield self[name]
 
 
 class BaseForm(PartialUpdateMixin, forms.ModelForm):
 
+    # Translators: contenttypes title label
     title = forms.CharField(label=_("Title"),
                             max_length=255,
                             widget=forms.TextInput())
@@ -48,70 +48,81 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
         exclude = ["creator", "changed_by"]
 
 
-class BaseContentForm(BaseForm):
+class BaseContentForm(BaseForm, RelateMixin):
 
+    # Translators: contenttypes usergroup label
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
                                              queryset=UserGroup.objects.all())
-    
-    publish_from = forms.DateTimeField(label=_("Publish from"),
-                                       required=False,
-                                       widget=forms.DateTimeInput(
-                attrs={'class': 'datetime'},
-                format="%d-%m-%Y %H:%M"
-                )                                       )
-    
+
+    # Translators: contenttypes publish_from label
+    publish_from = forms.DateTimeField(
+        label=_("Publish from"),
+        required=False,
+        widget=forms.DateTimeInput(
+            attrs={'class': 'datetime'},
+            format="%d-%m-%Y %H:%M"
+            )
+        )
+
+    # Translators: contenttypes publish_to label
     publish_to = forms.DateTimeField(label=_("Publiceren till"),
                                      required=False,
                                      widget=forms.DateTimeInput(
                 attrs={'class': 'datetime'},
                 format="%d-%m-%Y %H:%M"
                 ))
-     
-    userkeywords = forms.CharField(label=_("Keywords"),
-                                   required=False,
-                                   help_text=_("Enter keywords separated by spaces"),
-                                   widget=forms.HiddenInput(
-                attrs={'class': 'full',
-                       'autocomplete': 'off'})
-                                   )
 
-    related = RelatedContentField(
-        label=_("Related content"),
+    userkeywords = forms.CharField(
+        # Translators: contenttypes userkeywords label
+        label=_("Keywords"),
         required=False,
-        widget=RelatedContentWidget(
-            relation_types=BASE_RELATEABLE_TYPES,
-            attrs={"add_link_label": _("Add link")}
-            ))
+        # Translators: contenttypes userkeywords help
+        help_text=_("Enter keywords separated by spaces"),
+        widget=forms.HiddenInput(
+            attrs={'class': 'full',
+                   'autocomplete': 'off'})
+        )
 
-    owner = OwnerField(label=_("Owner"),
-                       required=False,
-                       widget=OwnerWidget(
-            attrs={"edit_link_label": _("Change owner")}
-            ))
+    # TODO: Move this to relationfield in djinn_forms
+    related = RelateField(
+        #lambda x: "related_%s" % x.ct_name,
+        "related_content",
+        [],
+        # Translators: contenttypes related label
+        label=_("Related content"),
+        required=False
+        )
 
-    shares = SharesField(label=_("Shares"),
-                         widget=SharesWidget(
-            attrs={"add_link_label": _("Add user or group")}
-            ))
+    owner = LocalRoleSingleField(
+        OWNER_ROLE_ID,
+        ["pgprofile.userprofile"],
+        # Translators: Contentype owner label
+        label=_("Owner"),
+        required=False,
+        widget=RelateSingleWidget(attrs={'searchfield': 'title_auto'})
+        )
+
+    editors = LocalRoleField(
+        EDITOR_ROLE_ID,
+        ["pgprofile.userprofile", "pgprofile.groupprofile"],
+        # Translators: Contentype editors label
+        label=_("Editors"),
+        required=False,
+        )
+
 
     def __init__(self, *args, **kwargs):
 
         super(BaseContentForm, self).__init__(*args, **kwargs)
+        self.init_relation_fields()
+        
+    def save(self, commit=True):
 
-        if 'related' in self.fields:
-            self.fields['related'].widget.object = self.instance
-        if 'owner' in self.fields:
-            self.fields['owner'].widget.object = self.instance
+        res = super(BaseContentForm, self).save(commit=commit)
+        self.save_relations()
 
-        if 'shares' in self.fields:
-            self.fields['shares'].widget.object = self.instance
-
-        owner = self.instance.get_owner()
-
-        if owner:
-            self.fields['owner'].initial = "%s:%s" % (owner.profile.ct_name, 
-                                                      owner.profile.id)
+        return res
 
     def clean(self):
 
@@ -123,40 +134,3 @@ class BaseContentForm(BaseForm):
             pass
 
         return self.cleaned_data
-
-    def save(self, commit=True):
-
-        """ Override save. This is needed for related add/rm actions and 
-        ownership set """
-
-        obj = super(BaseContentForm, self).save(commit=commit)
-
-        # Related
-        # TODO: move to widget
-        #
-        for ctype, cid in self.cleaned_data.get('related', {'rm': [],
-                                                            'add': []})['rm']:
-            tgt = get_object_by_ctype_id(ctype, cid)
-            relation_type = get_relation_type_by_ctype(ctype)
-
-            obj.rm_relation(relation_type, tgt)
-
-        for ctype, cid in self.cleaned_data.get('related', {'rm': [],
-                                                            'add': []})['add']:
-            tgt = get_object_by_ctype_id(ctype, cid)
-            relation_type = get_relation_type_by_ctype(ctype)
-
-            obj.add_relation(relation_type, tgt)
-
-        # Shares
-        #
-        for ctype, cid, mode in self.cleaned_data['shares']['rm']:
-            obj.rm_share(ctype, cid, mode)
-
-        for ctype, cid, mode in self.cleaned_data['shares']['add']:
-            obj.add_share(ctype, cid, mode)
-
-        if self.cleaned_data.get("owner", None):
-            obj.set_owner(self.cleaned_data['owner'])
-
-        return obj
