@@ -6,6 +6,15 @@ from djinn_forms.fields.role import LocalRoleField, LocalRoleSingleField
 from djinn_forms.fields.relate import RelateField
 from djinn_forms.widgets.relate import RelateSingleWidget
 from djinn_forms.forms.relate import RelateMixin
+from pgcontent.fields import OwnerField, \
+    RelatedContentField
+from pgcontent.widgets.content import RelatedContentWidget
+from djinn_forms.forms.share import ShareMixin
+from djinn_forms.fields.share import ShareField
+from djinn_forms.widgets.share import ShareWidget
+from pgcontent.widgets.owner import OwnerWidget
+from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
+from djinn_contenttypes.utils import get_object_by_ctype_id
 
 
 class PartialUpdateMixin:
@@ -103,14 +112,15 @@ class BaseContentForm(BaseForm, RelateMixin):
         widget=RelateSingleWidget(attrs={'searchfield': 'title_auto'})
         )
 
-    editors = LocalRoleField(
+    shares = LocalRoleField(
         EDITOR_ROLE_ID,
         ["pgprofile.userprofile", "pgprofile.groupprofile"],
-        # Translators: Contentype editors label
+        # Translators: Contentype shares/editors label
         label=_("Editors"),
+        # Translators: content shares help
+        help_text=_("Select users or groups toshare editing role"),
         required=False,
         )
-
 
     def __init__(self, *args, **kwargs):
 
