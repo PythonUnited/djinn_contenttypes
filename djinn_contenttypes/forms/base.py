@@ -2,9 +2,11 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from pgauth.models import UserGroup
 from pgcontent.fields import OwnerField, \
-    RelatedContentField, SharesField
+    RelatedContentField
 from pgcontent.widgets.content import RelatedContentWidget
-from pgcontent.widgets.shares import SharesWidget
+from djinn_forms.forms.share import ShareMixin
+from djinn_forms.fields.share import ShareField
+from djinn_forms.widgets.share import ShareWidget
 from pgcontent.widgets.owner import OwnerWidget
 from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
 from djinn_contenttypes.utils import get_object_by_ctype_id
@@ -48,7 +50,7 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
         exclude = ["creator", "changed_by"]
 
 
-class BaseContentForm(BaseForm):
+class BaseContentForm(BaseForm, ShareMixin):
 
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
@@ -90,9 +92,18 @@ class BaseContentForm(BaseForm):
             attrs={"edit_link_label": _("Change owner")}
             ))
 
-    shares = SharesField(label=_("Shares"),
-                         widget=SharesWidget(
-            attrs={"add_link_label": _("Add user or group")}
+    shares = ShareField(
+        'editor', # alleen nog shares over schrijfpermissies gaan, niet meer afzonderlijk lees- en schrijfpermissies
+        ["pgprofile.userprofile", "pgprofile.groupprofile", "pgprofile.deputyprofile"],
+        # Translators: content shares label
+        label=_("Shares"),
+        required=False,
+        # Translators: content shares help
+        help_text=_("Select contacts"),
+                         widget=ShareWidget(
+            # Translators: content shares hint
+            attrs={'hint': _("Add a user or group"),
+                   'searchfield': 'title_auto'},
             ))
 
     def __init__(self, *args, **kwargs):
@@ -104,8 +115,7 @@ class BaseContentForm(BaseForm):
         if 'owner' in self.fields:
             self.fields['owner'].widget.object = self.instance
 
-        if 'shares' in self.fields:
-            self.fields['shares'].widget.object = self.instance
+        self.init_share_fields()
 
         owner = self.instance.get_owner()
 
@@ -150,11 +160,7 @@ class BaseContentForm(BaseForm):
 
         # Shares
         #
-        for ctype, cid, mode in self.cleaned_data['shares']['rm']:
-            obj.rm_share(ctype, cid, mode)
-
-        for ctype, cid, mode in self.cleaned_data['shares']['add']:
-            obj.add_share(ctype, cid, mode)
+        self.save_shares(commit=commit)
 
         if self.cleaned_data.get("owner", None):
             obj.set_owner(self.cleaned_data['owner'])
