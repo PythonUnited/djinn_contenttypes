@@ -182,7 +182,7 @@ def find_form_class(model, modulename):
 
     formclassname = "%sForm" % model.__name__
     modelname = model.__name__.lower()
-    form_class = None
+    form_class = module = None
 
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.split(".")
