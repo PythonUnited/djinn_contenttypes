@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n auth_tags bootstrap %}
+{% load i18n auth_tags bootstrap djinn_contenttypes %}
 
 {% block body_class %}ct {{ object.ct_name }} edit{% endblock %}
 
@@ -41,7 +41,13 @@
     </ul>
   </div>
   {% endif %}
-  {% endblock %}
+  {% endblock errors %}
+
+  {% block help %}
+  {% if form.help %}
+  {{ form.help|safe }}
+  {% endif %}
+  {% endblock help %}
 
   {% block formfields %}
   {{ form|bootstrap }}
@@ -58,7 +64,7 @@
       {% trans "Cancel" %}
     </button>
     {% if object %}
-    {% with perm=object|del_permission %}
+    {% with perm=object|delete_permission_id %}
     {% ifpermission object request.user perm %}
     <a class="btn btn-danger delete-action"
        data-toggle="modal"

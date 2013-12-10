@@ -12,6 +12,7 @@ from pgcontent.widgets.content import RelatedContentWidget
 from djinn_forms.forms.share import ShareMixin
 from djinn_forms.fields.share import ShareField
 from djinn_forms.widgets.share import ShareWidget
+from djinn_forms.widgets.datetimewidget import DateTimeWidget
 from pgcontent.widgets.owner import OwnerWidget
 from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
 from djinn_contenttypes.utils import get_object_by_ctype_id
@@ -64,23 +65,25 @@ class BaseContentForm(BaseForm, RelateMixin):
                                              required=False,
                                              queryset=UserGroup.objects.all())
 
-    # Translators: contenttypes publish_from label
     publish_from = forms.DateTimeField(
+        # Translators: contenttypes publish_from label
         label=_("Publish from"),
         required=False,
-        widget=forms.DateTimeInput(
-            attrs={'class': 'datetime'},
-            format="%d-%m-%Y %H:%M"
+        widget=DateTimeWidget(
+            attrs={'date_hint': _("Date"),
+                   'time_hint': _("Time")}
             )
         )
 
-    # Translators: contenttypes publish_to label
-    publish_to = forms.DateTimeField(label=_("Publiceren till"),
-                                     required=False,
-                                     widget=forms.DateTimeInput(
-                attrs={'class': 'datetime'},
-                format="%d-%m-%Y %H:%M"
-                ))
+    publish_to = forms.DateTimeField(
+        # Translators: contenttypes publish_to label
+        label=_("Publish from"),
+        required=False,
+        widget=DateTimeWidget(
+            attrs={'date_hint': _("Date"),
+                   'time_hint': _("Time")}
+            )
+        )
 
     userkeywords = forms.CharField(
         # Translators: contenttypes userkeywords label
@@ -148,3 +151,6 @@ class BaseContentForm(BaseForm, RelateMixin):
             pass
 
         return self.cleaned_data
+
+    class Meta(BaseForm.Meta):
+        pass

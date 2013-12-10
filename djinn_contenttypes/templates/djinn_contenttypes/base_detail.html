@@ -1,8 +1,6 @@
 {% extends "layout-8x4.html" %}
 
-{% load contentblock_tags %}
-{% load contentutil_tags %}
-{% load pgcomment_tags %}
+{% load pgcomment_tags i18n djinn_contenttypes auth_tags %}
 
 {% block body_class %}ct {{ object.ct_name }} view{% endblock %}
 
@@ -14,17 +12,74 @@
   <header>
     <h1>{{ object.title }}</h1>
   </header>
-  {% contentitem_stats object %}
-  {% endblock %}
+
+  {% block metainfo %}
+  <div class="meta-info">
+    {% if not object.is_tmp %}
+    {% if object.is_publishable %}
+    {% if object.publish_from %}
+    {% trans "Published on" %}: {{ object.publish_from }},
+    {% else %}
+    {% trans "Status" %}: {% trans "draft" %},
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% trans "Last change" %}: {{ object.changed }}, 
+    {% trans "Reactions" %}: {% comment_count_for user object %}
+  </div>
+  {% endblock metainfo %}
+  {% endblock header %}
 
   {% block content %}
-  {% endblock %}
+  {% endblock content %}
 
   {% if object|implements:"CommentableMixin" %}
   {% comments_for object %}
   {% endif %}
 </article>
-{% endblock %}
+{% endblock left-pane %}
+
 
 {% block right-pane %}
-{% endblock %}
+<div class="action-bar">
+  {% with perm=object|edit_permission_id %}
+  {% ifpermission object request.user perm %}
+  {% edit_action object %}
+  {% endifpermission %}
+  {% endwith %}
+</div>
+
+<section id="ownership">
+  {% if object.show_owner or object.get_owner == request.user or request.user.is_superuser %}
+  {% owner object 'False' %}
+  {% endif %}
+</section>
+
+{% if object.parentusergroup %}
+
+<section id="content-for-group">
+  
+  <h3>Geplaatst in de groep</h3>
+  
+  {% with group=object.parentusergroup.profile %}
+  <div class="groupprofilesummary">
+    
+    <figure>
+      <a class="groupprofile" href="{{ group.get_absolute_url }}">
+        <img src="{{ group.avatar_url }}"/>
+      </a>
+    </figure>
+    
+    <div class="text">
+      <a class="groupprofile" 
+         href="{{ group.get_absolute_url }}">{{ group }}</a>
+    </div>
+    
+  </div>
+  {% endwith %}
+  
+</section>
+
+{% endif %}
+
+{% endblock right-pane %}

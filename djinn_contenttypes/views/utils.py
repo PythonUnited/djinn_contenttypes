@@ -1,6 +1,5 @@
-import sys
 import logging
-from django.db import models 
+from django.db import models
 from django.db.models import get_model
 from django.conf.urls.defaults import url, patterns
 from djinn_core.utils import extends
@@ -36,7 +35,7 @@ def generate_model_urls(*models, **kwargs):
                 viewname = "%s_view_%s" % name
             else:
                 viewname = None
-            views.append(generate_view_url(model, modelname, modulename, 
+            views.append(generate_view_url(model, modelname, modulename,
                                            name=viewname))
         if kwargs.get("edit", True):
             if name:
@@ -85,7 +84,8 @@ def generate_delete_url(model, modelname, modulename, name=None):
 
     expr = r"^delete/%s/(?P<pk>[\d]+)/?$" % modelname
     name = name or "%s_delete_%s" % (modulename, modelname)
-    view = find_view(model, modulename, suffix="DeleteView", default=DeleteView)
+    view = find_view(model, modulename, suffix="DeleteView",
+                     default=DeleteView)
 
     return url(expr, view, name=name)
 
@@ -111,7 +111,8 @@ def generate_add_url(model, modelname, modulename, name=None):
             expr += "/(?P<%s>.+)" % fk_field
         expr += "/?$"
 
-    view = find_view(model, modulename, suffix="CreateView", default=CreateView,
+    view = find_view(model, modulename, suffix="CreateView",
+                     default=CreateView,
                      **kwargs)
 
     return url(expr, view, name=name)
@@ -131,7 +132,8 @@ def generate_edit_url(model, modelname, modulename, name=None):
     if form_class:
         kwargs["form_class"] = form_class
 
-    view = find_view(model, modulename, suffix="UpdateView", default=UpdateView,
+    view = find_view(model, modulename, suffix="UpdateView",
+                     default=UpdateView,
                      **kwargs)
 
     return url(expr, view, name=name)
@@ -144,9 +146,12 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
 
     viewclassname = "%s%s" % (model.__name__, suffix)
     modelname = model.__name__.lower()
+    view_class = None
 
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.lower().split(".")
+
+    module = None
 
     try:
         module = __import__("%s.views.%s" % (modulename, modelname))
@@ -156,10 +161,14 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
         except ImportError:
             pass
 
-    try:
-        view_class = getattr(getattr(getattr(module, "views"), modelname),
-                             viewclassname)
-    except:
+    if module:
+        try:
+            view_class = getattr(getattr(getattr(module, "views"), modelname),
+                                 viewclassname)
+        except AttributeError:
+            pass
+
+    if not view_class:
         view_class = default
         kwargs.update({"model": model})
 
@@ -186,13 +195,14 @@ def find_form_class(model, modulename):
         except ImportError:
             LOGGER.warn("No forms module found for %s" % modelname)
 
-    try:
-        form_class = getattr(getattr(getattr(module, "forms"), modelname),
-                             formclassname)
-    except:
+    if module:
         try:
-            form_class = getattr(getattr(module, "forms"), formclassname)
-        except:
-            LOGGER.warn("No form found for %s" % modelname)
+            form_class = getattr(getattr(getattr(module, "forms"), modelname),
+                                 formclassname)
+        except AttributeError:
+            try:
+                form_class = getattr(getattr(module, "forms"), formclassname)
+            except AttributeError:
+                LOGGER.warn("No form found for %s" % modelname)
 
     return form_class
