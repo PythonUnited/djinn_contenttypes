@@ -1,11 +1,12 @@
 import logging
+from django.db import models
 from pgcontent.models.simplerelation import SimpleRelation
 
 
-LOG = logging.getLogger("pgcontent")
+LOG = logging.getLogger("djinn_contenttypes")
 
 
-class RelatableMixin:
+class RelatableMixin(object):
 
     """ Mixin class that enables relations."""
 
@@ -96,7 +97,26 @@ class RelatableMixin:
         """ Remove all relations. If inverse is true=ish, also remove
         relations where self is the target. """
 
-        self.get_relations().delete()
-        if inverse:
-            self.get_relations(inverse=True).delete()
+    def save_relations(self):
 
+        # if this instance has a '_relation_updater' attribute, then
+        # iterate over them, and call the update method
+        if hasattr(self, '_relation_updater'):
+            for updater in self._relation_updater:
+                updater.update()
+            # clean up, so another save won't mess up
+            delattr(self, '_relation_updater')
+
+
+class RelatableModel(models.Model, RelatableMixin):
+
+    """ A model with the relatable stuff builtin """
+
+    class Meta:
+        abstract = True
+
+    def save(self):
+        """ save the model + the relations """
+
+        super(RelatableModel, self).save()
+        self.save_relations()

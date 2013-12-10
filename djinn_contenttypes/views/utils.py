@@ -1,10 +1,14 @@
 import sys
+import logging
 from django.db import models 
 from django.db.models import get_model
 from django.conf.urls.defaults import url, patterns
 from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
 from base import DetailView, CreateView, UpdateView, DeleteView
+
+
+LOGGER = logging.getLogger("djinn_contenttypes")
 
 
 def generate_model_urls(*models, **kwargs):
@@ -180,7 +184,7 @@ def find_form_class(model, modulename):
         try:
             module = __import__("%s.forms" % modulename)
         except ImportError:
-            pass
+            LOGGER.warn("No forms module found for %s" % modelname)
 
     try:
         form_class = getattr(getattr(getattr(module, "forms"), modelname),
@@ -189,6 +193,6 @@ def find_form_class(model, modulename):
         try:
             form_class = getattr(getattr(module, "forms"), formclassname)
         except:
-            pass
+            LOGGER.warn("No form found for %s" % modelname)
 
     return form_class
