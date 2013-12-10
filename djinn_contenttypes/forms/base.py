@@ -4,18 +4,9 @@ from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleField, LocalRoleSingleField
 from djinn_forms.fields.relate import RelateField
-from djinn_forms.widgets.relate import RelateSingleWidget
+from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
-from pgcontent.fields import OwnerField, \
-    RelatedContentField
-from pgcontent.widgets.content import RelatedContentWidget
-from djinn_forms.forms.share import ShareMixin
-from djinn_forms.fields.share import ShareField
-from djinn_forms.widgets.share import ShareWidget
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
-from pgcontent.widgets.owner import OwnerWidget
-from pgcontent.settings import BASE_RELATEABLE_TYPES, get_relation_type_by_ctype
-from djinn_contenttypes.utils import get_object_by_ctype_id
 
 
 class PartialUpdateMixin:
@@ -103,7 +94,12 @@ class BaseContentForm(BaseForm, RelateMixin):
         [],
         # Translators: contenttypes related label
         label=_("Related content"),
-        required=False
+        required=False,
+        widget=RelateWidget(
+            attrs={'searchfield': 'title_auto',
+                   #Translators: content type owner hint
+                   'hint': _("Select related content ")
+                   })
         )
 
     owner = LocalRoleSingleField(
@@ -127,13 +123,18 @@ class BaseContentForm(BaseForm, RelateMixin):
         # Translators: content shares help
         help_text=_("Select users or groups toshare editing role"),
         required=False,
+        widget=RelateWidget(
+            attrs={'searchfield': 'title_auto',
+                   #Translators: content type owner hint
+                   'hint': _("Select a user or group name ")
+                   })
         )
 
     def __init__(self, *args, **kwargs):
 
         super(BaseContentForm, self).__init__(*args, **kwargs)
         self.init_relation_fields()
-        
+
     def save(self, commit=True):
 
         res = super(BaseContentForm, self).save(commit=commit)
