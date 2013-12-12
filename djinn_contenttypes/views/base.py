@@ -291,7 +291,11 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if implements(self.object, BaseContent):
             self.object.creator = self.request.user
             self.object.changed_by = self.request.user
+
+        try:
             self.object.is_tmp = False
+        except:
+            pass
 
         self.object.save()
 
@@ -369,6 +373,12 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
             return HttpResponseForbidden()
 
         if self.request.POST.get('action', None) == "cancel":
+
+            if getattr(self.object, "is_tmp", False):
+                self.object.delete()
+                return HttpResponseRedirect(
+                    request.user.profile.get_absolute_url())
+
             return HttpResponseRedirect(self.object.get_absolute_url())
         else:
             return super(UpdateView, self).post(request, *args, **kwargs)
@@ -382,6 +392,11 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
         if implements(self.object, BaseContent):
             self.object.changed_by = self.request.user
+
+        try:
+            self.object.is_tmp = False
+        except:
+            pass
 
         self.object.save()
 
