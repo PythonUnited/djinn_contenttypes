@@ -313,6 +313,21 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
         return self.view_url
 
+    @property
+    def partial(self):
+
+        """ Allow partial update """
+
+        return self.request.REQUEST.get('partial', False)
+
+    def get_form_kwargs(self):
+
+        kwargs = super(UpdateView, self).get_form_kwargs()
+
+        kwargs['partial'] = self.partial
+
+        return kwargs
+
     def get_initial(self):
 
         initial = {}
@@ -360,7 +375,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
 
     def form_valid(self, form):
 
-        if hasattr(form, "update"):
+        if hasattr(form, "update") and self.partial:
             self.object = form.update(commit=False)
         else:
             self.object = form.save(commit=False)

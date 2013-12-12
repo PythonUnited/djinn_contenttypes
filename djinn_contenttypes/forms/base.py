@@ -40,16 +40,30 @@ class MetaFieldsMixin(object):
 
 class BaseForm(PartialUpdateMixin, forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+
+        try:
+            partial = kwargs.pop('partial')
+        except:
+            partial = False
+
+        super(BaseForm, self).__init__(*args, **kwargs)
+
+        if partial:
+            self.fields = dict((fname, field) for fname, field in \
+                                   self.fields.items() if \
+                                   fname in self.data.keys())
+
+    class Meta:
+        pass
+
+
+class BaseContentForm(BaseForm, RelateMixin):
+
     # Translators: contenttypes title label
     title = forms.CharField(label=_("Title"),
                             max_length=255,
                             widget=forms.TextInput())
-
-    class Meta:
-        exclude = ["creator", "changed_by"]
-
-
-class BaseContentForm(BaseForm, RelateMixin):
 
     # Translators: contenttypes usergroup label
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
@@ -154,4 +168,4 @@ class BaseContentForm(BaseForm, RelateMixin):
         return self.cleaned_data
 
     class Meta(BaseForm.Meta):
-        pass
+        exclude = ["creator", "changed_by"]

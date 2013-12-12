@@ -45,7 +45,9 @@
 
   {% block help %}
   {% if form.help %}
+  <div class="help alert alert-info">
   {{ form.help|safe }}
+  </div>
   {% endif %}
   {% endblock help %}
 
