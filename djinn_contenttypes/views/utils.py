@@ -186,14 +186,25 @@ def find_form_class(model, modulename):
 
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.split(".")
+        modelname = modelname.lower()
 
     try:
         module = __import__("%s.forms.%s" % (modulename, modelname))
-    except ImportError:
+    except ImportError, e:
+        if not "No module" in str(e) and not modelname in str(e):
+            import traceback
+            traceback.print_exc()
+
+            raise
+
         try:
             module = __import__("%s.forms" % modulename)
-        except ImportError:
-            LOGGER.warn("No forms module found for %s" % modelname)
+        except ImportError, e:
+            if not "No module" in str(e) and not modelname in str(e):
+                import traceback
+                traceback.print_exc()
+
+                raise
 
     if module:
         try:
