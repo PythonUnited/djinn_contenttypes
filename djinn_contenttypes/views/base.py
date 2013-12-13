@@ -214,23 +214,28 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            obj = self.real_model.objects.create(creator=self.request.user,
-                                                 changed_by=self.request.user
-                                                 )
+            if self.request.REQUEST.get("is_tmp"):
+                obj = self.real_model.objects.get(
+                    id=self.request.REQUEST.get("is_tmp"))
+            else:
+                obj = self.real_model.objects.create(
+                    creator=self.request.user,
+                    changed_by=self.request.user
+                    )
 
-            # Set any data that is available, i.e. through initial data
-            #
-            if self.get_initial():
-                form_class = self.get_form_class()
-                form = form_class(data=self.get_initial(),
-                                  **self.get_form_kwargs())
-                form.cleaned_data = {}
+                # Set any data that is available, i.e. through initial data
+                #
+                if self.get_initial():
+                    form_class = self.get_form_class()
+                    form = form_class(data=self.get_initial(),
+                                      **self.get_form_kwargs())
+                    form.cleaned_data = {}
+                    
+                    for field in self.get_initial().keys():
+                        value = form.fields[field].clean(form.data[field])
+                        setattr(obj, field, value)
 
-                for field in self.get_initial().keys():
-                    value = form.fields[field].clean(form.data[field])
-                    setattr(obj, field, value)
-
-                obj.save()
+            obj.save()
 
             return obj
 
@@ -266,6 +271,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                                                 'contenttypes.add_contenttype')
 
         pugid = kwargs.get('parentusergroup', None)
+
         if pugid:
             theobj = UserGroup.objects.get(id=int(pugid)).profile
         else:
@@ -273,12 +279,12 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not self.request.user.has_perm(perm, obj=theobj):
             return HttpResponseForbidden()
 
+        self.object = self.get_object()
+
         if self.request.POST.get('action', None) == "cancel":
 
             # There may be a temporary object...
             try:
-                self.object = self.get_object()
-
                 if getattr(self.object, "is_tmp", False):
                     self.object.delete()
             except:
@@ -287,7 +293,13 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
             return HttpResponseRedirect(
                 request.user.profile.get_absolute_url())
         else:
-            return super(CreateView, self).post(request, *args, **kwargs)
+            form_class = self.get_form_class()
+            form = self.get_form(form_class)
+
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
 
     def form_valid(self, form):
 
