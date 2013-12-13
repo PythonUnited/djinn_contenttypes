@@ -214,28 +214,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            return self.real_model.objects.create(creator=self.request.user,
-                                                  changed_by=self.request.user
-                                                  )
-
-    def get(self, request, *args, **kwargs):
-
-        """ Override get so as to be able to check permissions """
-
-        perm = CTRegistry.get(self.ct_name).get("add_permission",
-                                                'contenttypes.add_contenttype')
-
-        pugid = kwargs.get('parentusergroup', None)
-        if pugid:
-            theobj = UserGroup.objects.get(id=int(pugid)).profile
-        else:
-            theobj = None
-        if not self.request.user.has_perm(perm, obj=theobj):
-            return HttpResponseForbidden()
-
-        self.object = self.get_object()
-
-        if getattr(self.real_model, "create_tmp_object", False):
+            obj = self.real_model.objects.create(creator=self.request.user,
+                                                 changed_by=self.request.user
+                                                 )
 
             # Set any data that is available, i.e. through initial data
             #
@@ -247,13 +228,37 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
                 for field in self.get_initial().keys():
                     value = form.fields[field].clean(form.data[field])
-                    setattr(self.object, field, value)
+                    setattr(obj, field, value)
 
-                self.object.save()
+                obj.save()
 
-            return HttpResponseRedirect(self.edit_url)
+            return obj
+
+    def get(self, request, *args, **kwargs):
+
+        """ Override get so as to be able to check permissions """
+
+        # TODO: this should be the more specific permission
+        perm = CTRegistry.get(self.ct_name).get("add_permission",
+                                                'contenttypes.add_contenttype')
+
+        # TODO: check if this still exists...
+        ugid = kwargs.get('parentusergroup', None)
+
+        if ugid:
+            context = UserGroup.objects.get(id=int(ugid)).profile
         else:
-            return super(CreateView, self).get(request, *args, **kwargs)
+            context = None
+
+        if not self.request.user.has_perm(perm, obj=context):
+            return HttpResponseForbidden()
+
+        self.object = self.get_object()
+
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        return self.render_to_response(self.get_context_data(form=form))
 
     def post(self, request, *args, **kwargs):
 
@@ -288,11 +293,11 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
         self.object = form.save(commit=False)
 
-        if implements(self.object, BaseContent):
+        # Assume, but not overly, that this is BaseContent...
+        #
+        try:
             self.object.creator = self.request.user
             self.object.changed_by = self.request.user
-
-        try:
             self.object.is_tmp = False
         except:
             pass
