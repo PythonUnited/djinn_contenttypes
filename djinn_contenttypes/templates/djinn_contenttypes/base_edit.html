@@ -25,7 +25,7 @@
 {% block form %}
 <form action="" method="POST" 
       id="editform" {% block form_class %}{% endblock %}>
-
+  
   {% csrf_token %}
 
   {% block errors %}
@@ -54,6 +54,8 @@
   {% block formfields %}
   {{ form|bootstrap }}
   {% endblock %}
+
+  {% block extra_formfields %}{% endblock %}
 
   {% block formcontrols %}
   <div class="btn-group form-actions">
