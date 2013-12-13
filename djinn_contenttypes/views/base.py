@@ -403,9 +403,9 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
     def form_valid(self, form):
 
         if hasattr(form, "update") and self.partial:
-            self.object = form.update(commit=False)
+            self.object = form.update()
         else:
-            self.object = form.save(commit=False)
+            self.object = form.save()
 
         if implements(self.object, BaseContent):
             self.object.changed_by = self.request.user
