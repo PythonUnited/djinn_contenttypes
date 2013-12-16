@@ -2,17 +2,19 @@ from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
 from django.views.generic.edit import CreateView as BaseCreateView
+from django.views.generic.base import TemplateResponseMixin
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden
-from django.db import models
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.utils import simplejson as json
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
+from djinn_contenttypes.utils import json_serializer
 from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
 
@@ -135,7 +137,25 @@ class SwappableMixin(object):
         return self.queryset._clone()
 
 
-class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
+class JSONMixin(object):
+
+    def render_to_response(self, context, **response_kwargs):
+
+        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+
+            return HttpResponse(
+                json.dumps(context, skipkeys=True,
+                           default=json_serializer),
+                content_type='application/json',
+                **response_kwargs)
+        else:
+            return TemplateResponseMixin.render_to_response(self,
+                                                            context,
+                                                            **response_kwargs)
+
+
+class DetailView(TemplateResolverMixin, SwappableMixin, JSONMixin,
+                 BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
     detail views should extend this view.
@@ -214,9 +234,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            if self.request.REQUEST.get("is_tmp"):
+            if self.request.REQUEST.get("tmp_id"):
                 obj = self.real_model.objects.get(
-                    id=self.request.REQUEST.get("is_tmp"))
+                    id=self.request.REQUEST.get("tmp_id"))
             else:
                 obj = self.real_model.objects.create(
                     creator=self.request.user,
@@ -227,10 +247,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                 #
                 if self.get_initial():
                     form_class = self.get_form_class()
-                    form = form_class(data=self.get_initial(),
-                                      **self.get_form_kwargs())
+                    form = form_class(data=self.get_initial())
                     form.cleaned_data = {}
-                    
+
                     for field in self.get_initial().keys():
                         value = form.fields[field].clean(form.data[field])
                         setattr(obj, field, value)
@@ -303,6 +322,11 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
     def form_valid(self, form):
 
+        """ If the form is valid, first let the form.save create the
+        object. We can't commit straight away, since essential data for
+        the content type is not in the form (creator, changed_by).
+        Set those, then commit. """
+
         self.object = form.save(commit=False)
 
         # Assume, but not overly, that this is BaseContent...
@@ -314,7 +338,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         except:
             pass
 
-        self.object.save()
+        # And now for real!
+        #
+        self.object = form.save()
 
         if implements(self.object, BaseContent):
             self.object.set_owner(self.request.user)
@@ -326,7 +352,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                                        status=202)
 
 
-class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
+class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
+                 BaseUpdateView):
 
     mode = "edit"
 

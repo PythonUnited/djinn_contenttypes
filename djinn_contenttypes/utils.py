@@ -1,7 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
-from djinn_contenttypes.registry import CTRegistry
 from django.db.models import Model
+from djinn_core.utils import implements
+from djinn_contenttypes.registry import CTRegistry
 from settings import URN_SCHEMA
 
 
@@ -82,3 +83,20 @@ def get_object_by_ctype_id(ctype_id, _id, app_label=None):
     ctype = CTRegistry.get(ctype_id)['class']
 
     return get_object_by_ctype(ctype, _id, app_label)
+
+
+def json_serializer(obj):
+
+    if implements(obj, Model):
+
+        obj_data = {}
+
+        for field in obj._meta.fields:
+            try:
+                obj_data[field.name] = str(field.value_from_object(obj))
+            except:
+                pass
+                
+        return str(obj_data)
+
+    return "NOT SERIALIZABLE"
