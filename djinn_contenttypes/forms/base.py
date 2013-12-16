@@ -55,7 +55,7 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
                                    fname in self.data.keys())
 
     class Meta:
-        pass
+        exclude = ["creator", "changed_by"]
 
 
 class BaseContentForm(BaseForm, RelateMixin):
@@ -166,6 +166,3 @@ class BaseContentForm(BaseForm, RelateMixin):
             pass
 
         return self.cleaned_data
-
-    class Meta(BaseForm.Meta):
-        exclude = ["creator", "changed_by"]

@@ -1,23 +1,42 @@
 {% extends "base.html" %}
-{% load i18n auth_tags bootstrap djinn_contenttypes %}
+{% load i18n auth_tags bootstrap djinn_contenttypes pgcomment_tags %}
 
 {% block body_class %}ct {{ object.ct_name }} edit{% endblock %}
 
 {% block container %}
 
 {% block header %}
-
 <header>
   <h1>
+    {% block title %}
     {% if object and not object.is_tmp %}
     {% trans "Edit" %} {{ view.ct_label|lower }}
     {% else %}
     {% trans "New" %} {{ view.ct_label|lower }}
     {% endif %}
+    {% endblock title %}
   </h1>
 </header>
-
-{% endblock %}
+{% block metainfo %}
+<div class="meta-info">
+  {% if not object.is_tmp %}
+  {% if object.is_publishable %}
+  {% if object.publish_from %}
+  {# Translators: metadata publication date #}
+  {% trans "Published on" %}: {{ object.publish_from }},
+  {% else %}
+  {# Translators: metadata status #}
+  {% trans "Status" %}: {% trans "draft" %},
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  {# Translators: metadata last changed #}
+  {% trans "Last change" %}: {{ object.changed }}, 
+  {# Translators: metadata reactions #}
+  {% trans "Reactions" %}: {% comment_count_for user object %}
+</div>
+{% endblock metainfo %}
+{% endblock header %}
 
 {% block form_preamble %}
 {% endblock %}
@@ -25,7 +44,7 @@
 {% block form %}
 <form action="" method="POST" 
       id="editform" {% block form_class %}{% endblock %}>
-
+  
   {% csrf_token %}
 
   {% block errors %}
@@ -55,6 +74,8 @@
   {{ form|bootstrap }}
   {% endblock %}
 
+  {% block extra_formfields %}{% endblock %}
+
   {% block formcontrols %}
   <div class="btn-group form-actions">
     <button class="btn btn-primary protected save-action" type="submit" 
@@ -83,8 +104,8 @@
     {% endif %}
   </div>
   {% endblock %}
-
+  {% block formfooter %}{% endblock %}
 </form>
-{% endblock %}
+{% endblock form %}
 
-{% endblock %}
+{% endblock container %}

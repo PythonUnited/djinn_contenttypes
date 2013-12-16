@@ -11,6 +11,12 @@
 </header>
 {% endblock %}
 
+{% block extra_formfields %}
+{% if object %}
+<input type="hidden" name="tmp_id" value="{{ object.id }}" />
+{% endif %}
+{% endblock %}
+
 
 {% block formcontrols %}
 <div class="btn-group form-actions">

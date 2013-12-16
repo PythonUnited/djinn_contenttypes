@@ -2,17 +2,19 @@ from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
 from django.views.generic.edit import CreateView as BaseCreateView
+from django.views.generic.base import TemplateResponseMixin
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden
-from django.db import models
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.utils import simplejson as json
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
+from djinn_contenttypes.utils import json_serializer
 from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
 
@@ -135,7 +137,45 @@ class SwappableMixin(object):
         return self.queryset._clone()
 
 
-class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
+class JSONMixin(object):
+
+    def render_to_response(self, context, **response_kwargs):
+
+        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+
+            try:
+                del response_kwargs['mimetype']
+            except:
+                pass
+
+            response_kwargs["content_type"] = 'application/json'
+
+            return HttpResponse(
+                json.dumps(context, skipkeys=True,
+                           default=json_serializer),
+                **response_kwargs)
+        else:
+            return TemplateResponseMixin.render_to_response(self,
+                                                            context,
+                                                            **response_kwargs)
+
+
+class AbstractBaseView(TemplateResolverMixin, SwappableMixin, JSONMixin):
+
+    def _determine_content_type(self, default="text/html"):
+
+        content_type = default
+
+        if self.request.is_ajax():
+            content_type = "text/plain"
+
+        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+            content_type = "application_json"
+
+        return content_type
+
+
+class DetailView(AbstractBaseView, BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
     detail views should extend this view.
@@ -175,12 +215,9 @@ class DetailView(TemplateResolverMixin, SwappableMixin, BaseDetailView):
             return HttpResponseForbidden()
 
         context = self.get_context_data(object=self.object)
-        mimetype = "text/html"
+        content_type = self._determine_content_type()
 
-        if self.request.is_ajax():
-            mimetype = "text/plain"
-
-        return self.render_to_response(context, mimetype=mimetype)
+        return self.render_to_response(context, content_type=content_type)
 
 
 class CTDetailView(CTMixin, DetailView):
@@ -214,23 +251,27 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            obj = self.real_model.objects.create(creator=self.request.user,
-                                                 changed_by=self.request.user
-                                                 )
+            if self.request.REQUEST.get("tmp_id"):
+                obj = self.real_model.objects.get(
+                    id=self.request.REQUEST.get("tmp_id"))
+            else:
+                obj = self.real_model.objects.create(
+                    creator=self.request.user,
+                    changed_by=self.request.user
+                    )
 
-            # Set any data that is available, i.e. through initial data
-            #
-            if self.get_initial():
-                form_class = self.get_form_class()
-                form = form_class(data=self.get_initial(),
-                                  **self.get_form_kwargs())
-                form.cleaned_data = {}
+                # Set any data that is available, i.e. through initial data
+                #
+                if self.get_initial():
+                    form_class = self.get_form_class()
+                    form = form_class(data=self.get_initial())
+                    form.cleaned_data = {}
 
-                for field in self.get_initial().keys():
-                    value = form.fields[field].clean(form.data[field])
-                    setattr(obj, field, value)
+                    for field in self.get_initial().keys():
+                        value = form.fields[field].clean(form.data[field])
+                        setattr(obj, field, value)
 
-                obj.save()
+            obj.save()
 
             return obj
 
@@ -266,6 +307,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                                                 'contenttypes.add_contenttype')
 
         pugid = kwargs.get('parentusergroup', None)
+
         if pugid:
             theobj = UserGroup.objects.get(id=int(pugid)).profile
         else:
@@ -273,12 +315,12 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         if not self.request.user.has_perm(perm, obj=theobj):
             return HttpResponseForbidden()
 
+        self.object = self.get_object()
+
         if self.request.POST.get('action', None) == "cancel":
 
             # There may be a temporary object...
             try:
-                self.object = self.get_object()
-
                 if getattr(self.object, "is_tmp", False):
                     self.object.delete()
             except:
@@ -287,9 +329,20 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
             return HttpResponseRedirect(
                 request.user.profile.get_absolute_url())
         else:
-            return super(CreateView, self).post(request, *args, **kwargs)
+            form_class = self.get_form_class()
+            form = self.get_form(form_class)
+
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
 
     def form_valid(self, form):
+
+        """ If the form is valid, first let the form.save create the
+        object. We can't commit straight away, since essential data for
+        the content type is not in the form (creator, changed_by).
+        Set those, then commit. """
 
         self.object = form.save(commit=False)
 
@@ -302,7 +355,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         except:
             pass
 
-        self.object.save()
+        # And now for real!
+        #
+        self.object = form.save()
 
         if implements(self.object, BaseContent):
             self.object.set_owner(self.request.user)
@@ -314,7 +369,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                                        status=202)
 
 
-class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
+class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
+                 BaseUpdateView):
 
     mode = "edit"
 
@@ -391,9 +447,9 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, BaseUpdateView):
     def form_valid(self, form):
 
         if hasattr(form, "update") and self.partial:
-            self.object = form.update(commit=False)
+            self.object = form.update()
         else:
-            self.object = form.save(commit=False)
+            self.object = form.save()
 
         if implements(self.object, BaseContent):
             self.object.changed_by = self.request.user
