@@ -1,8 +1,13 @@
 # coding=utf-8
+"""
+This filename should be renamed to something which is not equal to the
+modulename.. it breaks the import from djinn_contenttypes
+"""
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from djinn_core.utils import implements as _implements
+from ..utils import object_to_urn as obj_to_urn
 
 
 register = Library()
@@ -73,3 +78,8 @@ def delete_permission_id(obj):
 def implements(instance, clazz):
 
     return _implements(instance, clazz)
+
+
+@register.filter
+def object_to_urn(obj):
+    return obj_to_urn(obj)

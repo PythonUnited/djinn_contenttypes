@@ -207,7 +207,6 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         return list(_viewers)
 
-
     class Meta:
         abstract = True
 
