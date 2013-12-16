@@ -143,10 +143,16 @@ class JSONMixin(object):
 
         if "application/json" in self.request.META.get("HTTP_ACCEPT"):
 
+            try:
+                del response_kwargs['mimetype']
+            except:
+                pass
+
+            response_kwargs["content_type"] = 'application/json'
+
             return HttpResponse(
                 json.dumps(context, skipkeys=True,
                            default=json_serializer),
-                content_type='application/json',
                 **response_kwargs)
         else:
             return TemplateResponseMixin.render_to_response(self,
@@ -154,8 +160,22 @@ class JSONMixin(object):
                                                             **response_kwargs)
 
 
-class DetailView(TemplateResolverMixin, SwappableMixin, JSONMixin,
-                 BaseDetailView):
+class AbstractBaseView(TemplateResolverMixin, SwappableMixin, JSONMixin):
+
+    def _determine_content_type(self, default="text/html"):
+
+        content_type = default
+
+        if self.request.is_ajax():
+            content_type = "text/plain"
+
+        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+            content_type = "application_json"
+
+        return content_type
+
+
+class DetailView(AbstractBaseView, BaseDetailView):
 
     """ Detail view for simple content, not related, etc. All intranet
     detail views should extend this view.
@@ -195,12 +215,9 @@ class DetailView(TemplateResolverMixin, SwappableMixin, JSONMixin,
             return HttpResponseForbidden()
 
         context = self.get_context_data(object=self.object)
-        mimetype = "text/html"
+        content_type = self._determine_content_type()
 
-        if self.request.is_ajax():
-            mimetype = "text/plain"
-
-        return self.render_to_response(context, mimetype=mimetype)
+        return self.render_to_response(context, content_type=content_type)
 
 
 class CTDetailView(CTMixin, DetailView):
