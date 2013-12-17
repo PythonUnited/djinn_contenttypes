@@ -11,6 +11,8 @@ from djinn_forms.widgets.datetimewidget import DateTimeWidget
 
 class PartialUpdateMixin:
 
+    partial_support = True
+
     def update(self, commit=True):
 
         """ Allow for updates of only the fields available in the form """

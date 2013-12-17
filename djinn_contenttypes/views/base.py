@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
-from djinn_core.utils import implements
+from djinn_core.utils import implements, extends
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
 from djinn_contenttypes.models.base import BaseContent
@@ -389,7 +389,8 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
 
         kwargs = super(UpdateView, self).get_form_kwargs()
 
-        kwargs['partial'] = self.partial
+        if getattr(self.form_class, "patial_support", False):
+            kwargs['partial'] = self.partial
 
         return kwargs
 
