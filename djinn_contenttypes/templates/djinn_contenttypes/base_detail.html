@@ -1,6 +1,6 @@
 {% extends "layout-8x4.html" %}
 
-{% load pgcomment_tags i18n djinn_contenttypes auth_tags %}
+{% load pgcomment_tags i18n djinn_contenttypes auth_tags contentaction_tags %}
 
 {% block body_class %}ct {{ object.ct_name }} view{% endblock %}
 
@@ -74,8 +74,10 @@
       <a class="groupprofile" 
          href="{{ group.get_absolute_url }}">{{ group }}</a>
     </div>
-    
+
   </div>
+
+  {% group_ct_menu group %}
   {% endwith %}
   
 </section>
