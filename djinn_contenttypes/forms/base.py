@@ -7,10 +7,9 @@ from djinn_forms.fields.relate import RelateField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
-from pgcontent.settings import RELATED_CONTENT
 
 
-class PartialUpdateMixin:
+class PartialUpdateMixin(object):
 
     partial_support = True
 
@@ -43,12 +42,19 @@ class MetaFieldsMixin(object):
 
 class BaseForm(PartialUpdateMixin, forms.ModelForm):
 
+    user_support = True
+
     def __init__(self, *args, **kwargs):
 
         try:
             partial = kwargs.pop('partial')
         except:
             partial = False
+        
+        try:
+            user = kwargs.pop("user")
+        except:
+            user = None
 
         super(BaseForm, self).__init__(*args, **kwargs)
 
@@ -56,6 +62,8 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
             self.fields = dict((fname, field) for fname, field in
                                self.fields.items() if
                                fname in self.data.keys())
+
+        self.user = user
 
     class Meta:
         exclude = ["creator", "changed_by"]
@@ -105,7 +113,7 @@ class BaseContentForm(BaseForm, RelateMixin):
         )
 
     related = RelateField(
-        RELATED_CONTENT,
+        "related_content",
         [],
         # Translators: contenttypes related label
         label=_("Related content"),
@@ -125,7 +133,7 @@ class BaseContentForm(BaseForm, RelateMixin):
         ["pgprofile.userprofile"],
         # Translators: Contentype owner label
         label=_("Owner"),
-        required=False,
+        required=True,
         widget=RelateSingleWidget(
             attrs={'searchfield': 'title_auto',
                    #Translators: content type owner hint
@@ -156,7 +164,7 @@ class BaseContentForm(BaseForm, RelateMixin):
     def save(self, commit=True):
 
         res = super(BaseContentForm, self).save(commit=commit)
-        self.save_relations()
+        self.save_relations(commit=commit)
 
         return res
 

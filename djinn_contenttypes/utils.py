@@ -3,7 +3,6 @@ from django.db.models.base import ModelBase
 from django.db.models import Model
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
-from settings import URN_SCHEMA
 
 
 def has_permission(perm, user, obj):
@@ -17,35 +16,6 @@ def has_permission(perm, user, obj):
         return True
 
     return user.has_perm(perm, obj=authority)
-
-
-def object_to_urn(object):
-
-    """ Create A URN for the given object """
-
-    app_label = getattr(object, "app_label", object._meta.app_label)
-    ct_name = getattr(object, object.ct_name,
-                      object.__class__.__name__.lower())
-
-    return URN_SCHEMA % {'object_app': app_label,
-                         'object_ctype': ct_name,
-                         'object_id': object.id}
-
-
-def urn_to_object(urn):
-
-    """ Fetch the object for this URN. If not found, return None """
-
-    parts = urn.split(":")
-
-    obj = None
-
-    try:
-        obj = get_object_by_ctype_id(parts[3], parts[4], app_label=parts[2])
-    except:
-        pass
-
-    return obj
 
 
 def get_model_name(model):

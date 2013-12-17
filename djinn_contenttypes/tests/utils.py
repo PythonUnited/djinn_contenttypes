@@ -1,7 +1,7 @@
 from django.test.testcases import TestCase
 from django.contrib.auth.models import User
 from pgcontent.models import Article
-from djinn_contenttypes.utils import object_to_urn, urn_to_object
+from djinn_core.utils import object_to_urn, urn_to_object
 
 
 class UtilsTest(TestCase):

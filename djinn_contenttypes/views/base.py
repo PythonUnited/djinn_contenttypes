@@ -242,6 +242,15 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
         return initial
 
+    def get_form_kwargs(self):
+
+        kwargs = super(CreateView, self).get_form_kwargs()
+
+        if getattr(self.form_class, "user_support", False):
+            kwargs['user'] = self.request.user
+
+        return kwargs
+
     def get_success_url(self):
 
         return self.view_url
@@ -360,7 +369,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         self.object = form.save()
 
         if implements(self.object, BaseContent):
-            self.object.set_owner(self.request.user)
+            if not self.object.get_owner():
+                self.object.set_owner(self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -389,8 +399,11 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
 
         kwargs = super(UpdateView, self).get_form_kwargs()
 
-        if getattr(self.form_class, "patial_support", False):
+        if getattr(self.form_class, "partial_support", False):
             kwargs['partial'] = self.partial
+
+        if getattr(self.form_class, "user_support", False):
+            kwargs['user'] = self.request.user
 
         return kwargs
 

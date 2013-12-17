@@ -7,7 +7,7 @@ from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from djinn_core.utils import implements as _implements
-from ..utils import object_to_urn as obj_to_urn
+from djinn_core.utils import object_to_urn as obj_to_urn
 
 
 register = Library()
