@@ -133,7 +133,7 @@ class BaseContentForm(BaseForm, RelateMixin):
         ["pgprofile.userprofile"],
         # Translators: Contentype owner label
         label=_("Owner"),
-        required=True,
+        required=False,
         widget=RelateSingleWidget(
             attrs={'searchfield': 'title_auto',
                    #Translators: content type owner hint
