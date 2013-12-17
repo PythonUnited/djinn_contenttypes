@@ -1,0 +1,22 @@
+{% load contentutil_tags %}
+
+<li class="editable">
+
+  <img src="{{ object.get_thumbnail_url }}" />
+  {{ object }}
+  
+  <span class="controls pull-right">
+    <a class="edit-inline"
+       href="{% url 'djinn_contenttypes_edit_imgattachment' object.id %}"
+       >
+      Aanpassen
+    </a>
+    <a class="rm-inline"
+       data-pu_callback="djinn.forms.remove_attachment:{{ object.id }}"
+       href="{% url 'djinn_contenttypes_delete_imgattachment' object.id %}"
+       >
+      Verwijderen
+    </a>
+  </span>
+
+</li>
