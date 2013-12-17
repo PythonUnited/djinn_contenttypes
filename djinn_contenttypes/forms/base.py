@@ -7,6 +7,7 @@ from djinn_forms.fields.relate import RelateField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
+from pgcontent.settings import RELATED_CONTENT
 
 
 class PartialUpdateMixin:
@@ -50,9 +51,9 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
         super(BaseForm, self).__init__(*args, **kwargs)
 
         if partial:
-            self.fields = dict((fname, field) for fname, field in \
-                                   self.fields.items() if \
-                                   fname in self.data.keys())
+            self.fields = dict((fname, field) for fname, field in
+                               self.fields.items() if
+                               fname in self.data.keys())
 
     class Meta:
         exclude = ["creator", "changed_by"]
@@ -101,19 +102,20 @@ class BaseContentForm(BaseForm, RelateMixin):
                    'autocomplete': 'off'})
         )
 
-    # TODO: Move this to relationfield in djinn_forms
     related = RelateField(
-        #lambda x: "related_%s" % x.ct_name,
-        "related_content",
+        RELATED_CONTENT,
         [],
         # Translators: contenttypes related label
         label=_("Related content"),
         required=False,
+        # Translators: Translators: contenttypes related hint
+        help_text=_("Select related content"),
         widget=RelateWidget(
-            attrs={'searchfield': 'title_auto',
-                   #Translators: content type owner hint
-                   'hint': _("Select related content ")
-                   })
+            attrs={'hint': _("Search relation"),
+                   'searchfield': 'title_auto',
+                   'template_name': 'search/relate_search_widget.html',
+                   'search_url': '/zoeken/zoekajaxlinkcontent/', },
+            )
         )
 
     owner = LocalRoleSingleField(
