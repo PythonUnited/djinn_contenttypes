@@ -175,8 +175,9 @@ class BaseContentForm(BaseForm, RelateMixin):
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
 
-        self.fields['parentusergroup'].choices = [(group.id, str(group)) \
-                                                      for group in groups]
+        self.fields['parentusergroup'].choices = \
+            [("", _("Make a choice"))] + [(group.id, str(group)) \
+                                 for group in groups]
 
     def save(self, commit=True):
 

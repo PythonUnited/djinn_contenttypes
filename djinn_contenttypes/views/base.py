@@ -137,11 +137,24 @@ class SwappableMixin(object):
         return self.queryset._clone()
 
 
-class JSONMixin(object):
+class AcceptMixin(object):
+
+    """ Use the accept header to determine the response. Supported are
+    text/html, text/plain and application/json. """
+
+    @property
+    def is_json(self):
+        
+        return "application/json" in self.request.META.get("HTTP_ACCEPT")
+
+    @property
+    def is_text(self):
+        
+        return "text/plain" in self.request.META.get("HTTP_ACCEPT")
 
     def render_to_response(self, context, **response_kwargs):
 
-        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+        if self.is_json:
 
             try:
                 del response_kwargs['mimetype']
@@ -154,13 +167,23 @@ class JSONMixin(object):
                 json.dumps(context, skipkeys=True,
                            default=json_serializer),
                 **response_kwargs)
+        elif self.is_text:
+            try:
+                del response_kwargs['mimetype']
+            except:
+                pass
+
+            response_kwargs["content_type"] = 'text/plain'
+            return TemplateResponseMixin.render_to_response(self,
+                                                            context,
+                                                            **response_kwargs)
         else:
             return TemplateResponseMixin.render_to_response(self,
                                                             context,
                                                             **response_kwargs)
 
 
-class AbstractBaseView(TemplateResolverMixin, SwappableMixin, JSONMixin):
+class AbstractBaseView(TemplateResolverMixin, SwappableMixin, AcceptMixin):
 
     def _determine_content_type(self, default="text/html"):
 
@@ -379,7 +402,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                                        status=202)
 
 
-class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
+class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
                  BaseUpdateView):
 
     mode = "edit"
@@ -429,7 +452,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, JSONMixin,
         if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
-        return super(UpdateView, self).post(request, *args, **kwargs)
+        return super(UpdateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
 
