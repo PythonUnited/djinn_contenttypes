@@ -161,6 +161,10 @@ class BaseContentForm(BaseForm, RelateMixin):
         super(BaseContentForm, self).__init__(*args, **kwargs)
         self.init_relation_fields()
 
+        self.fields['parentusergroup'].choices = self._group_choices()
+
+    def _group_choices(self):
+
         # populate group selector
         groups = UserGroup.objects.filter(membership_type=0)
 
@@ -174,9 +178,9 @@ class BaseContentForm(BaseForm, RelateMixin):
 
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
-        self.fields['parentusergroup'].choices = \
-            [("", _("Make a choice"))] + [(group.id, str(group)) \
-                                 for group in groups]
+
+        return [("", _("Make a choice"))] + [(group.id, str(group)) \
+                                                 for group in groups]
 
     def save(self, commit=True):
 
