@@ -178,7 +178,6 @@ class BaseContentForm(BaseForm, RelateMixin):
             [("", _("Make a choice"))] + [(group.id, str(group)) \
                                  for group in groups]
 
-
     def save(self, commit=True):
 
         res = super(BaseContentForm, self).save(commit=commit)
