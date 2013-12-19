@@ -140,7 +140,8 @@ class SwappableMixin(object):
 class AcceptMixin(object):
 
     """ Use the accept header to determine the response. Supported are
-    text/html, text/plain and application/json. """
+    text/html, text/plain and application/json. Mixin class should come as
+    first extended class... """
 
     @property
     def is_json(self):
