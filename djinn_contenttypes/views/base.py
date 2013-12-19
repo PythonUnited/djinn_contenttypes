@@ -267,6 +267,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
 
     def get_form_kwargs(self):
 
+        """ Add user to kwargs for form. """
+
         kwargs = super(CreateView, self).get_form_kwargs()
 
         if getattr(self.form_class, "user_support", False):
@@ -296,7 +298,11 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
                 #
                 if self.get_initial():
                     form_class = self.get_form_class()
-                    form = form_class(data=self.get_initial())
+
+                    kwargs = self.get_form_kwargs()
+                    kwargs['data'] = self.get_initial()
+
+                    form = form_class(**kwargs)
                     form.cleaned_data = {}
 
                     for field in self.get_initial().keys():
@@ -310,6 +316,10 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
     def get(self, request, *args, **kwargs):
 
         """ Override get so as to be able to check permissions """
+
+        # Set object. If not set, odd behaviour of the django generic
+        # view classes may occur...
+        self.object = None
 
         # TODO: this should be the more specific permission
         perm = CTRegistry.get(self.ct_name).get("add_permission",
@@ -334,6 +344,10 @@ class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
     def post(self, request, *args, **kwargs):
+
+        # Set object. If not set, odd behaviour of the django generic
+        # view classes may occur...
+        self.object = None
 
         perm = CTRegistry.get(self.ct_name).get("add_permission",
                                                 'contenttypes.add_contenttype')
