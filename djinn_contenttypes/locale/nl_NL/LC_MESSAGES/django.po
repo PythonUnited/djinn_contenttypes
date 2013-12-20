@@ -62,7 +62,7 @@ msgstr ""
 #. Translators: contenttypes related label
 #: forms/base.py:119
 msgid "Related content"
-msgstr "Gerelateerde inhoud"
+msgstr "Koppel relevante content aan deze pagina"
 
 #. Translators: Translators: contenttypes related hint
 #: forms/base.py:122
