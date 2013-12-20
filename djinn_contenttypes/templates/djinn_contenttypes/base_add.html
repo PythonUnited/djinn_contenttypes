@@ -6,7 +6,9 @@
 {% block header %}
 <header>
   <h1>
-    {% trans "New" %} {{ view.ct_label|lower }}
+    {% with ct_label=view.ct_label %}
+    {% blocktrans %}Add {{ ct_label }}{% endblocktrans %}
+    {% endwith %}
   </h1>
 </header>
 {% endblock %}

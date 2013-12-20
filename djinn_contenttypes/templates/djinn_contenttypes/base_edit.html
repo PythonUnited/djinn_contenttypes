@@ -9,11 +9,13 @@
 <header>
   <h1>
     {% block title %}
+    {% with ct_label=view.ct_label %}
     {% if object and not object.is_tmp %}
-    {% trans "Edit" %} {{ view.ct_label|lower }}
+    {% blocktrans %}Edit {{ ct_label }}{% endblocktrans %}
     {% else %}
-    {% trans "New" %} {{ view.ct_label|lower }}
+    {% blocktrans %}Add {{ ct_label }}{% endblocktrans %}
     {% endif %}
+    {% endwith %}
     {% endblock title %}
   </h1>
 </header>

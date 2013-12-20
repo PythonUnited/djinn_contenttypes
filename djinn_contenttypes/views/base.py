@@ -31,6 +31,7 @@ class TemplateResolverMixin(object):
 
     @property
     def ct_label(self):
+
         return _(self.model.__name__)
 
     def get_template_names(self):
