@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-19 18:33+0100\n"
-"PO-Revision-Date: 2013-12-19 18:34+0100\n"
-"Last-Translator: Duco Dokter <dokter@w20e.com>\n"
+"POT-Creation-Date: 2013-12-20 10:04+0100\n"
+"PO-Revision-Date: 2013-12-17 17:01+0100\n"
+"Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -20,8 +20,7 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.7.2\n"
 
 #. Translators: contenttypes title label
-#: forms/base.py:75
-#: models/base.py:17
+#: forms/base.py:75 models/base.py:17
 msgid "Title"
 msgstr "Titel"
 
@@ -32,25 +31,20 @@ msgstr "Toevoegen aan groep"
 
 #. Translators: contenttypes publish_from label
 #. Translators: contenttypes publish_to label
-#: forms/base.py:86
-#: forms/base.py:96
-#: models/publishable.py:9
+#: forms/base.py:86 forms/base.py:96 models/publishable.py:9
 msgid "Publish from"
 msgstr "Publiceren vanaf"
 
-#: forms/base.py:89
-#: forms/base.py:99
+#: forms/base.py:89 forms/base.py:99
 msgid "Date"
 msgstr ""
 
-#: forms/base.py:90
-#: forms/base.py:100
+#: forms/base.py:90 forms/base.py:100
 msgid "Time"
 msgstr ""
 
 #. Translators: contenttypes userkeywords label
-#: forms/base.py:106
-#: models/base.py:24
+#: forms/base.py:106 models/base.py:24
 msgid "Keywords"
 msgstr "Trefwoorden"
 
@@ -68,7 +62,7 @@ msgstr "Koppel relevante content aan deze pagina"
 #: forms/base.py:122
 #, fuzzy
 msgid "Select related content"
-msgstr "Gerelateerde inhoud"
+msgstr "Koppel relevante content aan deze pagina"
 
 #: forms/base.py:124
 msgid "Search relation"
@@ -135,23 +129,23 @@ msgstr "Tijdelijk"
 msgid "Publish to"
 msgstr "Publiceren vanaf"
 
-#: templates/djinn_contenttypes/base_add.html:10
-#: templates/djinn_contenttypes/base_edit.html:16
-#, python-format
-msgid "Add %(ct_label)s"
-msgstr "%(ct_label)s toevoegen"
+#: templates/djinn_contenttypes/base_add.html:9
+#: templates/djinn_contenttypes/base_add_modal.html:10
+#: templates/djinn_contenttypes/base_edit.html:15
+msgid "New"
+msgstr "Nieuw"
 
-#: templates/djinn_contenttypes/base_add.html:27
+#: templates/djinn_contenttypes/base_add.html:25
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:85
+#: templates/djinn_contenttypes/base_edit.html:83
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr "Opslaan"
 
-#: templates/djinn_contenttypes/base_add.html:31
+#: templates/djinn_contenttypes/base_add.html:29
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:89
+#: templates/djinn_contenttypes/base_edit.html:87
 #: templates/djinn_contenttypes/base_edit_modal.html:43
 #: templatetags/djinn_contenttypes.py:40
 msgid "Cancel"
@@ -173,45 +167,46 @@ msgstr "Verwijderen"
 
 #. Translators: metadata publication date
 #: templates/djinn_contenttypes/base_detail.html:21
-#: templates/djinn_contenttypes/base_edit.html:28
+#: templates/djinn_contenttypes/base_edit.html:26
 #, fuzzy
 msgid "Published on"
 msgstr "Publiceren vanaf"
 
 #. Translators: metadata status
 #: templates/djinn_contenttypes/base_detail.html:23
-#: templates/djinn_contenttypes/base_edit.html:31
+#: templates/djinn_contenttypes/base_edit.html:29
 msgid "Status"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_detail.html:23
-#: templates/djinn_contenttypes/base_edit.html:31
+#: templates/djinn_contenttypes/base_edit.html:29
 msgid "draft"
 msgstr ""
 
 #. Translators: metadata last changed
 #: templates/djinn_contenttypes/base_detail.html:27
-#: templates/djinn_contenttypes/base_edit.html:36
+#: templates/djinn_contenttypes/base_edit.html:34
 #, fuzzy
 msgid "Last change"
 msgstr "Wijzigingen opgeslagen"
 
 #. Translators: metadata reactions
 #: templates/djinn_contenttypes/base_detail.html:28
-#: templates/djinn_contenttypes/base_edit.html:38
+#: templates/djinn_contenttypes/base_edit.html:36
 msgid "Reactions"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:14
-#, python-format
-msgid "Edit %(ct_label)s"
-msgstr "%(ct_label)s bewerken"
+#: templates/djinn_contenttypes/base_edit.html:13
+#: templates/djinn_contenttypes/base_edit_modal.html:10
+#: templatetags/djinn_contenttypes.py:62
+msgid "Edit"
+msgstr "Bewerk"
 
-#: templates/djinn_contenttypes/base_edit.html:55
+#: templates/djinn_contenttypes/base_edit.html:53
 msgid "Please correct the following errors"
 msgstr "Verbeter de onderstaande fouten"
 
-#: templates/djinn_contenttypes/base_edit.html:100
+#: templates/djinn_contenttypes/base_edit.html:98
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
