@@ -42,6 +42,7 @@
 
 {% block right-pane %}
 <div class="action-bar">
+  {% block extra_actions %}{% endblock extra_actions %}
   {% with perm=object|edit_permission_id %}
   {% ifpermission object request.user perm %}
   {% edit_action object %}
