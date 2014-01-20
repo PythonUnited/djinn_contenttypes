@@ -84,6 +84,8 @@ class BaseContentForm(BaseForm, RelateMixin):
     publish_from = forms.DateTimeField(
         # Translators: contenttypes publish_from label
         label=_("Publish from"),
+        # Translators: contenttypes publish_from help
+        help_text=_("Enter a publish-from date and time"),
         required=False,
         widget=DateTimeWidget(
             attrs={'date_hint': _("Date"),
@@ -93,7 +95,9 @@ class BaseContentForm(BaseForm, RelateMixin):
 
     publish_to = forms.DateTimeField(
         # Translators: contenttypes publish_to label
-        label=_("Publish from"),
+        label=_("Publish to"),
+        # Translators: contenttypes publish_to help
+        help_text=_("Enter a publish-to date and time"),
         required=False,
         widget=DateTimeWidget(
             attrs={'date_hint': _("Date"),
@@ -109,7 +113,8 @@ class BaseContentForm(BaseForm, RelateMixin):
         help_text=_("Enter keywords separated by spaces"),
         widget=forms.HiddenInput(
             attrs={'class': 'full',
-                   'autocomplete': 'off'})
+                   'autocomplete': 'off',
+                   })
         )
 
     related = RelateField(
@@ -162,6 +167,7 @@ class BaseContentForm(BaseForm, RelateMixin):
         self.init_relation_fields()
 
         self.fields['parentusergroup'].choices = self._group_choices()
+        self.fields['userkeywords'].show_label = True
 
     def _group_choices(self):
 
