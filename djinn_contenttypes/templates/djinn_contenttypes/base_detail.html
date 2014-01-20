@@ -50,9 +50,7 @@
 </div>
 
 <section id="ownership">
-  {% if object.show_owner or object.get_owner == request.user or request.user.is_superuser %}
   {% owner object 'False' %}
-  {% endif %}
 </section>
 
 {% if object.parentusergroup %}

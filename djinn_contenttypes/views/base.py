@@ -250,7 +250,8 @@ class CTDetailView(CTMixin, DetailView):
     """ Detailview that applies to any content, determined by the url parts """
 
 
-class CreateView(TemplateResolverMixin, SwappableMixin, BaseCreateView):
+class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
+                 BaseCreateView):
 
     mode = "add"
     fk_fields = []
