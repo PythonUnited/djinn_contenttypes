@@ -77,7 +77,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         """ Display name """
 
-        return self.__class__.__name__
+        return _(self.__class__.__name__)
 
     @property
     def in_closed_group(self):
