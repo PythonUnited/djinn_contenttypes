@@ -1,5 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from djinn_forms.fields.share import ShareField
+from djinn_forms.forms.share import ShareMixin
 from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleField, LocalRoleSingleField
@@ -69,7 +71,7 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
         exclude = ["creator", "changed_by"]
 
 
-class BaseContentForm(BaseForm, RelateMixin):
+class BaseContentForm(BaseForm, RelateMixin, ShareMixin):
 
     # Translators: contenttypes title label
     title = forms.CharField(label=_("Title"),
@@ -146,7 +148,7 @@ class BaseContentForm(BaseForm, RelateMixin):
                    })
         )
 
-    shares = LocalRoleField(
+    shares = ShareField(
         EDITOR_ROLE_ID,
         ["pgprofile.userprofile", "pgprofile.groupprofile"],
         # Translators: Contentype shares/editors label
@@ -165,6 +167,7 @@ class BaseContentForm(BaseForm, RelateMixin):
 
         super(BaseContentForm, self).__init__(*args, **kwargs)
         self.init_relation_fields()
+        self.init_share_fields()
 
         self.fields['parentusergroup'].choices = self._group_choices()
         self.fields['userkeywords'].show_label = True
@@ -192,6 +195,7 @@ class BaseContentForm(BaseForm, RelateMixin):
 
         res = super(BaseContentForm, self).save(commit=commit)
         self.save_relations(commit=commit)
+        self.save_shares(commit=commit)
 
         return res
 
