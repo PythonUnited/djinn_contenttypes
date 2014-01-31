@@ -524,7 +524,8 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
                                        status=202)
 
 
-class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
+class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
+                 BaseDeleteView):
 
     mode = "delete"
 
@@ -539,6 +540,8 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
         if not has_permission(perm, self.request.user, self.object):
             return HttpResponseForbidden()
 
+        deleted = False
+
         try:
             # enable signal handlers to access last change info
             #
@@ -546,13 +549,29 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
                 self.object.changed_by = self.request.user
 
             self.object.delete()
-        except Exception:
-            return HttpResponseRedirect(self.view_url)
 
-        if self.request.is_ajax():
-            return HttpResponse("Bye bye", content_type='text/plain')
+            deleted = True
+        except Exception:
+            pass
+
+        if deleted:
+            if self.is_json:
+                return HttpResponse(json.dumps({'message': 'bye bye'}),
+                                    content_type='application/json')
+            elif self.is_text:
+                return HttpResponse("Bye bye", content_type='text/plain')
+            else:
+                return HttpResponseRedirect(self.get_success_url())
         else:
-            return HttpResponseRedirect(self.get_success_url())
+            if self.is_json:
+                return HttpResponse(json.dumps({'message': 'error'}),
+                                    status=202,
+                                    content_type='application/json')
+            elif self.is_text:
+                return HttpResponse("Error", status=202,
+                                    content_type='text/plain', )
+            else:            
+                return HttpResponseRedirect(self.view_url)
 
     def get_success_url(self):
 
@@ -568,4 +587,4 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, BaseDeleteView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object, **kwargs)
 
-        return self.render_to_response(context, mimetype="text/plain")
+        return self.render_to_response(context)
