@@ -138,8 +138,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     def get_absolute_url(self):
 
-        return reverse('%s_view_%s' % (self.app_label, self.ct_name), (),
-                {"slug": self.slug, "pk": str(self.id)})
+        return reverse('%s_view_%s' % (self.app_label, self.ct_name),
+                       kwargs={"slug": self.slug, "pk": str(self.id)})
 
     def get_local_roles(self, **kwargs):
 
