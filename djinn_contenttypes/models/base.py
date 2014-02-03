@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Permission
 from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 from pgauth.base import LocalRoleMixin, Role
 from pgauth.models import UserGroup
 from pgauth.settings import VIEWER_ROLE_ID
@@ -135,10 +136,9 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         return super(BaseContent, self).delete()
 
-    @models.permalink
     def get_absolute_url(self):
 
-        return ('%s_view_%s' % (self.app_label, self.ct_name), (),
+        return reverse('%s_view_%s' % (self.app_label, self.ct_name), (),
                 {"slug": self.slug, "pk": str(self.id)})
 
     def get_local_roles(self, **kwargs):
