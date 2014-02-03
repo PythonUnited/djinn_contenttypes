@@ -582,9 +582,12 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
     def get(self, request, *args, **kwargs):
 
-        """ Make sure that the confirm delete is sent as text/plain """
+        """ Make sure that the confirm delete is sent as text/plain, given that
+        it is show as a modal. """
 
         self.object = self.get_object()
         context = self.get_context_data(object=self.object, **kwargs)
+
+        self.request.META["HTTP_ACCEPT"] = "text/plain"
 
         return self.render_to_response(context)
