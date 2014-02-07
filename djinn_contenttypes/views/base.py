@@ -147,12 +147,12 @@ class AcceptMixin(object):
     @property
     def is_json(self):
         
-        return "application/json" in self.request.META.get("HTTP_ACCEPT")
+        return "application/json" in self.request.META.get("HTTP_ACCEPT", [])
 
     @property
     def is_text(self):
         
-        return "text/plain" in self.request.META.get("HTTP_ACCEPT")
+        return "text/plain" in self.request.META.get("HTTP_ACCEPT", [])
 
     def render_to_response(self, context, **response_kwargs):
 
@@ -194,7 +194,7 @@ class AbstractBaseView(TemplateResolverMixin, SwappableMixin, AcceptMixin):
         if self.request.is_ajax():
             content_type = "text/plain"
 
-        if "application/json" in self.request.META.get("HTTP_ACCEPT"):
+        if "application/json" in self.request.META.get("HTTP_ACCEPT", []):
             content_type = "application_json"
 
         return content_type
