@@ -16,12 +16,10 @@
   {% block metainfo %}
   <div class="meta-info">
     {% if not object.is_tmp %}
-    {% if object.is_publishable %}
     {% if object.publish_from %}
     {% trans "Published on" %}: {{ object.publish_from }},
     {% else %}
-    {% trans "Status" %}: {% trans "draft" %},
-    {% endif %}
+    {% trans "Published on" %}: {{ object.created }},
     {% endif %}
     {% endif %}
     {% trans "Last change" %}: {{ object.changed }}, 
