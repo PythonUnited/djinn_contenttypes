@@ -31,7 +31,7 @@
   {% block content %}
   {% endblock content %}
 
-  {% if object|implements:"CommentableMixin" %}
+  {% if object|implements:"djinn_contenttypes.Commentable" %}
   {% comments_for object %}
   {% endif %}
 </article>
