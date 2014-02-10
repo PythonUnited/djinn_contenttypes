@@ -84,10 +84,12 @@
             value="save" name="action">
       {% trans "Save" %}
     </button>
+    {% if not object or not object.is_published %}
     <button class="btn protected save-action" type="submit" 
             value="save_as_concept" name="action">
       {% trans "Save as concept" %}
     </button>
+    {% endif %}
     <button class="btn protected cancel-action" type="submit" 
             value="cancel" name="action">
       {% trans "Cancel" %}

@@ -16,16 +16,16 @@ class PublishableContent(BaseContent):
     def is_published(self):
 
         """ Are we published? This is true iff:
-        - not initial still
-        - publish from is earlier than now
-        - if pulish to is set, it is later than now
+          - not initial still
+          - publish from is set and is earlier than now
+          - if publish to is set, it is later than now
         """
 
         now = datetime.now()
 
         return not self.is_tmp and \
-            (not self.publish_from or self.publish_from > now) and \
-            (not self.publish_to or self.publish_to < now)
+            (self.publish_from and self.publish_from <= now) and \
+            (not self.publish_to or self.publish_to > now)
 
     @property
     def acquire_global_roles(self):
