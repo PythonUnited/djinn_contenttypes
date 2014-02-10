@@ -17,9 +17,9 @@
   <div class="meta-info">
     {% if not object.is_tmp %}
     {% if object.publish_from %}
-    {% trans "Published on" %}: {{ object.publish_from }},
+    {% trans "Published on" %}: {{ object.publish_from }}, 
     {% else %}
-    {% trans "Published on" %}: {{ object.created }},
+    {% trans "Draft" %}, 
     {% endif %}
     {% endif %}
     {% trans "Last change" %}: {{ object.changed }}, 

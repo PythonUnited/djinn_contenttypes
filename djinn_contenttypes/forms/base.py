@@ -1,10 +1,11 @@
+from datetime import datetime
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djinn_forms.fields.share import ShareField
 from djinn_forms.forms.share import ShareMixin
 from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
-from djinn_forms.fields.role import LocalRoleField, LocalRoleSingleField
+from djinn_forms.fields.role import LocalRoleSingleField
 from djinn_forms.fields.relate import RelateField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
@@ -188,8 +189,8 @@ class BaseContentForm(BaseForm, RelateMixin, ShareMixin):
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
 
-        return [("", _("Make a choice"))] + [(group.id, str(group)) \
-                                                 for group in groups]
+        return [("", _("Make a choice"))] + [(group.id, str(group))
+                                             for group in groups]
 
     def save(self, commit=True):
 
@@ -200,6 +201,15 @@ class BaseContentForm(BaseForm, RelateMixin, ShareMixin):
         return res
 
     def clean(self):
+
+        # Check whether the 'save_as_concept' was used
+        #
+        if self.data.get("action") == "save":
+            if not self.cleaned_data['publish_from']:
+                self.cleaned_data['publish_from'] = datetime.now()
+        elif self.data.get("action") == "save_as_concept":
+            self.cleaned_data['publish_from'] = None
+            self.cleaned_data['publish_to'] = None
 
         try:
             if self.cleaned_data['publish_to'] < \
