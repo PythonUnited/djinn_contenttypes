@@ -72,7 +72,38 @@ class BaseForm(PartialUpdateMixin, forms.ModelForm):
         exclude = ["creator", "changed_by"]
 
 
-class BaseContentForm(BaseForm, RelateMixin, ShareMixin):
+class BaseSharingForm(BaseForm, RelateMixin, ShareMixin):
+
+    owner = LocalRoleSingleField(
+        OWNER_ROLE_ID,
+        ["pgprofile.userprofile"],
+        # Translators: Contentype owner label
+        label=_("Owner"),
+        required=False,
+        widget=RelateSingleWidget(
+            attrs={'searchfield': 'title_auto',
+                   #Translators: content type owner hint
+                   'hint': _("Select a name")
+                   })
+        )
+
+    shares = ShareField(
+        EDITOR_ROLE_ID,
+        ["pgprofile.userprofile", "pgprofile.groupprofile"],
+        # Translators: Contentype shares/editors label
+        label=_("Editors"),
+        # Translators: content shares help
+        help_text=_("Select users or groups to share editing role"),
+        required=False,
+        widget=RelateWidget(
+            attrs={'searchfield': 'title_auto',
+                   #Translators: content type owner hint
+                   'hint': _("Select a user or group name ")
+                   })
+        )
+
+
+class BaseContentForm(BaseSharingForm):
 
     # Translators: contenttypes title label
     title = forms.CharField(label=_("Title"),
@@ -134,34 +165,6 @@ class BaseContentForm(BaseForm, RelateMixin, ShareMixin):
                    'template_name': 'search/relate_search_widget.html',
                    'search_url': '/zoeken/zoekajaxlinkcontent/', },
             )
-        )
-
-    owner = LocalRoleSingleField(
-        OWNER_ROLE_ID,
-        ["pgprofile.userprofile"],
-        # Translators: Contentype owner label
-        label=_("Owner"),
-        required=False,
-        widget=RelateSingleWidget(
-            attrs={'searchfield': 'title_auto',
-                   #Translators: content type owner hint
-                   'hint': _("Select a name")
-                   })
-        )
-
-    shares = ShareField(
-        EDITOR_ROLE_ID,
-        ["pgprofile.userprofile", "pgprofile.groupprofile"],
-        # Translators: Contentype shares/editors label
-        label=_("Editors"),
-        # Translators: content shares help
-        help_text=_("Select users or groups toshare editing role"),
-        required=False,
-        widget=RelateWidget(
-            attrs={'searchfield': 'title_auto',
-                   #Translators: content type owner hint
-                   'hint': _("Select a user or group name ")
-                   })
         )
 
     def __init__(self, *args, **kwargs):
