@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
-from django.db.models import Model
+from django.db.models import Model, get_model
+import exceptions
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 
@@ -70,3 +72,16 @@ def json_serializer(obj):
         return str(obj_data)
 
     return "NOT SERIALIZABLE"
+
+
+def get_comment_model():
+
+    if settings.DJINN_COMMENT_MODEL:
+
+        try:
+            parts = settings.DJINN_GROUPPROFILE_MODEL.split('.')
+            model = get_model(parts[0], parts[-1])
+        except:
+            raise exceptions.ImproperlyConfigured('Erroneous groupprofile model')
+
+        return model
