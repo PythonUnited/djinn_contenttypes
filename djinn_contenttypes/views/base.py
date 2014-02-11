@@ -515,8 +515,10 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         self.object.save()
 
-        # Translators: edit form status message
-        messages.success(self.request, _("Saved changes"))
+        if not self.partial:
+            # Translators: edit form status message
+            messages.success(self.request, _("Saved changes"))
+
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
