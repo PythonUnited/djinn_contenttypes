@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
 from django.db.models import Model, get_model
-import exceptions
+from django.core import exceptions
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 
