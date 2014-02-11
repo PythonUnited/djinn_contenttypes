@@ -113,7 +113,7 @@ class BaseContentForm(BaseSharingForm):
     # Translators: contenttypes usergroup label
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
-                                             queryset=UserGroup.objects.all())
+                                             queryset=UserGroup.objects.none())
 
     publish_from = forms.DateTimeField(
         # Translators: contenttypes publish_from label
@@ -179,15 +179,18 @@ class BaseContentForm(BaseSharingForm):
     def _group_choices(self):
 
         # populate group selector
-        groups = UserGroup.objects.filter(membership_type=0)
+        if self.user and self.user.is_superuser:
+            groups = UserGroup.objects.all()
+        elif self.user:
+            groups = self.user.usergroup_set.all()
+        else:
+            groups = UserGroup.objects.none()
 
         # if we already have a group set, add it.
         #
         if self.instance.parentusergroup:
             groups = groups | UserGroup.objects.filter(
                 pk=self.instance.parentusergroup.id)
-
-        groups = groups | self.user.usergroup_set.all()
 
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
