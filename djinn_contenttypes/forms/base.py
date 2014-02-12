@@ -113,7 +113,7 @@ class BaseContentForm(BaseSharingForm):
     # Translators: contenttypes usergroup label
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
-                                             queryset=UserGroup.objects.none())
+                                             queryset=UserGroup.objects.all())
 
     publish_from = forms.DateTimeField(
         # Translators: contenttypes publish_from label
@@ -170,6 +170,7 @@ class BaseContentForm(BaseSharingForm):
     def __init__(self, *args, **kwargs):
 
         super(BaseContentForm, self).__init__(*args, **kwargs)
+
         self.init_relation_fields()
         self.init_share_fields()
 
