@@ -20,19 +20,21 @@ class SharingMixin(object):
 
         tgt = get_object_by_ctype_id(ctype, cid)
 
-        if ctype == "userprofile":
+        if getattr(tgt, "user", None):
             self.add_local_role(role, tgt.user)
             Events.send(SHARE_CONTENT,
                         self.get_owner(),
                         users=[tgt.user],
                         content=self, mode=mode)
-        elif ctype == "groupprofile":
+        elif getattr(tgt, "usergroup", None):
             self.add_local_role(role, tgt.usergroup)
-            
+
             Events.send(SHARE_CONTENT,
                         self.get_owner(),
                         users=tgt.usergroup.members.all(),
                         content=self, mode=mode)
+        else:
+            raise
 
     def rm_share(self, ctype, cid, mode):
 
@@ -47,10 +49,12 @@ class SharingMixin(object):
 
         tgt = get_object_by_ctype_id(ctype, cid)
 
-        if ctype == "userprofile":
+        if getattr(tgt, "user", None):
             self.rm_local_role(role, tgt.user)
-        elif ctype == "groupprofile":
+        elif getattr(tgt, "usergroup", None):
             self.rm_local_role(role, tgt.usergroup)
+        else:
+            raise
 
     @property
     def shares(self):
@@ -68,4 +72,3 @@ class SharingMixin(object):
         return self.get_local_roles(
             role_filter=[EDITOR_ROLE_ID, VIEWER_ROLE_ID]).filter(
             usergroup__isnull=False)
-
