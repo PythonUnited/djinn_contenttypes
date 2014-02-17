@@ -2,150 +2,156 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-20 10:04+0100\n"
-"PO-Revision-Date: 2013-12-17 17:01+0100\n"
-"Last-Translator:   <>\n"
+"POT-Creation-Date: 2014-02-10 15:37+0100\n"
+"PO-Revision-Date: 2014-02-11 11:21+0100\n"
+"Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Country: NETHERLANDS\n"
 "X-Poedit-Language: Dutch\n"
 "X-Translated-Using: django-rosetta 0.7.2\n"
 
-#. Translators: contenttypes title label
-#: forms/base.py:75 models/base.py:17
-msgid "Title"
-msgstr "Titel"
-
-#. Translators: contenttypes usergroup label
-#: forms/base.py:80
-msgid "Add to group"
-msgstr "Toevoegen aan groep"
-
-#. Translators: contenttypes publish_from label
-#. Translators: contenttypes publish_to label
-#: forms/base.py:86 forms/base.py:96 models/publishable.py:9
-msgid "Publish from"
-msgstr "Publiceren vanaf"
-
-#: forms/base.py:89 forms/base.py:99
-msgid "Date"
-msgstr ""
-
-#: forms/base.py:90 forms/base.py:100
-msgid "Time"
-msgstr ""
-
-#. Translators: contenttypes userkeywords label
-#: forms/base.py:106 models/base.py:24
-msgid "Keywords"
-msgstr "Trefwoorden"
-
-#. Translators: contenttypes userkeywords help
-#: forms/base.py:109
-msgid "Enter keywords separated by spaces"
-msgstr ""
-
-#. Translators: contenttypes related label
-#: forms/base.py:119
-msgid "Related content"
-msgstr "Koppel relevante content aan deze pagina"
-
-#. Translators: Translators: contenttypes related hint
-#: forms/base.py:122
-#, fuzzy
-msgid "Select related content"
-msgstr "Koppel relevante content aan deze pagina"
-
-#: forms/base.py:124
-msgid "Search relation"
-msgstr ""
-
 #. Translators: Contentype owner label
-#: forms/base.py:135
+#: forms/base.py:81
 msgid "Owner"
 msgstr "Eigenaar"
 
 #. Translators: content type owner hint
-#: forms/base.py:140
+#: forms/base.py:86
 msgid "Select a name"
 msgstr ""
 
 #. Translators: Contentype shares/editors label
-#: forms/base.py:148
-#, fuzzy
+#: forms/base.py:94
 msgid "Editors"
-msgstr "Bewerk"
+msgstr "Collega's/groepen die deze pagina mogen bewerken"
 
 #. Translators: content shares help
-#: forms/base.py:150
-msgid "Select users or groups toshare editing role"
-msgstr ""
+#: forms/base.py:96
+#, fuzzy
+msgid "Select users or groups to share editing role"
+msgstr "_EMPTY_"
 
 #. Translators: content type owner hint
-#: forms/base.py:155
-#, fuzzy
+#: forms/base.py:101
 msgid "Select a user or group name "
-msgstr "Voeg gebruiker of groep to"
+msgstr "Voeg een collega of groep toe"
 
-#: forms/base.py:182
-msgid "Make a choice"
+#. Translators: contenttypes title label
+#: forms/base.py:109 models/base.py:18
+msgid "Title"
+msgstr "Titel"
+
+#. Translators: contenttypes usergroup label
+#: forms/base.py:114
+msgid "Add to group"
+msgstr "Toevoegen aan groep"
+
+#. Translators: contenttypes publish_from label
+#: forms/base.py:120 models/publishable.py:9
+msgid "Publish from"
+msgstr "Publiceren vanaf"
+
+#. Translators: contenttypes publish_from help
+#: forms/base.py:122
+msgid "Enter a publish-from date and time"
+msgstr "_EMPTY_"
+
+#: forms/base.py:125 forms/base.py:137
+msgid "Date"
 msgstr ""
 
+#: forms/base.py:126 forms/base.py:138
+msgid "Time"
+msgstr ""
+
+#. Translators: contenttypes publish_to label
+#: forms/base.py:132 models/publishable.py:12
+msgid "Publish to"
+msgstr "Publiceren tot"
+
+#. Translators: contenttypes publish_to help
+#: forms/base.py:134
+msgid "Enter a publish-to date and time"
+msgstr "_EMPTY_"
+
+#. Translators: contenttypes userkeywords label
+#: forms/base.py:144 models/base.py:25
+msgid "Keywords"
+msgstr "Trefwoorden"
+
+#. Translators: contenttypes userkeywords help
+#: forms/base.py:147
+msgid "Enter keywords separated by spaces"
+msgstr "_EMPTY_"
+
+#. Translators: contenttypes related label
+#: forms/base.py:158
+msgid "Related content"
+msgstr "Voeg links naar andere content toe"
+
+#. Translators: Translators: contenttypes related hint
+#: forms/base.py:161
+msgid "Select related content"
+msgstr "_EMPTY_"
+
+#: forms/base.py:163
+msgid "Search relation"
+msgstr ""
+
+#: forms/base.py:195
+msgid "Make a choice"
+msgstr "Maak keuze"
+
 #: models/attachment.py:11
-#, fuzzy
 msgid "title"
 msgstr "Titel"
 
-#: models/base.py:18
+#: models/base.py:19
 msgid "Created"
 msgstr "Aangemaakt"
 
-#: models/base.py:19
+#: models/base.py:20
 msgid "Changed"
 msgstr "Gewijzigd"
 
-#: models/base.py:22
+#: models/base.py:23
 msgid "Creator naam"
 msgstr "Naam auteur"
-
-#: models/base.py:26
-msgid "Show owner"
-msgstr "Toon eigenaar"
 
 #: models/base.py:31
 msgid "Temporary"
 msgstr "Tijdelijk"
 
-#: models/publishable.py:12
-#, fuzzy
-msgid "Publish to"
-msgstr "Publiceren vanaf"
+#: models/commentable.py:16
+msgid "Collega's kunnen reageren"
+msgstr ""
 
-#: templates/djinn_contenttypes/base_add.html:9
-#: templates/djinn_contenttypes/base_add_modal.html:10
-#: templates/djinn_contenttypes/base_edit.html:15
-msgid "New"
-msgstr "Nieuw"
+#: templates/djinn_contenttypes/base_add.html:10
+#: templates/djinn_contenttypes/base_edit.html:16
+#, python-format
+msgid "Add %(ct_label)s"
+msgstr "%(ct_label)s toevoegen"
 
-#: templates/djinn_contenttypes/base_add.html:25
+#: templates/djinn_contenttypes/base_add.html:27
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:83
+#: templates/djinn_contenttypes/base_edit.html:85
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
-msgstr "Opslaan"
+msgstr "Opslaan en publiceren"
 
-#: templates/djinn_contenttypes/base_add.html:29
+#: templates/djinn_contenttypes/base_add.html:31
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:87
+#: templates/djinn_contenttypes/base_edit.html:95
 #: templates/djinn_contenttypes/base_edit_modal.html:43
 #: templatetags/djinn_contenttypes.py:40
 msgid "Cancel"
@@ -166,47 +172,50 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #. Translators: metadata publication date
-#: templates/djinn_contenttypes/base_detail.html:21
-#: templates/djinn_contenttypes/base_edit.html:26
-#, fuzzy
+#: templates/djinn_contenttypes/base_detail.html:20
+#: templates/djinn_contenttypes/base_edit.html:28
 msgid "Published on"
 msgstr "Publiceren vanaf"
 
+#: templates/djinn_contenttypes/base_detail.html:22
+msgid "Draft"
+msgstr "Concept"
+
+#. Translators: metadata last changed
+#: templates/djinn_contenttypes/base_detail.html:25
+#: templates/djinn_contenttypes/base_edit.html:36
+msgid "Last change"
+msgstr "Laatste wijziging"
+
+#. Translators: metadata reactions
+#: templates/djinn_contenttypes/base_detail.html:26
+#: templates/djinn_contenttypes/base_edit.html:38
+msgid "Reactions"
+msgstr "Reacties"
+
+#: templates/djinn_contenttypes/base_edit.html:14
+#, python-format
+msgid "Edit %(ct_label)s"
+msgstr "%(ct_label)s bewerken"
+
 #. Translators: metadata status
-#: templates/djinn_contenttypes/base_detail.html:23
-#: templates/djinn_contenttypes/base_edit.html:29
+#: templates/djinn_contenttypes/base_edit.html:31
 msgid "Status"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:23
-#: templates/djinn_contenttypes/base_edit.html:29
+#: templates/djinn_contenttypes/base_edit.html:31
 msgid "draft"
-msgstr ""
+msgstr "Concept"
 
-#. Translators: metadata last changed
-#: templates/djinn_contenttypes/base_detail.html:27
-#: templates/djinn_contenttypes/base_edit.html:34
-#, fuzzy
-msgid "Last change"
-msgstr "Wijzigingen opgeslagen"
-
-#. Translators: metadata reactions
-#: templates/djinn_contenttypes/base_detail.html:28
-#: templates/djinn_contenttypes/base_edit.html:36
-msgid "Reactions"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:13
-#: templates/djinn_contenttypes/base_edit_modal.html:10
-#: templatetags/djinn_contenttypes.py:62
-msgid "Edit"
-msgstr "Bewerk"
-
-#: templates/djinn_contenttypes/base_edit.html:53
+#: templates/djinn_contenttypes/base_edit.html:55
 msgid "Please correct the following errors"
-msgstr "Verbeter de onderstaande fouten"
+msgstr "Het formulier is niet helemaal correct ingevuld. "
 
-#: templates/djinn_contenttypes/base_edit.html:98
+#: templates/djinn_contenttypes/base_edit.html:90
+msgid "Save as concept"
+msgstr "Opslaan als concept"
+
+#: templates/djinn_contenttypes/base_edit.html:106
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
@@ -217,9 +226,12 @@ msgid "Edit"
 msgstr "Bewerk"
 
 #. Translators: edit form status message
-#: views/base.py:517
+#: views/base.py:519
 msgid "Saved changes"
 msgstr "Wijzigingen opgeslagen"
+
+#~ msgid "Show owner"
+#~ msgstr "Laat contactgegevens van eigenaar zien"
 
 #~ msgid "Publiceren till"
 #~ msgstr "Publiceren tot"
