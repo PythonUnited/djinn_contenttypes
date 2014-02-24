@@ -81,14 +81,19 @@
   {% block formcontrols %}
   <div class="btn-group form-actions">
     {% block savecontrols %}
+    {% if not object or not object.is_published %}
     <button class="btn btn-primary protected save-action" type="submit" 
             value="save" name="action">
-      {% trans "Save" %}
+      {% trans "Save and publish" %}
     </button>
-    {% if not object or not object.is_published %}
     <button class="btn protected save-action" type="submit" 
             value="save_as_concept" name="action">
       {% trans "Save as concept" %}
+    </button>
+    {% else %}
+    <button class="btn btn-primary protected save-action" type="submit" 
+            value="save" name="action">
+      {% trans "Save" %}
     </button>
     {% endif %}
     {% endblock %}
