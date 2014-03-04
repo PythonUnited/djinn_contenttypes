@@ -1,3 +1,7 @@
+1.1.0
+=====
+ * Well, basically too much to mention...
+
 1.0.2
 =====
  * Added name override option to url generate, to enable dynamic models
