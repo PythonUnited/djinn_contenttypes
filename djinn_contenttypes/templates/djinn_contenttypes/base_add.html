@@ -13,15 +13,10 @@
 </header>
 {% endblock %}
 
-{% block extra_formfields %}
-{% if object %}
-<input type="hidden" name="tmp_id" value="{{ object.id }}" />
-{% endif %}
-{% endblock %}
-
 
 {% block formcontrols %}
 <div class="btn-group form-actions">
+
   <button class="btn btn-primary protected save-action" type="submit" 
           value="save" name="action">
     {% trans "Save" %}
