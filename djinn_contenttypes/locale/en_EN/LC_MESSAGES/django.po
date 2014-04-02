@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-10 15:37+0100\n"
+"POT-Creation-Date: 2014-04-02 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Search relation"
 msgstr ""
 
-#: forms/base.py:195
+#: forms/base.py:199
 msgid "Make a choice"
 msgstr "Maak keuze"
 
@@ -132,23 +132,31 @@ msgstr ""
 msgid "Collega's kunnen reageren"
 msgstr ""
 
+#: models/publishable.py:15
+msgid "Event verstuurd"
+msgstr ""
+
+#: models/publishable.py:16
+msgid "Event bij publicatie is verstuurd (bijv. voor timeline)"
+msgstr ""
+
 #: templates/djinn_contenttypes/base_add.html:10
 #: templates/djinn_contenttypes/base_edit.html:16
 #, python-format
 msgid "Add %(ct_label)s"
 msgstr "%(ct_label)s toevoegen"
 
-#: templates/djinn_contenttypes/base_add.html:27
+#: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:85
+#: templates/djinn_contenttypes/base_edit.html:97
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_add.html:31
+#: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:95
+#: templates/djinn_contenttypes/base_edit.html:103
 #: templates/djinn_contenttypes/base_edit_modal.html:43
 #: templatetags/djinn_contenttypes.py:40
 msgid "Cancel"
@@ -208,11 +216,15 @@ msgstr ""
 msgid "Please correct the following errors"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:90
+#: templates/djinn_contenttypes/base_edit.html:88
+msgid "Save and publish"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_edit.html:92
 msgid "Save as concept"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:106
+#: templates/djinn_contenttypes/base_edit.html:114
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr ""
@@ -223,6 +235,6 @@ msgid "Edit"
 msgstr ""
 
 #. Translators: edit form status message
-#: views/base.py:519
+#: views/base.py:520
 msgid "Saved changes"
 msgstr ""
