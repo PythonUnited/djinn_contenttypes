@@ -92,38 +92,23 @@
           {% trans "Save as concept" %}
         </button>
     {% else %}
-      {% if not object.is_published %}
-        <button class="btn btn-primary protected save-action" type="submit"
-                value="save_as_concept" name="action">
-          {% trans "Save" %}
-        </button>
+      {% if not object.is_published and not object.is_scheduled %}
         <button class="btn btn-primary protected save-action" type="submit"
                 value="save" name="action">
           {% trans "Save and publish" %}
         </button>
-      {% else %}
         <button class="btn btn-primary protected save-action" type="submit"
                 value="save_as_concept" name="action">
+          {% trans "Save as concept" %}
+        </button>
+      {% else %}
+        <button class="btn btn-primary protected save-action" type="submit"
+                value="save" name="action">
           {% trans "Save" %}
         </button>
       {% endif %}
     {% endif %}
 
-    <!--{% if not object or not object.is_published %}-->
-        <!--<button class="btn btn-primary protected save-action" type="submit" -->
-                <!--value="save" name="action">-->
-          <!--{% trans "Save and publish" %}-->
-        <!--</button>-->
-        <!--<button class="btn protected save-action" type="submit" -->
-                <!--value="save_as_concept" name="action">-->
-          <!--{% trans "Save as concept" %}-->
-        <!--</button>-->
-    <!--{% else %}-->
-        <!--<button class="btn btn-primary protected save-action" type="submit" -->
-                <!--value="save" name="action">-->
-          <!--{% trans "Save" %}-->
-        <!--</button>-->
-    <!--{% endif %}-->
     {% endblock %}
     <button class="btn protected cancel-action" type="submit" 
             value="cancel" name="action">

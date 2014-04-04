@@ -29,6 +29,17 @@ class PublishableContent(BaseContent):
             (self.publish_from and self.publish_from <= now) and \
             (not self.publish_to or self.publish_to > now)
 
+    def is_scheduled(self):
+
+        """
+        Are we scheduled to be published later?
+        """
+
+        now = datetime.now()
+        return not self.is_tmp and \
+            (self.publish_from and self.publish_from > now) and \
+            (not self.publish_to or self.publish_to > now)
+
     @property
     def acquire_global_roles(self):
 
