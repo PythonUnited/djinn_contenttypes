@@ -94,12 +94,12 @@
     {% else %}
       {% if not object.is_published and not object.is_scheduled %}
         <button class="btn btn-primary protected save-action" type="submit"
-                value="save" name="action">
-          {% trans "Save and publish" %}
+                value="save_as_concept" name="action">
+          {% trans "Save" %}
         </button>
         <button class="btn btn-primary protected save-action" type="submit"
-                value="save_as_concept" name="action">
-          {% trans "Save as concept" %}
+                value="save" name="action">
+          {% trans "Save and publish" %}
         </button>
       {% else %}
         <button class="btn btn-primary protected save-action" type="submit"
