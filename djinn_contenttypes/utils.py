@@ -79,9 +79,10 @@ def get_comment_model():
     if settings.DJINN_COMMENT_MODEL:
 
         try:
-            parts = settings.DJINN_GROUPPROFILE_MODEL.split('.')
+            parts = settings.DJINN_COMMENT_MODEL.split('.')
+
             model = get_model(parts[0], parts[-1])
         except:
-            raise exceptions.ImproperlyConfigured('Erroneous groupprofile model')
+            raise exceptions.ImproperlyConfigured('Erroneous comment model')
 
         return model

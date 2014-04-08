@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-04 22:44+0100\n"
+"POT-Creation-Date: 2014-04-02 15:10+0200\n"
 "PO-Revision-Date: 2014-02-11 11:21+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,7 +154,7 @@ msgstr "%(ct_label)s toevoegen"
 #: templates/djinn_contenttypes/base_edit.html:97
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
-msgstr "Opslaan en publiceren"
+msgstr "Opslaan"
 
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:43
@@ -221,7 +221,7 @@ msgstr "Het formulier is niet helemaal correct ingevuld. "
 
 #: templates/djinn_contenttypes/base_edit.html:88
 msgid "Save and publish"
-msgstr ""
+msgstr "Opslaan en publiceren"
 
 #: templates/djinn_contenttypes/base_edit.html:92
 msgid "Save as concept"

@@ -1,3 +1,13 @@
+1.2.1
+=====
+* Fixes for comment model
+
+1.2.0
+=====
+* Added submit buttons for save and save as draft
+* Comment model configurable
+* publication can be scheduled
+
 1.1.1
 =====
  * Translation hotfix
