@@ -1,3 +1,7 @@
+1.2.2
+====
+* Added forms.fields.NoScripCharField 
+
 1.2.1
 =====
 * Fixes for comment model
