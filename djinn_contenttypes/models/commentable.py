@@ -5,6 +5,7 @@ from djinn_contenttypes.utils import get_comment_model
 
 comment_class = get_comment_model()
 
+
 class Commentable(models.Model):
 
     """

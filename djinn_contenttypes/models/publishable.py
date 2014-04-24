@@ -6,14 +6,17 @@ from base import BaseContent
 
 class PublishableContent(BaseContent):
 
+    """ Anything that is publishable should extend this class """
+
     publish_from = models.DateTimeField(_('Publish from'), null=True,
                                         db_index=True,
                                         blank=True, default=None)
     publish_to = models.DateTimeField(_('Publish to'), null=True,
                                       db_index=True,
                                       blank=True, default=None)
-    publish_notified = models.BooleanField(_('Event verstuurd'), default=False,
-                                           help_text=_("Event bij publicatie is verstuurd (bijv. voor timeline)"))
+    publish_notified = models.BooleanField(
+        _('Event verstuurd'), default=False,
+        help_text=_("Event bij publicatie is verstuurd (bijv. voor timeline)"))
 
     def is_published(self):
 
@@ -42,6 +45,8 @@ class PublishableContent(BaseContent):
 
     @property
     def acquire_global_roles(self):
+
+        """ Do we need to acquire global roles? Only if published... """
 
         if not self.is_published():
             return False

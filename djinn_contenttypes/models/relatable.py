@@ -1,6 +1,5 @@
 import logging
 from django.db import models
-from pgcontent.models.simplerelation import SimpleRelation
 
 
 LOG = logging.getLogger("djinn_contenttypes")
@@ -9,6 +8,13 @@ LOG = logging.getLogger("djinn_contenttypes")
 class RelatableMixin(object):
 
     """ Mixin class that enables relations."""
+
+    @property
+    def relation_model(self):
+
+        """ Dynamically fetch model, so as to remove module dependency """
+
+        return models.get_model("pgcontent", "SimpleRelation")
 
     def get_related(self, relation_type=None):
 
@@ -26,12 +32,12 @@ class RelatableMixin(object):
             try:
                 related.append(rel.get_tgt())
             except:
-                LOG.warn("Cleaning up broken relation %s" % rel)
+                LOG.warn("Cleaning up broken relation %s", rel)
                 rel.delete()
 
         return related
 
-    def get_relations(self, relation_type_list=[], target_type=None,
+    def get_relations(self, relation_type_list=None, target_type=None,
                       inverse=False):
 
         """
@@ -42,12 +48,15 @@ class RelatableMixin(object):
         Returns a Filter result.
         """
 
+        if not relation_type_list:
+            relation_type_list = []
+
         if not inverse:
             _filter = {'src_content_type': self.ct_class,
-              'src_object_id': self.id}
+                       'src_object_id': self.id}
         else:
             _filter = {'tgt_content_type': self.ct_class,
-                 'tgt_object_id': self.id}
+                       'tgt_object_id': self.id}
 
         if len(relation_type_list):
             _filter['relation_type__in'] = relation_type_list
@@ -55,7 +64,7 @@ class RelatableMixin(object):
         if target_type:
             _filter['tgt_content_type'] = target_type
 
-        return SimpleRelation.objects.filter(**_filter)
+        return self.relation_model.objects.filter(**_filter)
 
     def add_relation(self, relation_type, target, unique=True):
 
@@ -65,32 +74,35 @@ class RelatableMixin(object):
         if unique and self.has_relation(relation_type, target):
             return None
 
-        return SimpleRelation.objects.create(src_content_type=self.ct_class,
-                                             src_object_id=self.id,
-                                             relation_type=relation_type,
-                                             tgt_content_type=target.ct_class,
-                                             tgt_object_id=target.id)
+        return self.relation_model.objects.create(
+            src_content_type=self.ct_class,
+            src_object_id=self.id,
+            relation_type=relation_type,
+            tgt_content_type=target.ct_class,
+            tgt_object_id=target.id)
 
     def has_relation(self, relation_type, target):
 
         """ Add relation with given type with target as receiving end."""
 
-        return SimpleRelation.objects.filter(src_content_type=self.ct_class,
-                                             src_object_id=self.id,
-                                             relation_type=relation_type,
-                                             tgt_content_type=target.ct_class,
-                                             tgt_object_id=target.id).exists()
+        return self.relation_model.objects.filter(
+            src_content_type=self.ct_class,
+            src_object_id=self.id,
+            relation_type=relation_type,
+            tgt_content_type=target.ct_class,
+            tgt_object_id=target.id).exists()
 
     def rm_relation(self, relation_type, target):
 
         """ Remove relation with given type with target as receiving
         end."""
 
-        SimpleRelation.objects.filter(src_content_type=self.ct_class,
-                                   src_object_id=self.id,
-                                   relation_type=relation_type,
-                                   tgt_content_type=target.ct_class,
-                                   tgt_object_id=target.id).delete()
+        self.relation_model.objects.filter(
+            src_content_type=self.ct_class,
+            src_object_id=self.id,
+            relation_type=relation_type,
+            tgt_content_type=target.ct_class,
+            tgt_object_id=target.id).delete()
 
     def rm_all_relations(self, inverse=True):
 
@@ -98,6 +110,8 @@ class RelatableMixin(object):
         relations where self is the target. """
 
     def save_relations(self):
+
+        """ Save all relations set for the current object """
 
         # if this instance has a '_relation_updater' attribute, then
         # iterate over them, and call the update method
@@ -113,6 +127,9 @@ class RelatableModel(models.Model, RelatableMixin):
     """ A model with the relatable stuff builtin """
 
     class Meta:
+
+        """ Make the base model abstract """
+
         abstract = True
 
     def save(self):
