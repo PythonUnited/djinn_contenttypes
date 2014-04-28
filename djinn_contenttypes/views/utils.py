@@ -1,4 +1,5 @@
 import logging
+import traceback
 from django.db import models
 from django.db.models import get_model
 from django.conf.urls.defaults import url, patterns
@@ -103,8 +104,8 @@ def generate_add_url(model, modelname, modulename, name=None):
 
     if extends(model, FKContentMixin):
 
-        kwargs['fk_fields'] = [f.name for f in model._meta.fields if \
-                                   isinstance(f, models.ForeignKey)]
+        kwargs['fk_fields'] = [f.name for f in model._meta.fields if
+                               isinstance(f, models.ForeignKey)]
         expr = r"^add/%s" % modelname
 
         for fk_field in kwargs['fk_fields']:
@@ -151,22 +152,17 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.lower().split(".")
 
-    module = None
-
-    try:
-        module = __import__("%s.views.%s" % (modulename, modelname))
-    except ImportError:
-        try:
-            module = __import__("%s.views" % modulename)
-        except ImportError:
-            pass
+    module = __import__(modulename)
 
     if module:
         try:
             view_class = getattr(getattr(getattr(module, "views"), modelname),
                                  viewclassname)
         except AttributeError:
-            pass
+            try:
+                view_class = getattr(getattr(module, "views"), viewclassname)
+            except AttributeError:
+                pass
 
     if not view_class:
         view_class = default
@@ -188,23 +184,7 @@ def find_form_class(model, modulename):
         modulename, modelname = model._meta.swapped.split(".")
         modelname = modelname.lower()
 
-    try:
-        module = __import__("%s.forms.%s" % (modulename, modelname))
-    except ImportError, e:
-        if not "No module" in str(e) and not modelname in str(e):
-            import traceback
-            traceback.print_exc()
-
-            raise
-
-        try:
-            module = __import__("%s.forms" % modulename)
-        except ImportError, e:
-            if not "No module" in str(e) and not modelname in str(e):
-                import traceback
-                traceback.print_exc()
-
-                raise
+    module = __import__(modulename)
 
     if module:
         try:

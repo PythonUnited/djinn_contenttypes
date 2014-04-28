@@ -1,4 +1,5 @@
-import registry
+#import registry
+
 
 def get_js():
 

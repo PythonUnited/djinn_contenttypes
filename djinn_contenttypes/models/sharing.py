@@ -1,7 +1,5 @@
 from pgauth.base import Role
 from pgauth.settings import VIEWER_ROLE_ID, EDITOR_ROLE_ID
-from pgevents.settings import SHARE_CONTENT
-from pgevents.events import Events
 from djinn_contenttypes.utils import get_object_by_ctype_id
 
 
@@ -10,6 +8,12 @@ class SharingMixin(object):
     def add_share(self, ctype, cid, mode):
 
         """ Add share to given ct, with mode """
+
+        # Import runtime to prevent dependency hell.
+        # TODO needs to be resolved obviously...
+        #
+        from pgevents.settings import SHARE_CONTENT
+        from pgevents.events import Events
 
         if mode == 'viewer':
             role = Role.objects.get(name=VIEWER_ROLE_ID)

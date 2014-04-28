@@ -21,7 +21,9 @@ def has_permission(perm, user, obj):
 
 
 def get_model_name(model):
+
     "Returns the Python model class for this type of content."
+
     if isinstance(model, Model) or isinstance(model, ModelBase):
         return model._meta.object_name.lower()
     return str(model)
@@ -68,7 +70,7 @@ def json_serializer(obj):
                 obj_data[field.name] = str(field.value_from_object(obj))
             except:
                 pass
-                
+
         return str(obj_data)
 
     return "NOT SERIALIZABLE"
