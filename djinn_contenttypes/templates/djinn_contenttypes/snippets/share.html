@@ -1,0 +1,70 @@
+{% extends "djinn_contenttypes/snippets/modal.html" %}
+
+{% load bootstrap i18n %}
+
+{% block id %}sharecontent{% endblock %}
+  
+{% block title %}{% trans "Share" %}{% endblock %}
+
+{% block body %}
+
+<div class="general-help alert alert-info">
+  {{ form.help|safe }}
+</div>
+
+<form method="POST"
+      action="{% url 'djinn_contenttypes_share' view.obj.ct_name view.obj.id %}"
+      id="retweet_form"
+      class="modal-submit">
+  
+	{% if form.errors %}
+  <div class="alert alert-error">
+    {% for field in form %}
+    {% if field.errors %}
+    <dl>
+      <dt>{{ field.label }}</dt><dd>{{ field.errors }}</dd>
+    </dl>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+    
+  <div class="control-group 
+              {% if form.recipient.errors %}error{% endif %}
+              required">
+    <label class="control-label">{{ view.page_title }}</label>
+    <div class="controls">
+      
+      <label class="radio">
+        {{ view.render_recipients.0|removetags:'label' }}
+      </label>
+      
+      <label class="radio">
+        {{ view.render_recipients.1|removetags:'label' }}
+      </label>
+      
+      <div class="controls hide collapsed">
+        {{ form.group }}
+      </div>
+      
+      <label class="radio">
+        {{ view.render_recipients.2|removetags:'label' }}
+      </label>
+      
+      <div class="controls hide collapsed">
+        {{ form.user }}
+      </div>
+      
+    </div>
+  </div>
+  
+  {{ form.message|bootstrap }}
+  
+  <div class="btn-group form-actions">
+    <a href="#" class="btn btn-primary submit">{% trans 'Share' %}</a>
+    <a href="#" class="btn cancel">{% trans 'Cancel' %}</a>
+  </div>
+  
+</form>
+
+{% endblock %}

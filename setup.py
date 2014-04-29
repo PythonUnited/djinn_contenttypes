@@ -13,16 +13,17 @@ requires = [
 setup(name='djinn_contenttypes',
       version="1.2.2",
       description='Djinn Intranet Contenttypes framework',
-      long_description=README + '\n\n' +  CHANGES,
+      long_description=README + '\n\n' + CHANGES,
       classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Framework :: Django",
-        "Intended Audience :: Developers",
-        "License :: Freely Distributable",
-        "Programming Language :: Python",
-        "Topic :: Internet :: WWW/HTTP :: Site Management",
-        "Topic :: Software Development :: Libraries :: Application Frameworks"
-        ],
+          "Development Status :: 5 - Production/Stable",
+          "Framework :: Django",
+          "Intended Audience :: Developers",
+          "License :: Freely Distributable",
+          "Programming Language :: Python",
+          "Topic :: Internet :: WWW/HTTP :: Site Management",
+          "Topic :: Software Development :: Libraries :: "
+          "Application Frameworks"
+      ],
       author='PythonUnited',
       author_email='info@pythonunited.com',
       license='beer-ware',
@@ -31,11 +32,12 @@ setup(name='djinn_contenttypes',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      install_requires = requires,
-      tests_require= requires,
+      install_requires=requires,
+      tests_require=requires,
       test_suite="djinn-contenttypes",
-      entry_points = """\
+      entry_points="""\
       [djinn.app]
       js=djinn_contenttypes:get_js
+      urls=djinn_contenttypes:get_urls
       """
       )
