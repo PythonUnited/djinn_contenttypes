@@ -1,5 +1,5 @@
 import logging
-import traceback
+from importlib import import_module
 from django.db import models
 from django.db.models import get_model
 from django.conf.urls.defaults import url, patterns
@@ -147,22 +147,24 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
 
     viewclassname = "%s%s" % (model.__name__, suffix)
     modelname = model.__name__.lower()
-    view_class = None
+    view_class = module = None
 
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.lower().split(".")
 
-    module = __import__(modulename)
+    try:
+        module = import_module("%s.views.%s" % (modulename, modelname))
+    except ImportError:
+        try:
+            module = import_module("%s.views" % modulename)
+        except ImportError:
+            LOGGER.info("No views module found for %s" % modulename)
 
     if module:
         try:
-            view_class = getattr(getattr(getattr(module, "views"), modelname),
-                                 viewclassname)
+            view_class = getattr(module, viewclassname)
         except AttributeError:
-            try:
-                view_class = getattr(getattr(module, "views"), viewclassname)
-            except AttributeError:
-                pass
+            LOGGER.info("No view found for %s" % modelname)
 
     if not view_class:
         view_class = default
@@ -174,7 +176,7 @@ def find_view(model, modulename, suffix="View", default=DetailView, **kwargs):
 def find_form_class(model, modulename):
 
     """ Try to find form class either in forms.py or in a separate file
-    within forms named after the lower case model class """
+    within forms named after the lower case model class. """
 
     formclassname = "%sForm" % model.__name__
     modelname = model.__name__.lower()
@@ -184,16 +186,18 @@ def find_form_class(model, modulename):
         modulename, modelname = model._meta.swapped.split(".")
         modelname = modelname.lower()
 
-    module = __import__(modulename)
+    try:
+        module = import_module("%s.forms.%s" % (modulename, modelname))
+    except ImportError:
+        try:
+            module = import_module("%s.forms" % modulename)
+        except ImportError:
+            LOGGER.info("No forms module found for %s" % modulename)
 
     if module:
         try:
-            form_class = getattr(getattr(getattr(module, "forms"), modelname),
-                                 formclassname)
+            form_class = getattr(module, formclassname)
         except AttributeError:
-            try:
-                form_class = getattr(getattr(module, "forms"), formclassname)
-            except AttributeError:
-                LOGGER.warn("No form found for %s" % modelname)
+            LOGGER.info("No form found for %s" % modelname)
 
     return form_class
