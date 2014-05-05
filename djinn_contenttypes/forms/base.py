@@ -177,9 +177,19 @@ class BaseContentForm(BaseSharingForm):
         self.fields['parentusergroup'].choices = self._group_choices()
         self.fields['userkeywords'].show_label = True
 
+        # If there is no instance, or the instance is a temporary one,
+        # set the group to -1.
+        #
+        if not self.instance or self.instance.is_tmp:
+            self.initial['parentusergroup'] = -1
+
     def _group_choices(self):
 
-        # populate group selector
+        """Populate group selector. This adds the special case '-1' for no
+        selection made, so we can make sure the user needs to either
+        select a group, or select 'no group'.
+        """
+
         if self.user and self.user.is_superuser:
             groups = UserGroup.objects.all()
         elif self.user:
@@ -196,12 +206,17 @@ class BaseContentForm(BaseSharingForm):
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
 
-        return [("", _("Make a choice"))] + [(group.id, str(group))
-                                             for group in groups]
+        return [
+            # Translators: djinn_contenttypes group make a choice label
+            ("-1", _("Make a choice")),
+            # Translators: djinn_contenttypes group no group label
+            (("", _("Do not add to a group")))] + \
+            [(group.id, str(group)) for group in groups]
 
     def save(self, commit=True):
 
         res = super(BaseContentForm, self).save(commit=commit)
+
         self.save_relations(commit=commit)
         self.save_shares(commit=commit)
 
@@ -226,3 +241,17 @@ class BaseContentForm(BaseSharingForm):
             pass
 
         return self.cleaned_data
+
+    def clean_parentusergroup(self):
+
+        """The parentusergroup requires some special attention: it is not
+        required, but users need to make that choice explicitly. """
+
+        group = self.cleaned_data.get('parentusergroup')
+
+        if group == -1:
+            if group == -1:
+                # Translators: djinn_contenttypes parentusergroup required
+                raise forms.ValidationError(_(u"Make a choice"))
+
+        return group

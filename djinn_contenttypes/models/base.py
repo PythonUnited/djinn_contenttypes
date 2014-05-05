@@ -13,7 +13,7 @@ from relatable import RelatableMixin
 
 class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
-    """ All Djinn content extends this base class. """
+    """ All Djinn content extends this base class. Or should... """
 
     title = models.CharField(_('Title'), max_length=200)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
