@@ -62,7 +62,7 @@ $(document).ready(function() {
    * the modal is closed, on failure (status 202) the received data is
    * assumed to be a new modal, to replace the current one.
    */
-  $(document).on("submit", ".modal form", function(e) {
+  $(document).on("submit", ".modal-submit", function(e) {
 
     e.preventDefault();    
 
