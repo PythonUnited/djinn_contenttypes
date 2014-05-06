@@ -297,6 +297,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             else:
                 obj = self.real_model.objects.create(
                     creator=self.request.user,
+                    is_tmp=True,
                     changed_by=self.request.user
                     )
 
