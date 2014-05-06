@@ -81,6 +81,9 @@ class TemplateResolverMixin(object):
 
 class MimeTypeMixin(object):
 
+    """ Mixin class to set mimetype. Make sure this is the first class in the
+    line of extended classes that do render_to_response... """
+
     mimetype = "text/html"
 
     def render_to_response(self, context, **response_kwargs):
@@ -146,12 +149,12 @@ class AcceptMixin(object):
 
     @property
     def is_json(self):
-        
+
         return "application/json" in self.request.META.get("HTTP_ACCEPT", [])
 
     @property
     def is_text(self):
-        
+
         return "text/plain" in self.request.META.get("HTTP_ACCEPT", [])
 
     def render_to_response(self, context, **response_kwargs):
@@ -294,6 +297,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             else:
                 obj = self.real_model.objects.create(
                     creator=self.request.user,
+                    is_tmp=True,
                     changed_by=self.request.user
                     )
 
@@ -572,7 +576,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             elif self.is_text:
                 return HttpResponse("Error", status=202,
                                     content_type='text/plain', )
-            else:            
+            else:
                 return HttpResponseRedirect(self.view_url)
 
     def get_success_url(self):

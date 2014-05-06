@@ -1,28 +1,35 @@
 from django.views.generic.edit import FormView
 from django.utils.translation import ugettext_lazy as _
-from djinn_contenttypes.views.base import CTMixin
+from djinn_contenttypes.views.base import CTMixin, MimeTypeMixin
 from djinn_contenttypes.forms.share import ShareForm
 from pgtimeline.models import QueuedActivity
 from pgevents.events import Events
 from pgevents.settings import RETWEET_CONTENTITEM, RETWEET_ACTIVITY
 
 
-class ShareView(FormView, CTMixin):
+class ShareView(MimeTypeMixin, FormView, CTMixin):
 
     """Share the given content with other users or groups. This will
-    result in a notification to the users/groups
+    result in a notification to the users/groups. The share form is
+    shown in a modal window.
     """
 
     template_name = "djinn_contenttypes/snippets/share.html"
     form_class = ShareForm
     success_url = "#"
     notification_type = RETWEET_CONTENTITEM
+    mimetype = "text/plain"
 
     @property
     def page_title(self):
 
         # Translators: djinn_contenttypes share content form title
         return _("share %(obj)s with:" % {'obj': self.obj})
+
+    @property
+    def share_url(self):
+
+        return self.request.path
 
     def render_recipients(self):
 
@@ -37,7 +44,12 @@ class ShareView(FormView, CTMixin):
     @property
     def obj(self):
 
-        return self.get_object()
+        """ Accessor for object, keeping the object in a variable """
+
+        if not hasattr(self, "_obj"):
+            self._obj = self.get_object()
+
+        return self._obj
 
     def form_invalid(self, form):
 

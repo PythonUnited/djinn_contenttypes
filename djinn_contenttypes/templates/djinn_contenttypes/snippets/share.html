@@ -13,7 +13,7 @@
 </div>
 
 <form method="POST"
-      action="{% url 'djinn_contenttypes_share' view.obj.ct_name view.obj.id %}"
+      action="{{ view.share_url }}"
       id="retweet_form"
       class="modal-submit">
   
