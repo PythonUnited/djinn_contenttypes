@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-02 15:10+0200\n"
+"POT-Creation-Date: 2014-05-06 11:44+0200\n"
 "PO-Revision-Date: 2014-02-11 11:21+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid "Add to group"
 msgstr "Toevoegen aan groep"
 
 #. Translators: contenttypes publish_from label
-#: forms/base.py:120 models/publishable.py:9
+#: forms/base.py:120 models/publishable.py:11
 msgid "Publish from"
 msgstr "Publiceren vanaf"
 
@@ -74,7 +74,7 @@ msgid "Time"
 msgstr ""
 
 #. Translators: contenttypes publish_to label
-#: forms/base.py:132 models/publishable.py:12
+#: forms/base.py:132 models/publishable.py:14
 msgid "Publish to"
 msgstr "Publiceren tot"
 
@@ -107,9 +107,52 @@ msgstr "_EMPTY_"
 msgid "Search relation"
 msgstr ""
 
-#: forms/base.py:199
+#. Translators: djinn_contenttypes group make a choice label
+#. Translators: djinn_contenttypes parentusergroup required
+#: forms/base.py:211 forms/base.py:255
 msgid "Make a choice"
 msgstr "Maak keuze"
+
+#. Translators: djinn_contenttypes group no group label
+#: forms/base.py:213
+#, fuzzy
+msgid "Do not add to a group"
+msgstr "Toevoegen aan groep"
+
+#: forms/share.py:7
+msgid "Colleagues that follow you"
+msgstr ""
+
+#: forms/share.py:8
+msgid "Members of one or more groups"
+msgstr ""
+
+#: forms/share.py:9
+msgid "One or more colleagues"
+msgstr ""
+
+#. Translators: Content share form help
+#: forms/share.py:27
+#, fuzzy
+msgid "Share this content"
+msgstr "Opslaan als concept"
+
+#: forms/share.py:30
+#, fuzzy
+msgid "Share with"
+msgstr "Gedeeld met"
+
+#: forms/share.py:51
+msgid "Message to send with share"
+msgstr ""
+
+#: forms/share.py:64
+msgid "No group selected"
+msgstr ""
+
+#: forms/share.py:68
+msgid "No colleague selected"
+msgstr ""
 
 #: models/attachment.py:11
 msgid "title"
@@ -131,15 +174,15 @@ msgstr "Naam auteur"
 msgid "Temporary"
 msgstr "Tijdelijk"
 
-#: models/commentable.py:16
+#: models/commentable.py:14
 msgid "Collega's kunnen reageren"
 msgstr ""
 
-#: models/publishable.py:15
+#: models/publishable.py:18
 msgid "Event verstuurd"
 msgstr ""
 
-#: models/publishable.py:16
+#: models/publishable.py:19
 msgid "Event bij publicatie is verstuurd (bijv. voor timeline)"
 msgstr ""
 
@@ -151,7 +194,8 @@ msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:97
+#: templates/djinn_contenttypes/base_edit.html:98
+#: templates/djinn_contenttypes/base_edit.html:107
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr "Opslaan"
@@ -159,8 +203,9 @@ msgstr "Opslaan"
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:103
+#: templates/djinn_contenttypes/base_edit.html:115
 #: templates/djinn_contenttypes/base_edit_modal.html:43
+#: templates/djinn_contenttypes/snippets/share.html:65
 #: templatetags/djinn_contenttypes.py:40
 msgid "Cancel"
 msgstr "Annuleren"
@@ -220,6 +265,7 @@ msgid "Please correct the following errors"
 msgstr "Het formulier is niet helemaal correct ingevuld. "
 
 #: templates/djinn_contenttypes/base_edit.html:88
+#: templates/djinn_contenttypes/base_edit.html:102
 msgid "Save and publish"
 msgstr "Opslaan en publiceren"
 
@@ -227,7 +273,7 @@ msgstr "Opslaan en publiceren"
 msgid "Save as concept"
 msgstr "Opslaan als concept"
 
-#: templates/djinn_contenttypes/base_edit.html:114
+#: templates/djinn_contenttypes/base_edit.html:126
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
@@ -237,10 +283,31 @@ msgstr "Verwijder dit %(object_name)s"
 msgid "Edit"
 msgstr "Bewerk"
 
+#: templates/djinn_contenttypes/snippets/modal.html:7
+msgid "Close"
+msgstr ""
+
+#: templates/djinn_contenttypes/snippets/share.html:7
+#: templates/djinn_contenttypes/snippets/share.html:64
+#, fuzzy
+msgid "Share"
+msgstr "Gedeeld met"
+
 #. Translators: edit form status message
-#: views/base.py:520
+#: views/base.py:523
 msgid "Saved changes"
 msgstr "Wijzigingen opgeslagen"
+
+#. Translators: djinn_contenttypes share content form title
+#: views/share.py:27
+#, python-format
+msgid "share %(obj)s with:"
+msgstr ""
+
+#. Translators: djinn_contenttypes share message form title
+#: views/share.py:106
+msgid "Share this message with:"
+msgstr ""
 
 #~ msgid "Show owner"
 #~ msgstr "Laat contactgegevens van eigenaar zien"
@@ -253,9 +320,6 @@ msgstr "Wijzigingen opgeslagen"
 
 #~ msgid "Change owner"
 #~ msgstr "Wijzig eigenaar"
-
-#~ msgid "Shares"
-#~ msgstr "Gedeeld met"
 
 #~ msgid "New %(view.ct_name)s"
 #~ msgstr "Nieuw %(view.ct_name)s"
