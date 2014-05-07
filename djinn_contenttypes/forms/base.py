@@ -177,10 +177,10 @@ class BaseContentForm(BaseSharingForm):
         self.fields['parentusergroup'].choices = self._group_choices()
         self.fields['userkeywords'].show_label = True
 
-        # If there is no instance, or the instance is a temporary one,
-        # set the group to -1.
+        # If there is no parentusergroup in the instance, and the instance is
+        # a temporary one, set the group to -1.
         #
-        if not self.instance or self.instance.is_tmp:
+        if not self.instance.parentusergroup and self.instance.is_tmp:
             self.initial['parentusergroup'] = -1
 
     def _group_choices(self):
