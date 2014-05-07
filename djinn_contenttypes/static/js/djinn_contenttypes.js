@@ -11,13 +11,16 @@ if (djinn.contenttypes === undefined) {
 /**
  * Show given data as modal. This assumes the data is actually the
  * correct HTML for a bootstrap modal box.
- * @param data modal box
+ * @param data modal box as HTML
  */
 djinn.contenttypes.show_modal = function(data) {
 
-  $(data).modal().css("z-index", "5000")
-    .on('hidden', function () { $(this).remove(); })
-    .on('shown', function() { $(this).trigger("modal_action_show"); });
+  var modal = $(data).modal({'show': false}).css("z-index", "5000");
+
+  modal.on('hidden', function () { $(this).remove(); });
+  modal.on('shown', function() { $(this).trigger("modal_action_show"); });
+
+  modal.modal('show');
 };
 
 
