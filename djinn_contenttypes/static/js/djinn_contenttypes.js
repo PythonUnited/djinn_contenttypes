@@ -10,15 +10,22 @@ if (djinn.contenttypes === undefined) {
 
 /**
  * Show given data as modal. This assumes the data is actually the
- * correct HTML for a bootstrap modal box.
+ * correct HTML for a bootstrap modal box. Since the modal data
  * @param data modal box as HTML
+ * @param args Extra event arguments as list.
  */
-djinn.contenttypes.show_modal = function(data) {
+djinn.contenttypes.show_modal = function(data, args) {
 
-  var modal = $(data).modal({'show': false}).css("z-index", "5000");
+  if (!args) {
+    args = [];
+  }
+
+  var styling = {"z-index": "5000"};
+
+  var modal = $(data).modal({'show': false}).css(styling);
 
   modal.on('hidden', function () { $(this).remove(); });
-  modal.on('shown', function() { $(this).trigger("modal_action_show"); });
+  modal.on('shown', function() { $(this).trigger("modal_action_show", args); });
 
   modal.modal('show');
 };
