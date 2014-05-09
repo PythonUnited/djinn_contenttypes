@@ -8,9 +8,11 @@
 
 {% block body %}
 
+{% if form.help %}
 <div class="general-help alert alert-info">
   {{ form.help|safe }}
 </div>
+{% endif %}
 
 <form method="POST"
       action="{{ view.share_url }}"
@@ -43,7 +45,9 @@
         {{ view.render_recipients.1|removetags:'label' }}
       </label>
       
-      <div class="controls hide collapsed">
+      <div class="controls 
+                  {% if view.recipient_value != 'group' %}hide{% endif %}
+                  collapsed">
         {{ form.group }}
       </div>
       
@@ -51,7 +55,9 @@
         {{ view.render_recipients.2|removetags:'label' }}
       </label>
       
-      <div class="controls hide collapsed">
+      <div class="controls
+                  {% if view.recipient_value != 'user' %}hide{% endif %}
+                  collapsed">
         {{ form.user }}
       </div>
       

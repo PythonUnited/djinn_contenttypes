@@ -14,7 +14,7 @@ class ShareField(forms.Field):
 
     def prepare_value(self, data):
 
-        return []
+        return data or {'add': [], 'rm': []}
 
     def clean(self, value):
 
@@ -35,6 +35,8 @@ class ShareForm(forms.Form):
         required=False,
         widget=ShareWidget(
             attrs={'searchfield': 'title_auto',
+                   # Translators: share user placeholder
+                   'hint': _("Find group to share with"),
                    'content_types': ["djinn_profiles.groupprofile"]}
         )
     )
@@ -43,6 +45,8 @@ class ShareForm(forms.Form):
         required=False,
         widget=ShareWidget(
             attrs={'searchfield': 'title_auto',
+                   # Translators: share user placeholder
+                   'hint': _("Find user to share with"),
                    'content_types': ["djinn_profiles.userprofile"]}
         )
     )
@@ -50,13 +54,18 @@ class ShareForm(forms.Form):
     message = forms.CharField(
         label=_("Message to send with share"),
         max_length=200,
-        widget=forms.Textarea(attrs={"class": "expand init_expansion",
-                                     "cols": 100}),
+        widget=forms.Textarea(
+            attrs={"class": "expand count_characters init_expansion",
+                   'data-maxchars': '500',
+                   "cols": 100}),
         required=True
     )
 
     def clean(self):
         cleaned_data = super(ShareForm, self).clean()
+
+        import pdb; pdb.set_trace()
+
 
         if cleaned_data.get("recipient", "") == "group" and \
            not cleaned_data.get("group"):

@@ -36,6 +36,13 @@ $(document).ready(function() {
   $('input').placehold();
   $('textarea').placehold();
 
+  $(document).on("click", ".modal .cancel", function(e) {
+
+    e.preventDefault();
+
+    $(e.currentTarget).parents(".modal").modal('hide');
+  });
+
   $(document).on("click", "#sharecontent :radio", function(e) {
 
     var input = $(e.target);

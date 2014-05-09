@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-06 11:44+0200\n"
+"POT-Creation-Date: 2014-05-09 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,15 +136,25 @@ msgstr ""
 msgid "Share with"
 msgstr ""
 
-#: forms/share.py:51
+#. Translators: share user placeholder
+#: forms/share.py:39
+msgid "Find group to share with"
+msgstr ""
+
+#. Translators: share user placeholder
+#: forms/share.py:49
+msgid "Find user to share with"
+msgstr ""
+
+#: forms/share.py:55
 msgid "Message to send with share"
 msgstr ""
 
-#: forms/share.py:64
+#: forms/share.py:73
 msgid "No group selected"
 msgstr ""
 
-#: forms/share.py:68
+#: forms/share.py:77
 msgid "No colleague selected"
 msgstr ""
 
@@ -188,7 +198,6 @@ msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:98
 #: templates/djinn_contenttypes/base_edit.html:107
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
@@ -199,7 +208,7 @@ msgstr ""
 #: templates/djinn_contenttypes/base_delete_modal.html:12
 #: templates/djinn_contenttypes/base_edit.html:115
 #: templates/djinn_contenttypes/base_edit_modal.html:43
-#: templates/djinn_contenttypes/snippets/share.html:65
+#: templates/djinn_contenttypes/snippets/share.html:71
 #: templatetags/djinn_contenttypes.py:40
 msgid "Cancel"
 msgstr ""
@@ -264,6 +273,7 @@ msgid "Save and publish"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_edit.html:92
+#: templates/djinn_contenttypes/base_edit.html:98
 msgid "Save as concept"
 msgstr ""
 
@@ -282,12 +292,12 @@ msgid "Close"
 msgstr ""
 
 #: templates/djinn_contenttypes/snippets/share.html:7
-#: templates/djinn_contenttypes/snippets/share.html:64
+#: templates/djinn_contenttypes/snippets/share.html:70
 msgid "Share"
 msgstr ""
 
 #. Translators: edit form status message
-#: views/base.py:523
+#: views/base.py:530
 msgid "Saved changes"
 msgstr ""
 
@@ -298,6 +308,6 @@ msgid "share %(obj)s with:"
 msgstr ""
 
 #. Translators: djinn_contenttypes share message form title
-#: views/share.py:106
+#: views/share.py:119
 msgid "Share this message with:"
 msgstr ""

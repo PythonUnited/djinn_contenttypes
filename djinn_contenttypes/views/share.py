@@ -31,15 +31,28 @@ class ShareView(MimeTypeMixin, FormView, CTMixin):
 
         return self.request.path
 
+    @property
+    def recipient_value(self):
+
+        form = self.get_form(self.form_class)
+        return form.data.get('recipient')
+
     def render_recipients(self):
 
         """ Render the separate radio options of the recipient field """
 
         form = self.get_form(self.form_class)
         recipient = form.fields['recipient']
+        value = form.data.get('recipient')
 
-        return [option.render() for option in
-                recipient.widget.get_renderer('recipient', '')]
+        options = []
+
+        for opt in recipient.widget.get_renderer('recipient', ''):
+
+            opt.value = value
+            options.append(opt)
+
+        return [option.render(value=value) for option in options]
 
     @property
     def obj(self):
