@@ -16,13 +16,14 @@ class RelatableMixin(object):
 
         return models.get_model("pgcontent", "SimpleRelation")
 
-    def get_related(self, relation_type=None):
+    def get_related(self, relation_type=None, inverse=False):
 
         """ Return all related content. This is a costly operation, so
         use it wisely..."""
 
         if relation_type:
-            relations = self.get_relations(relation_type_list=[relation_type])
+            relations = self.get_relations(relation_type_list=[relation_type],
+                                           inverse=inverse)
         else:
             relations = self.get_relations()
 
@@ -30,7 +31,10 @@ class RelatableMixin(object):
 
         for rel in relations:
             try:
-                related.append(rel.get_tgt())
+                if inverse:
+                    related.append(rel.get_src())
+                else:
+                    related.append(rel.get_tgt())
             except:
                 LOG.warn("Cleaning up broken relation %s", rel)
                 rel.delete()
