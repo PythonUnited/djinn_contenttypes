@@ -64,9 +64,6 @@ class ShareForm(forms.Form):
     def clean(self):
         cleaned_data = super(ShareForm, self).clean()
 
-        import pdb; pdb.set_trace()
-
-
         if cleaned_data.get("recipient", "") == "group" and \
            not cleaned_data.get("group"):
 
