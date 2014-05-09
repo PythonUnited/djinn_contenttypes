@@ -250,7 +250,13 @@ class DetailView(AbstractBaseView, BaseDetailView):
 
 class CTDetailView(CTMixin, DetailView):
 
-    """ Detailview that applies to any content, determined by the url parts """
+    """Detailview that applies to any content, determined by the url
+    parts. This means that the model is really variable! """
+
+    @property
+    def model(self):
+
+        return self.get_object().__class__
 
 
 class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
