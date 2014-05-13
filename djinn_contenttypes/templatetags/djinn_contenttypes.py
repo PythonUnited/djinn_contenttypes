@@ -3,11 +3,13 @@
 This filename should be renamed to something which is not equal to the
 modulename.. it breaks the import from djinn_contenttypes
 """
+
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from djinn_core.utils import implements as _implements
 from djinn_core.utils import object_to_urn as obj_to_urn
+from djinn_core.utils import HTMLTruncate
 
 
 register = Library()
@@ -33,6 +35,15 @@ def abbreviate_hellip(text, length=50):
     """
 
     return abbreviate(text, length, u'…')
+
+
+@register.filter
+def abbreviate_html(text, length=50):
+
+    """ Break off the text content of 'text', ignoring the html tags, and
+    making sure that no tags are cut off. """
+
+    return HTMLTruncate(length).truncate(text)
 
 
 @register.inclusion_tag('djinn_contenttypes/snippets/cancel_action.html')
