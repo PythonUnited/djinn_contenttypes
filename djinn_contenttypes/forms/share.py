@@ -54,14 +54,16 @@ class ShareForm(forms.Form):
     message = forms.CharField(
         label=_("Message to send with share"),
         max_length=200,
+        help_text="Maximaal 200 karakters",
         widget=forms.Textarea(
             attrs={"class": "expand count_characters init_expansion",
-                   'data-maxchars': '500',
+                   'data-maxchars': '200',
                    "cols": 100}),
         required=True
     )
 
     def clean(self):
+
         cleaned_data = super(ShareForm, self).clean()
 
         if cleaned_data.get("recipient", "") == "group" and \

@@ -56,6 +56,8 @@ $(document).ready(function() {
 
     var modal = $(e.target);
 
+    modal.find('input,textarea').placehold();
+
     modal.find(".relate").each(function() {
 
       djinn.forms.initRelateWidget($(this));
