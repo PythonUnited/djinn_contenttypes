@@ -378,15 +378,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if self.request.POST.get('action', None) == "cancel":
 
-            # There may be a temporary object...
-            try:
-                if getattr(self.object, "is_tmp", False):
-                    self.object.delete()
-            except:
-                pass
-
-            return HttpResponseRedirect(
-                request.user.profile.get_absolute_url())
+            return self.handle_cancel()
         else:
             form_class = self.get_form_class()
             form = self.get_form(form_class)
@@ -427,6 +419,19 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form),
                                        status=202)
+
+    def handle_cancel(self):
+
+        """Default action upon cancel of edit. If we have an object, and it
+        is temporary, delete and return to user home. If it is not
+        temporary, go to view of object. If there is no object, go home...
+        """
+
+        if self.object and getattr(self.object, "is_tmp", False):
+            self.object.delete()
+
+        return HttpResponseRedirect(
+            self.request.user.profile.get_absolute_url())
 
 
 class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
@@ -499,12 +504,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if self.request.POST.get('action', None) == "cancel":
 
-            if getattr(self.object, "is_tmp", False):
-                self.object.delete()
-                return HttpResponseRedirect(
-                    request.user.profile.get_absolute_url())
-
-            return HttpResponseRedirect(self.object.get_absolute_url())
+            self.handle_cancel()
         else:
             return super(UpdateView, self).post(request, *args, **kwargs)
 
@@ -534,6 +534,24 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form),
                                        status=202)
+
+    def handle_cancel(self):
+
+        """Default action upon cancel of edit. If we have an object, and it
+        is temporary, delete and return to user home. If it is not
+        temporary, go to view of object. If there is no object, go home...
+        """
+
+        redir = HttpResponseRedirect(
+            self.request.user.profile.get_absolute_url())
+
+        if self.object:
+            if getattr(self.object, "is_tmp", False):
+                self.object.delete()
+            else:
+                redir = HttpResponseRedirect(self.view_url)
+
+        return redir
 
 
 class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
