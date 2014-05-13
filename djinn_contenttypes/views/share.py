@@ -24,7 +24,7 @@ class ShareView(MimeTypeMixin, FormView, CTMixin):
     def page_title(self):
 
         # Translators: djinn_contenttypes share content form title
-        return _("share %(obj)s with:" % {'obj': self.obj})
+        return _("share %(obj)s with:") % {'obj': self.obj}
 
     @property
     def share_url(self):

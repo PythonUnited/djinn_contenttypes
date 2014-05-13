@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-09 14:08+0200\n"
-"PO-Revision-Date: 2014-02-11 11:21+0100\n"
+"PO-Revision-Date: 2014-05-13 09:54+0200\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -295,7 +295,7 @@ msgstr "Bewerk"
 
 #: templates/djinn_contenttypes/snippets/modal.html:7
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
 #: templates/djinn_contenttypes/snippets/share.html:7
 #: templates/djinn_contenttypes/snippets/share.html:70
@@ -312,7 +312,7 @@ msgstr "Wijzigingen opgeslagen"
 #: views/share.py:27
 #, python-format
 msgid "share %(obj)s with:"
-msgstr ""
+msgstr "Deel %(obj)s met:"
 
 #. Translators: djinn_contenttypes share message form title
 #: views/share.py:119
