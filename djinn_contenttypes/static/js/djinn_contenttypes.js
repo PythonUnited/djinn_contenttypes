@@ -52,11 +52,16 @@ $(document).ready(function() {
     input.parents(".radio").next().show();
   });
 
-  $(document).on("modal_action_show", "#sharecontent", function(e) {
+  $(document).on("modal_action_show", function(e) {
 
     var modal = $(e.target);
 
     modal.find('input,textarea').placehold();
+  });
+
+  $(document).on("modal_action_show", "#sharecontent", function(e) {
+
+    var modal = $(e.target);
 
     modal.find(".relate").each(function() {
 
