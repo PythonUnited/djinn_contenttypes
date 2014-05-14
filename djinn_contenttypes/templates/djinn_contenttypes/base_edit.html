@@ -84,7 +84,7 @@
   <div class="btn-group form-actions">
 
     {% block savecontrols %}
-    {% if not object %}
+    {% if not object or object.is_tmp %}
         <button class="btn btn-primary protected save-action" type="submit"
                 value="save" name="action">
           {% trans "Save and publish" %}
