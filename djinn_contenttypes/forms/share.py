@@ -37,7 +37,7 @@ class ShareForm(forms.Form):
             attrs={'searchfield': 'title_auto',
                    # Translators: share user placeholder
                    'hint': _("Find group to share with"),
-                   'content_types': ["djinn_profiles.groupprofile"]}
+                   'content_type': ["djinn_profiles.groupprofile"]}
         )
     )
 
@@ -47,7 +47,7 @@ class ShareForm(forms.Form):
             attrs={'searchfield': 'title_auto',
                    # Translators: share user placeholder
                    'hint': _("Find user to share with"),
-                   'content_types': ["djinn_profiles.userprofile"]}
+                   'content_type': ["djinn_profiles.userprofile"]}
         )
     )
 
