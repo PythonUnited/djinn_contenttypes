@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-13 12:24+0200\n"
+"POT-Creation-Date: 2014-05-14 16:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,12 +150,14 @@ msgstr ""
 msgid "Message to send with share"
 msgstr ""
 
-#: forms/share.py:70
-msgid "No group selected"
+#. Translators: sharing group required
+#: forms/share.py:73
+msgid "Selecting a group is required"
 msgstr ""
 
-#: forms/share.py:74
-msgid "No colleague selected"
+#. Translators: sharing user required
+#: forms/share.py:81
+msgid "Selecting a user is required"
 msgstr ""
 
 #: models/attachment.py:11
@@ -198,7 +200,8 @@ msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:110
+#: templates/djinn_contenttypes/base_edit.html:100
+#: templates/djinn_contenttypes/base_edit.html:109
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr ""
@@ -206,10 +209,10 @@ msgstr ""
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:118
+#: templates/djinn_contenttypes/base_edit.html:117
 #: templates/djinn_contenttypes/base_edit_modal.html:43
 #: templates/djinn_contenttypes/snippets/share.html:71
-#: templatetags/djinn_contenttypes.py:40
+#: templatetags/djinn_contenttypes.py:51
 msgid "Cancel"
 msgstr ""
 
@@ -223,7 +226,7 @@ msgid "Are you sure you want to delete %(object)s"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_delete_modal.html:10
-#: templatetags/djinn_contenttypes.py:51
+#: templatetags/djinn_contenttypes.py:62
 msgid "Delete"
 msgstr ""
 
@@ -263,27 +266,26 @@ msgstr ""
 msgid "draft"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:58
+#: templates/djinn_contenttypes/base_edit.html:57
 msgid "Please correct the following errors"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:91
-#: templates/djinn_contenttypes/base_edit.html:105
+#: templates/djinn_contenttypes/base_edit.html:90
+#: templates/djinn_contenttypes/base_edit.html:104
 msgid "Save and publish"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:95
-#: templates/djinn_contenttypes/base_edit.html:101
+#: templates/djinn_contenttypes/base_edit.html:94
 msgid "Save as concept"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:129
+#: templates/djinn_contenttypes/base_edit.html:127
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_edit_modal.html:10
-#: templatetags/djinn_contenttypes.py:62
+#: templatetags/djinn_contenttypes.py:73
 msgid "Edit"
 msgstr ""
 

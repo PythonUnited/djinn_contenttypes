@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-13 12:24+0200\n"
+"POT-Creation-Date: 2014-05-14 16:56+0200\n"
 "PO-Revision-Date: 2014-05-13 12:25+0200\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,13 +156,16 @@ msgstr ""
 msgid "Message to send with share"
 msgstr ""
 
-#: forms/share.py:70
-msgid "No group selected"
+#. Translators: sharing group required
+#: forms/share.py:73
+msgid "Selecting a group is required"
 msgstr ""
 
-#: forms/share.py:74
-msgid "No colleague selected"
-msgstr ""
+#. Translators: sharing user required
+#: forms/share.py:81
+#, fuzzy
+msgid "Selecting a user is required"
+msgstr "Voeg een collega of groep toe"
 
 #: models/attachment.py:11
 msgid "title"
@@ -204,7 +207,8 @@ msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:36
-#: templates/djinn_contenttypes/base_edit.html:110
+#: templates/djinn_contenttypes/base_edit.html:100
+#: templates/djinn_contenttypes/base_edit.html:109
 #: templates/djinn_contenttypes/base_edit_modal.html:36
 msgid "Save"
 msgstr "Opslaan"
@@ -212,10 +216,10 @@ msgstr "Opslaan"
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:43
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:118
+#: templates/djinn_contenttypes/base_edit.html:117
 #: templates/djinn_contenttypes/base_edit_modal.html:43
 #: templates/djinn_contenttypes/snippets/share.html:71
-#: templatetags/djinn_contenttypes.py:40
+#: templatetags/djinn_contenttypes.py:51
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -229,7 +233,7 @@ msgid "Are you sure you want to delete %(object)s"
 msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
 
 #: templates/djinn_contenttypes/base_delete_modal.html:10
-#: templatetags/djinn_contenttypes.py:51
+#: templatetags/djinn_contenttypes.py:62
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -269,27 +273,26 @@ msgstr ""
 msgid "draft"
 msgstr "Concept"
 
-#: templates/djinn_contenttypes/base_edit.html:58
+#: templates/djinn_contenttypes/base_edit.html:57
 msgid "Please correct the following errors"
 msgstr "Het formulier is niet helemaal correct ingevuld. "
 
-#: templates/djinn_contenttypes/base_edit.html:91
-#: templates/djinn_contenttypes/base_edit.html:105
+#: templates/djinn_contenttypes/base_edit.html:90
+#: templates/djinn_contenttypes/base_edit.html:104
 msgid "Save and publish"
 msgstr "Opslaan en publiceren"
 
-#: templates/djinn_contenttypes/base_edit.html:95
-#: templates/djinn_contenttypes/base_edit.html:101
+#: templates/djinn_contenttypes/base_edit.html:94
 msgid "Save as concept"
 msgstr "Opslaan als concept"
 
-#: templates/djinn_contenttypes/base_edit.html:129
-#, python-format
+#: templates/djinn_contenttypes/base_edit.html:127
+#, fuzzy, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
 
 #: templates/djinn_contenttypes/base_edit_modal.html:10
-#: templatetags/djinn_contenttypes.py:62
+#: templatetags/djinn_contenttypes.py:73
 msgid "Edit"
 msgstr "Bewerk"
 

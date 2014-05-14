@@ -124,9 +124,7 @@
        href="{{ view.delete_url }}"
        data-target="#MyModal">
       {% block delete_label %}
-      {% with object_name=view.ct_label %}
-      {% blocktrans %}Delete this {{ object_name }}{% endblocktrans %}
-      {% endwith %}
+      {% blocktrans with object_name=view.ct_label %}Delete this {{ object_name }}{% endblocktrans %}
       {% endblock %}
     </a>
     {% endifpermission %}

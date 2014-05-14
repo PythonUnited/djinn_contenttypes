@@ -69,10 +69,17 @@ class ShareForm(forms.Form):
         if cleaned_data.get("recipient", "") == "group" and \
            not cleaned_data.get("group"):
 
-            raise forms.ValidationError(_("No group selected"))
+            # Translators: sharing group required
+            msg = _("Selecting a group is required")
+
+            self._errors["group"] = self.error_class([msg])
 
         if cleaned_data.get("recipient", "") == "user" and \
            not cleaned_data.get("user"):
-            raise forms.ValidationError(_("No colleague selected"))
+
+            # Translators: sharing user required
+            msg = _("Selecting a user is required")
+
+            self._errors["user"] = self.error_class([msg])
 
         return cleaned_data
