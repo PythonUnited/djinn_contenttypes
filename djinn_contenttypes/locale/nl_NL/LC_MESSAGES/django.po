@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 16:56+0200\n"
-"PO-Revision-Date: 2014-05-13 12:25+0200\n"
+"POT-Creation-Date: 2014-05-15 09:58+0200\n"
+"PO-Revision-Date: 2014-05-15 10:00+0200\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,7 +27,7 @@ msgstr "Eigenaar"
 #. Translators: content type owner hint
 #: forms/base.py:86
 msgid "Select a name"
-msgstr ""
+msgstr "Selecteer een naam"
 
 #. Translators: Contentype shares/editors label
 #: forms/base.py:94
@@ -67,11 +67,11 @@ msgstr "_EMPTY_"
 
 #: forms/base.py:125 forms/base.py:137
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: forms/base.py:126 forms/base.py:138
 msgid "Time"
-msgstr ""
+msgstr "Tijd"
 
 #. Translators: contenttypes publish_to label
 #: forms/base.py:132 models/publishable.py:14
@@ -105,7 +105,7 @@ msgstr "_EMPTY_"
 
 #: forms/base.py:163
 msgid "Search relation"
-msgstr ""
+msgstr "Zoek relatie"
 
 #. Translators: djinn_contenttypes group make a choice label
 #. Translators: djinn_contenttypes parentusergroup required
@@ -121,15 +121,15 @@ msgstr "Toevoegen aan groep"
 
 #: forms/share.py:7
 msgid "Colleagues that follow you"
-msgstr ""
+msgstr "Collega's die jou volgen"
 
 #: forms/share.py:8
 msgid "Members of one or more groups"
-msgstr ""
+msgstr "Leden van een of meer groepen"
 
 #: forms/share.py:9
 msgid "One or more colleagues"
-msgstr ""
+msgstr "Een of meer collega's"
 
 #. Translators: Content share form help
 #: forms/share.py:27
@@ -142,27 +142,40 @@ msgstr "Opslaan als concept"
 msgid "Share with"
 msgstr "Gedeeld met"
 
+#. Translators: share form group label
+#: forms/share.py:36
+#, fuzzy
+msgid "Share with group"
+msgstr "Gedeeld met"
+
 #. Translators: share user placeholder
-#: forms/share.py:39
+#: forms/share.py:41
 msgid "Find group to share with"
-msgstr ""
+msgstr "Zoek een groep om mee te delen"
+
+#. Translators: share form user label
+#: forms/share.py:48
+#, fuzzy
+msgid "Share with user"
+msgstr "Gedeeld met"
 
 #. Translators: share user placeholder
-#: forms/share.py:49
+#: forms/share.py:53
 msgid "Find user to share with"
-msgstr ""
+msgstr "Zoek een gebruiker om mee te delen"
 
-#: forms/share.py:55
+#. Translators: share form message label
+#: forms/share.py:60
 msgid "Message to send with share"
-msgstr ""
+msgstr "Bericht om mee te sturen"
 
 #. Translators: sharing group required
-#: forms/share.py:73
+#: forms/share.py:78
 msgid "Selecting a group is required"
-msgstr ""
+msgstr "Een groep is verplicht"
 
 #. Translators: sharing user required
-#: forms/share.py:81
+#: forms/share.py:86
 #, fuzzy
 msgid "Selecting a user is required"
 msgstr "Voeg een collega of groep toe"
@@ -189,15 +202,16 @@ msgstr "Tijdelijk"
 
 #: models/commentable.py:14
 msgid "Collega's kunnen reageren"
-msgstr ""
+msgstr "Collega's kunnen reageren"
 
 #: models/publishable.py:18
-msgid "Event verstuurd"
-msgstr ""
+msgid "Event sent"
+msgstr "Event verstuurd"
 
 #: models/publishable.py:19
-msgid "Event bij publicatie is verstuurd (bijv. voor timeline)"
-msgstr ""
+#, fuzzy
+msgid "Publish event is sent"
+msgstr "Publiceren vanaf"
 
 #: templates/djinn_contenttypes/base_add.html:10
 #: templates/djinn_contenttypes/base_edit.html:16
@@ -267,7 +281,7 @@ msgstr "%(ct_label)s bewerken"
 #. Translators: metadata status
 #: templates/djinn_contenttypes/base_edit.html:31
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: templates/djinn_contenttypes/base_edit.html:31
 msgid "draft"
@@ -302,9 +316,8 @@ msgstr "Venster sluiten"
 
 #: templates/djinn_contenttypes/snippets/share.html:7
 #: templates/djinn_contenttypes/snippets/share.html:70
-#, fuzzy
 msgid "Share"
-msgstr "Gedeeld met"
+msgstr "Delen"
 
 #. Translators: edit form status message
 #: views/base.py:530
@@ -320,34 +333,4 @@ msgstr "Deel %(obj)s met:"
 #. Translators: djinn_contenttypes share message form title
 #: views/share.py:119
 msgid "Share this message with:"
-msgstr ""
-
-#~ msgid "Close"
-#~ msgstr "Sluiten"
-
-#~ msgid "Show owner"
-#~ msgstr "Laat contactgegevens van eigenaar zien"
-
-#~ msgid "Publiceren till"
-#~ msgstr "Publiceren tot"
-
-#~ msgid "Add link"
-#~ msgstr "Voeg link toe"
-
-#~ msgid "Change owner"
-#~ msgstr "Wijzig eigenaar"
-
-#~ msgid "New %(view.ct_name)s"
-#~ msgstr "Nieuw %(view.ct_name)s"
-
-#~ msgid "New %(object_name)s"
-#~ msgstr "Nieuw %(object_name)s"
-
-#~ msgid "%(view.ct_name)s"
-#~ msgstr "%(view.ct_name)s"
-
-#~ msgid "%(object.ct_name)s"
-#~ msgstr "%(object.ct_name)s"
-
-#~ msgid "Creator"
-#~ msgstr "Naam auteur"
+msgstr "Deel dit bericht met:"

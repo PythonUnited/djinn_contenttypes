@@ -32,6 +32,8 @@ class ShareForm(forms.Form):
     )
 
     group = ShareField(
+        # Translators: share form group label
+        label=_("Share with group"),
         required=False,
         widget=ShareWidget(
             attrs={'searchfield': 'title_auto',
@@ -42,6 +44,8 @@ class ShareForm(forms.Form):
     )
 
     user = ShareField(
+        # Translators: share form user label
+        label=_("Share with user"),
         required=False,
         widget=ShareWidget(
             attrs={'searchfield': 'title_auto',
@@ -52,6 +56,7 @@ class ShareForm(forms.Form):
     )
 
     message = forms.CharField(
+        # Translators: share form message label
         label=_("Message to send with share"),
         max_length=200,
         help_text="Maximaal 200 karakters",

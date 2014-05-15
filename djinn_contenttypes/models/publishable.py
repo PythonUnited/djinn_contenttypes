@@ -15,8 +15,8 @@ class PublishableContent(BaseContent):
                                       db_index=True,
                                       blank=True, default=None)
     publish_notified = models.BooleanField(
-        _('Event verstuurd'), default=False,
-        help_text=_("Event bij publicatie is verstuurd (bijv. voor timeline)"))
+        _('Event sent'), default=False,
+        help_text=_("Publish event is sent"))
 
     def is_published(self):
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 16:56+0200\n"
+"POT-Creation-Date: 2014-05-15 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,27 +136,38 @@ msgstr ""
 msgid "Share with"
 msgstr ""
 
+#. Translators: share form group label
+#: forms/share.py:36
+msgid "Share with group"
+msgstr ""
+
 #. Translators: share user placeholder
-#: forms/share.py:39
+#: forms/share.py:41
 msgid "Find group to share with"
 msgstr ""
 
+#. Translators: share form user label
+#: forms/share.py:48
+msgid "Share with user"
+msgstr ""
+
 #. Translators: share user placeholder
-#: forms/share.py:49
+#: forms/share.py:53
 msgid "Find user to share with"
 msgstr ""
 
-#: forms/share.py:55
+#. Translators: share form message label
+#: forms/share.py:60
 msgid "Message to send with share"
 msgstr ""
 
 #. Translators: sharing group required
-#: forms/share.py:73
+#: forms/share.py:78
 msgid "Selecting a group is required"
 msgstr ""
 
 #. Translators: sharing user required
-#: forms/share.py:81
+#: forms/share.py:86
 msgid "Selecting a user is required"
 msgstr ""
 
@@ -185,11 +196,11 @@ msgid "Collega's kunnen reageren"
 msgstr ""
 
 #: models/publishable.py:18
-msgid "Event verstuurd"
+msgid "Event sent"
 msgstr ""
 
 #: models/publishable.py:19
-msgid "Event bij publicatie is verstuurd (bijv. voor timeline)"
+msgid "Publish event is sent"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:10
