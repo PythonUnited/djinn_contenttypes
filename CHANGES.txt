@@ -1,3 +1,11 @@
+1.2.3
+=====
+* usergroup choice is now required, but permits empty
+* i18n fixes
+* Added share view
+* PEP8 fixes
+* removed some dependencies
+
 1.2.2
 ====
 * Added forms.fields.NoScripCharField 
