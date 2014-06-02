@@ -51,6 +51,10 @@
   {{ form.media }}
   {% csrf_token %}
 
+  {% if object and object.is_tmp %}
+  <input type="hidden" name="tmp_id" value="{{ object.pk }}" />
+  {% endif %}
+
   {% block errors %}
   {% if form.errors %}
   <div class="alert alert-error">

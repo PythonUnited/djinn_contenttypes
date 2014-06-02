@@ -504,7 +504,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if self.request.POST.get('action', None) == "cancel":
 
-            self.handle_cancel()
+            return self.handle_cancel()
         else:
             return super(UpdateView, self).post(request, *args, **kwargs)
 
