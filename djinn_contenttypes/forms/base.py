@@ -162,7 +162,7 @@ class BaseContentForm(BaseSharingForm):
         widget=RelateWidget(
             attrs={'hint': _("Search relation"),
                    'searchfield': 'title_auto',
-                   'template_name': 'search/relate_search_widget.html',
+                   'template_name': 'djinn_forms/snippets/relatesearchwidget.html',
                    'search_url': '/zoeken/zoekajaxlinkcontent/', },
             )
         )
