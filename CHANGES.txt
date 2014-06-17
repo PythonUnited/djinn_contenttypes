@@ -1,3 +1,7 @@
+1.2.6
+=====
+* Dependency on djinn_forms 1.2.2
+
 1.2.5
 =====
 * Return modal on create, to allow chaining

@@ -65,7 +65,7 @@ $(document).ready(function() {
 
     modal.find(".relate").each(function() {
 
-      djinn.forms.initRelateWidget($(this));
+      djinn.forms.relate.init($(this));
     });
   });
 

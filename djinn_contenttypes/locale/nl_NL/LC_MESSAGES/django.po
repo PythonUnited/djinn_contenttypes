@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-15 09:58+0200\n"
-"PO-Revision-Date: 2014-05-15 10:00+0200\n"
+"PO-Revision-Date: 2014-06-17 10:40+0200\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -301,7 +301,7 @@ msgid "Save as concept"
 msgstr "Opslaan als concept"
 
 #: templates/djinn_contenttypes/base_edit.html:127
-#, fuzzy, python-format
+#, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"
 
