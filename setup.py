@@ -7,7 +7,10 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'django', 'djinn_core', 'django-bootstrap-form'
+    'django',
+    'djinn_core',
+    'django-bootstrap-form',
+    'djinn_forms==1.2.3'
     ]
 
 setup(name='djinn_contenttypes',
