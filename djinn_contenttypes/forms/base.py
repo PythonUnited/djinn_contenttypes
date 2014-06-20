@@ -7,6 +7,7 @@ from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleSingleField
 from djinn_forms.fields.relate import RelateField
+from djinn_forms.fields.keyword import KeywordField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
@@ -147,9 +148,16 @@ class BaseContentForm(BaseSharingForm):
         help_text=_("Enter keywords separated by spaces"),
         widget=forms.HiddenInput(
             attrs={'class': 'full',
-                   'autocomplete': 'off',
-                   })
-        )
+                   'autocomplete': 'off'}
+        ))
+
+    #userkeywords = KeywordField(
+    #    # Translators: contenttypes userkeywords label
+    #    label=_("Keywords"),
+    #    required=False,
+    #    # Translators: contenttypes userkeywords help
+    #    help_text=_("Enter keywords separated by spaces"),
+    #)
 
     related = RelateField(
         "related_content",
