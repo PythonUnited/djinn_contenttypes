@@ -55,6 +55,7 @@ djinn.contenttypes.show_modal = function(data, args) {
               if (xhr.status == 202) {
                 modal.find(".modal-body").replaceWith($(data).find(
                   ".modal-body"));
+                modal.trigger("modal_action_show");
               } else {
                 modal.modal('hide');
               }
