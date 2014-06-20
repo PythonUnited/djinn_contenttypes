@@ -24,8 +24,43 @@ djinn.contenttypes.show_modal = function(data, args) {
 
   var modal = $(data).modal({'show': false}).css(styling);
 
-  modal.on('hidden', function () { $(this).remove(); });
-  modal.on('shown', function() { $(this).trigger("modal_action_show", args); });
+  modal.on('hidden', function () {
+    $(this).remove();
+    $(this).trigger("modal_action_hide", args);
+  });
+
+  modal.on('shown', function() {
+    $(this).trigger("modal_action_show", args);
+  });
+
+  // bind some actions to this modal
+  modal.on("click", ".cancel", function() { modal.modal('hide'); });
+
+  /*
+   * The behavior of a modal form is: on success (status code 200)
+   * the modal is closed, on failure (status 202) the received data is
+   * assumed to be a new modal, to replace the current one.
+   */
+  modal.on("submit", ".modal-submit", function(e) {
+
+    e.preventDefault();
+
+    var form = $(e.target);
+
+    $.ajax(form.attr("action"),
+           {type: form.attr("method") || "POST",
+            data: form.serialize(),
+            success: function(data, status, xhr) {
+
+              if (xhr.status == 202) {
+                modal.find(".modal-body").replaceWith($(data).find(
+                  ".modal-body"));
+              } else {
+                modal.modal('hide');
+              }
+            }
+           });
+  });
 
   return modal.modal('show');
 };
@@ -35,22 +70,6 @@ $(document).ready(function() {
 
   $('input').placehold();
   $('textarea').placehold();
-
-  $(document).on("click", ".modal .cancel", function(e) {
-
-    e.preventDefault();
-
-    $(e.currentTarget).parents(".modal").modal('hide');
-  });
-
-  $(document).on("click", "#sharecontent :radio", function(e) {
-
-    var input = $(e.target);
-
-    $("#sharecontent .collapsed").hide();
-
-    input.parents(".radio").next().show();
-  });
 
   $(document).on("modal_action_show", function(e) {
 
@@ -67,6 +86,15 @@ $(document).ready(function() {
 
       djinn.forms.relate.init($(this));
     });
+
+    modal.on("click", ":radio", function(e) {
+
+      var input = $(e.target);
+
+      $("#sharecontent .collapsed").hide();
+
+      input.parents(".radio").next().show();
+    });
   });
 
   $(document).on("click", "a.modal-action", function(e) {
@@ -81,29 +109,4 @@ $(document).ready(function() {
     });
   });
 
-  /*
-   * The behavior of a modal form is: on success (status code 200)
-   * the modal is closed, on failure (status 202) the received data is
-   * assumed to be a new modal, to replace the current one.
-   */
-  $(document).on("submit", ".modal-submit", function(e) {
-
-    e.preventDefault();    
-
-    var form = $(e.target);
-    
-    $.ajax(form.attr("action"),
-           {type: form.attr("method") || "POST",
-            data: form.serialize(),
-            success: function(data, status, xhr) {
-
-              form.parents(".modal").modal("hide");
-           
-              if (xhr.status == 202) {
-                djinn.contenttypes.show_modal(data);
-              }
-            }
-           });    
-  });
-  
 });
