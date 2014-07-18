@@ -88,3 +88,5 @@ class ShareForm(forms.Form):
             self._errors["user"] = self.error_class([msg])
 
         return cleaned_data
+
+    

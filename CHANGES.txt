@@ -2,6 +2,7 @@
 =====
 * Fixes for relate and sharing widgets
 * Dependency on djinn_forms 1.2.3
+* Fixes for modal window
 
 1.2.6
 =====

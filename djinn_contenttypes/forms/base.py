@@ -172,7 +172,7 @@ class BaseContentForm(BaseSharingForm):
                    'searchfield': 'title_auto',
                    'template_name':
                    'djinn_forms/snippets/relatesearchwidget.html',
-                   'search_url': '/zoeken/zoekajaxlinkcontent/', },
+                   'search_url': '/content_search/', },
             )
         )
 
