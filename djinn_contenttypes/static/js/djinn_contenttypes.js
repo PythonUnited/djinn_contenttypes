@@ -101,6 +101,7 @@ $(document).ready(function() {
   $(document).on("click", "a.modal-action", function(e) {
 
     e.preventDefault();
+    e.stopPropagation();
 
     var link = $(e.currentTarget);
 
