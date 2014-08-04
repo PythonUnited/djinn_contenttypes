@@ -10,11 +10,11 @@ requires = [
     'django',
     'djinn_core',
     'django-bootstrap-form',
-    'djinn_forms==1.2.3'
+    'djinn_forms>=1.2.3'
     ]
 
 setup(name='djinn_contenttypes',
-      version="1.2.7",
+      version="1.2.8",
       description='Djinn Intranet Contenttypes framework',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

@@ -140,24 +140,13 @@ class BaseContentForm(BaseSharingForm):
             )
         )
 
-    userkeywords = forms.CharField(
+    userkeywords = KeywordField(
         # Translators: contenttypes userkeywords label
         label=_("Keywords"),
         required=False,
         # Translators: contenttypes userkeywords help
         help_text=_("Enter keywords separated by spaces"),
-        widget=forms.HiddenInput(
-            attrs={'class': 'full',
-                   'autocomplete': 'off'}
-        ))
-
-    #userkeywords = KeywordField(
-    #    # Translators: contenttypes userkeywords label
-    #    label=_("Keywords"),
-    #    required=False,
-    #    # Translators: contenttypes userkeywords help
-    #    help_text=_("Enter keywords separated by spaces"),
-    #)
+    )
 
     related = RelateField(
         "related_content",
