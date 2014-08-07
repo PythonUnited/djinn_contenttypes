@@ -1,7 +1,7 @@
 1.2.8
 =====
 * Fixes for modal window
-* Moved to new keyword widget
+* Moved to new keyword widget   
 
 1.2.7
 =====
