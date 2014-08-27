@@ -2,6 +2,8 @@
 =====
 * Fixes for modal window
 * Moved to new keyword widget   
+* stop event propgation for inline action
+* Fixes for search related content
 
 1.2.7
 =====
