@@ -27,6 +27,7 @@ djinn.contenttypes.show_modal = function(data, args) {
   modal.on('hidden', function () {
     $(this).remove();
     $(this).trigger("modal_action_hide", args);
+    $(".modal-backdrop").remove();
   });
 
   modal.on('shown', function() {
