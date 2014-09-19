@@ -32,9 +32,13 @@ class RelatableMixin(object):
         for rel in relations:
             try:
                 if inverse:
-                    related.append(rel.get_src())
+                    relation_source = rel.get_src()
+                    relation_source._meta # force a check
+                    related.append(relation_source)
                 else:
-                    related.append(rel.get_tgt())
+                    relation_target = rel.get_tgt()
+                    relation_target._meta
+                    related.append(relation_target)
             except:
                 LOG.warn("Cleaning up broken relation %s", rel)
                 rel.delete()
