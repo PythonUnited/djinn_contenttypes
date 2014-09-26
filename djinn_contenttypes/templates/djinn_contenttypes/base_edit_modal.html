@@ -19,7 +19,9 @@
 {% endblock %}
 
 {% block form %}
-<form action="{{ view.edit_url }}" method="POST">
+<form action="{{ view.edit_url }}" method="POST"
+      class="protected">
+
   {% csrf_token %}
 
   {% block formfields %}
@@ -36,7 +38,7 @@
       {% trans "Save" %}
       {% endif %}
     </button>
-    <button class="btn cancel">
+    <button class="btn cancel protected">
       {% if form.labels.cancel %}
       {{ form.labels.cancel }}
       {% else %}

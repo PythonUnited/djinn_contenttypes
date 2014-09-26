@@ -46,7 +46,7 @@
 {% block form %}
 
 <form action="" method="POST" 
-      id="editform" {% block form_class %}{% endblock %}>
+      id="editform" class="protected {% block form_class %}{% endblock %}">
 
   {{ form.media }}
   {% csrf_token %}
@@ -123,7 +123,7 @@
     {% if object and not object.is_tmp %}
     {% with perm=object|delete_permission_id %}
     {% ifpermission object request.user perm %}
-    <a class="btn btn-danger delete-action"
+    <a class="btn btn-danger protected delete-action"
        data-toggle="modal"
        href="{{ view.delete_url }}"
        data-target="#MyModal">
