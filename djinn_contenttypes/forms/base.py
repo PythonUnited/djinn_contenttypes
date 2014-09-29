@@ -98,7 +98,7 @@ class BaseSharingForm(BaseForm, RelateMixin, ShareMixin):
         required=False,
         widget=RelateWidget(
             attrs={'searchfield': 'title_auto',
-                   #Translators: content type owner hint
+                   # Translators: content type owner hint
                    'hint': _("Select a user or group name ")
                    })
         )
