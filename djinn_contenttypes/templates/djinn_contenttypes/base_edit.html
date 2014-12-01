@@ -17,6 +17,9 @@
     {% endif %}
     {% endwith %}
     {% endblock title %}
+    {% if not object.is_published %}
+    <span class="status private">{% trans "not published" %}</span>
+    {% endif %}
   </h1>
 </header>
 {% block metainfo %}
