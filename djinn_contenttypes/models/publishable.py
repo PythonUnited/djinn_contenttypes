@@ -1,22 +1,10 @@
 from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from base import BaseContent
+from djinn_contenttypes.models.base import BaseContent
 
 
-class PublishableContent(BaseContent):
-
-    """ Anything that is publishable should extend this class """
-
-    publish_from = models.DateTimeField(_('Publish from'), null=True,
-                                        db_index=True,
-                                        blank=True, default=None)
-    publish_to = models.DateTimeField(_('Publish to'), null=True,
-                                      db_index=True,
-                                      blank=True, default=None)
-    publish_notified = models.BooleanField(
-        _('Event sent'), default=False,
-        help_text=_("Publish event is sent"))
+class PublishableMixin(object):
 
     def is_published(self):
 
@@ -52,6 +40,23 @@ class PublishableContent(BaseContent):
             return False
         else:
             return True
+
+
+class PublishableContent(BaseContent, PublishableMixin):
+
+    """ Anything that is publishable should extend this class """
+
+    publish_from = models.DateTimeField(_('Publish from'), null=True,
+                                        db_index=True,
+                                        blank=True, default=None)
+    publish_to = models.DateTimeField(_('Publish to'), null=True,
+                                      db_index=True,
+                                      blank=True, default=None)
+    publish_notified = models.BooleanField(
+        _('Event sent'), default=False,
+        help_text=_("Publish event is sent"))
+    remove_after_publish_to = models.BooleanField(
+        _('Remove the content ater publication to has past'), default=False)
 
     class Meta:
         abstract = True

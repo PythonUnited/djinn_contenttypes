@@ -83,7 +83,7 @@ class BaseSharingForm(BaseForm, RelateMixin, ShareMixin):
         required=False,
         widget=RelateSingleWidget(
             attrs={'searchfield': 'title_auto',
-                   #Translators: content type owner hint
+                   # Translators: content type owner hint
                    'hint': _("Select a name")
                    })
         )
@@ -231,12 +231,12 @@ class BaseContentForm(BaseSharingForm):
             self.cleaned_data['publish_from'] = None
             self.cleaned_data['publish_to'] = None
 
-        try:
-            if self.cleaned_data['publish_to'] < \
-                    self.cleaned_data['publish_from']:
-                self.cleaned_data['publish_to'] = None
-        except:
-            pass
+        # Check publication sanity
+        #
+        if self.cleaned_data.get('publish_to') < \
+           self.cleaned_data.get('publish_from'):
+            raise forms.ValidationError(_(u"Publish to date should be after "
+                                          "publish from date"))
 
         return self.cleaned_data
 
@@ -253,3 +253,12 @@ class BaseContentForm(BaseSharingForm):
                 raise forms.ValidationError(_(u"Make a choice"))
 
         return group
+
+    def clean_remove_after_publish_to(self):
+
+        value = self.cleaned_data.get('remove_after_publish_to')
+
+        if value and not self.cleaned_data.get('publish_to'):
+            raise forms.ValidationError(_(u"You must set the publish to date"))
+
+        return value

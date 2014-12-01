@@ -29,7 +29,7 @@
 
   {% block formcontrols %}
   <div class="form-actions">
-    <button class="btn btn-primary protected" type="submit" 
+    <button class="btn btn-primary" type="submit" 
             value="save" name="action">
       {% if form.labels.submit %}
       {{ form.labels.submit }}
@@ -37,7 +37,7 @@
       {% trans "Save" %}
       {% endif %}
     </button>
-    <button class="btn cancel protected">
+    <button class="btn cancel">
       {% if form.labels.cancel %}
       {{ form.labels.cancel }}
       {% else %}

@@ -8,6 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'django',
+    'requests',
     'djinn_core',
     'django-bootstrap-form',
     'djinn_forms>=1.2.3'

@@ -1,3 +1,4 @@
+import requests
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
@@ -88,3 +89,10 @@ def get_comment_model():
             raise exceptions.ImproperlyConfigured('Erroneous comment model')
 
         return model
+
+
+def check_get_url(url):
+
+    """ return http status for fetching this url """
+
+    return requests.get(url).status_code

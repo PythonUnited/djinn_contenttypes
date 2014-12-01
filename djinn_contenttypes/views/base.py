@@ -12,7 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
-from djinn_contenttypes.utils import get_object_by_ctype_id, has_permission
+from djinn_contenttypes.utils import (
+    get_object_by_ctype_id, has_permission, check_get_url)
 from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.utils import json_serializer
 from pgauth.models import UserGroup
@@ -203,7 +204,40 @@ class AbstractBaseView(TemplateResolverMixin, SwappableMixin, AcceptMixin):
         return content_type
 
 
-class DetailView(AbstractBaseView, BaseDetailView):
+class HistoryMixin(object):
+
+    def add_to_history(self, path):
+
+        """ Check on session history, and add path if need be """
+
+        if 'history' not in self.request.session:
+            self.request.session['history'] = []
+
+        if len(self.request.session['history']) > 10:
+            self.request.session['history'].pop(0)
+
+        self.request.session['history'].append(path)
+        self.request.session.modified = True
+
+    def get_redir_url(self):
+
+        """ Get last valid url """
+
+        success_url = None
+
+        for url in self.request.session.get('history', []):
+
+            if check_get_url(self.request.build_absolute_uri(url)) == 200:
+
+                success_url = url
+
+        if not success_url:
+            success_url = self.request.user.profile.get_absolute_url()
+
+        return success_url
+
+
+class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
 
     """ Detail view for simple content, not related, etc. All intranet
     detail views should extend this view.
@@ -245,6 +279,9 @@ class DetailView(AbstractBaseView, BaseDetailView):
         context = self.get_context_data(object=self.object)
         content_type = self._determine_content_type()
 
+        if content_type == "text/html":
+            self.add_to_history(request.path)
+
         return self.render_to_response(context, content_type=content_type)
 
 
@@ -260,7 +297,7 @@ class CTDetailView(CTMixin, DetailView):
 
 
 class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
-                 BaseCreateView):
+                 BaseCreateView, HistoryMixin):
 
     mode = "add"
     fk_fields = []
@@ -422,20 +459,18 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
     def handle_cancel(self):
 
-        """Default action upon cancel of edit. If we have an object, and it
-        is temporary, delete and return to user home. If it is not
-        temporary, go to view of object. If there is no object, go home...
+        """Default action upon cancel of edit. If we have an object, and it is
+        temporary, delete. Go to last successfull url.
         """
 
         if self.object and getattr(self.object, "is_tmp", False):
             self.object.delete()
 
-        return HttpResponseRedirect(
-            self.request.user.profile.get_absolute_url())
+        return HttpResponseRedirect(self.get_redir_url())
 
 
 class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
-                 BaseUpdateView):
+                 BaseUpdateView, HistoryMixin):
 
     mode = "edit"
 
@@ -537,21 +572,10 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
     def handle_cancel(self):
 
-        """Default action upon cancel of edit. If we have an object, and it
-        is temporary, delete and return to user home. If it is not
-        temporary, go to view of object. If there is no object, go home...
-        """
+        if self.object and getattr(self.object, "is_tmp", False):
+            self.object.delete()
 
-        redir = HttpResponseRedirect(
-            self.request.user.profile.get_absolute_url())
-
-        if self.object:
-            if getattr(self.object, "is_tmp", False):
-                self.object.delete()
-            else:
-                redir = HttpResponseRedirect(self.view_url)
-
-        return redir
+        return HttpResponseRedirect(self.get_redir_url())
 
 
 class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
@@ -605,10 +629,10 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
     def get_success_url(self):
 
-        """ Return the URL to which the edit/create action should
-        return upon success"""
+        """ On delete, the user should be brought back to the last valid url,
+        or home... """
 
-        return self.request.user.profile.get_absolute_url()
+        return self.get_redir_url()
 
     def get(self, request, *args, **kwargs):
 
