@@ -233,10 +233,15 @@ class BaseContentForm(BaseSharingForm):
 
         # Check publication sanity
         #
-        if self.cleaned_data.get('publish_to') < \
-           self.cleaned_data.get('publish_from'):
-            raise forms.ValidationError(_(u"Publish to date should be after "
-                                          "publish from date"))
+        try:
+            if self.cleaned_data.get('publish_to') < \
+               self.cleaned_data.get('publish_from'):
+                raise forms.ValidationError(
+                    _(u"Publish to date should be after publish from date"),
+                    code='invalid')
+        except:
+            # Dates could be None
+            pass
 
         return self.cleaned_data
 
