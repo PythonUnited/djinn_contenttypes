@@ -26,7 +26,7 @@ class Highlight(models.Model):
 
     def __unicode__(self):
 
-        return "%s (%s)" % (self.name, self.content_object)
+        return "%s highlight" % self.content_object
 
     class Meta:
 
