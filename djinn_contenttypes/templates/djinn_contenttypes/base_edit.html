@@ -12,14 +12,14 @@
     {% with ct_label=view.ct_label %}
     {% if object and not object.is_tmp %}
     {% blocktrans %}Edit {{ ct_label }}{% endblocktrans %}
+    {% if not object.is_published %}
+    <span class="status private">{% trans "not published" %}</span>
+    {% endif %}
     {% else %}
     {% blocktrans %}Add {{ ct_label }}{% endblocktrans %}
     {% endif %}
     {% endwith %}
     {% endblock title %}
-    {% if not object.is_published %}
-    <span class="status private">{% trans "not published" %}</span>
-    {% endif %}
   </h1>
 </header>
 {% block metainfo %}

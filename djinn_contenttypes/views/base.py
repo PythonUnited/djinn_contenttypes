@@ -578,7 +578,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
 
 class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
-                 BaseDeleteView):
+                 BaseDeleteView, HistoryMixin):
 
     mode = "delete"
 

@@ -33,7 +33,7 @@ class RelatableMixin(object):
             try:
                 if inverse:
                     relation_source = rel.get_src()
-                    relation_source._meta # force a check
+                    relation_source._meta  # force a check
                     related.append(relation_source)
                 else:
                     relation_target = rel.get_tgt()
@@ -89,16 +89,35 @@ class RelatableMixin(object):
             tgt_content_type=target.ct_class,
             tgt_object_id=target.id)
 
-    def has_relation(self, relation_type, target):
+    def has_relation(self, relation_type, target=None, inverse=False):
 
-        """ Add relation with given type with target as receiving end."""
+        """Do we have a relation? With target? If inverse is set, check
+        that...
 
-        return self.relation_model.objects.filter(
-            src_content_type=self.ct_class,
-            src_object_id=self.id,
-            relation_type=relation_type,
-            tgt_content_type=target.ct_class,
-            tgt_object_id=target.id).exists()
+        """
+
+        _filter = {'relation_type': relation_type}
+
+        if inverse:
+            _filter.update(
+                {'tgt_content_type': self.ct_class,
+                 'tgt_object_id': self.id})
+        else:
+            _filter.update(
+                {'src_content_type': self.ct_class,
+                 'src_object_id': self.id})
+
+        if target:
+            if inverse:
+                _filter.update(
+                    {'src_content_type': target.ct_class,
+                     'src_object_id': target.id})
+            else:
+                _filter.update(
+                    {'tgt_content_type': target.ct_class,
+                     'tgt_object_id': target.id})
+
+        return self.relation_model.objects.filter(**_filter).exists()
 
     def rm_relation(self, relation_type, target):
 

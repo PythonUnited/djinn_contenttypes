@@ -94,3 +94,19 @@ def implements(instance, clazz):
 @register.filter
 def object_to_urn(obj):
     return obj_to_urn(obj)
+
+
+@register.inclusion_tag('djinn_contenttypes/snippets/title.html')
+def title(obj):
+
+    """ obj should be a regular content type for djinn """
+
+    return {'obj': obj, 'include_href': False}
+
+
+@register.inclusion_tag('djinn_contenttypes/snippets/title.html')
+def reference(obj):
+
+    """ obj should be a regular content type for djinn """
+
+    return {'obj': obj, 'include_href': True}

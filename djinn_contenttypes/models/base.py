@@ -101,6 +101,16 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         return True
 
     @property
+    def is_deleted(self):
+
+        try:
+            self.__class__.objects.get(pk=self.id)
+            _deleted = False
+        except self.__class__.DoesNotExist:
+            _deleted = True
+        return self.created and _deleted
+
+    @property
     def permission_authority(self):
 
         """ Return the permission authority for this object. This is
