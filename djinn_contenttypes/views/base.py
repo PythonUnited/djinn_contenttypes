@@ -448,8 +448,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         self.object = form.save()
 
         if implements(self.object, BaseContent):
-            if not self.object.get_owner():
-                self.object.set_owner(self.request.user)
+            self.object.set_owner(self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 
