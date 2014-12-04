@@ -20,9 +20,10 @@ def abbreviate(text, length=50, truncate_str='...'):
     """
     Usage: {{ sometext|abbreviate:"50" }} Abbreviates given string if
     it is more than 'length' chars, and adds trailing dots.
+    If length is negative, do nothing.
     """
 
-    if len(text) > length:
+    if length > 0 and len(text) > length:
         return "%s%s" % (text[:length], truncate_str)
     return text
 
@@ -32,6 +33,7 @@ def abbreviate_hellip(text, length=50):
     """
     Usage: {{ sometext|abbreviate:"50" }} Abbreviates given string if
     it is more than 'length' chars, and adds trailing horizontal ellipsis.
+    If length is negative, do nothing.
     """
 
     return abbreviate(text, length, u'…')
@@ -97,16 +99,16 @@ def object_to_urn(obj):
 
 
 @register.inclusion_tag('djinn_contenttypes/snippets/title.html')
-def title(obj):
+def title(obj, truncate=-1):
 
     """ obj should be a regular content type for djinn """
 
-    return {'obj': obj, 'include_href': False}
+    return {'obj': obj, 'include_href': False, 'truncate': truncate}
 
 
 @register.inclusion_tag('djinn_contenttypes/snippets/title.html')
-def reference(obj):
+def reference(obj, truncate=-1):
 
     """ obj should be a regular content type for djinn """
 
-    return {'obj': obj, 'include_href': True}
+    return {'obj': obj, 'include_href': True, 'truncate': truncate}

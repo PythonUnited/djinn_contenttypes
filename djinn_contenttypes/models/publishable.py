@@ -6,6 +6,7 @@ from djinn_contenttypes.models.base import BaseContent
 
 class PublishableMixin(object):
 
+    @property
     def is_published(self):
 
         """ Are we published? This is true iff:
@@ -36,7 +37,7 @@ class PublishableMixin(object):
 
         """ Do we need to acquire global roles? Only if published... """
 
-        if not self.is_published():
+        if not self.is_published:
             return False
         else:
             return True

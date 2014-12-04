@@ -95,7 +95,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         if self.in_closed_group:
             return False
 
-        if not self.is_published():
+        if not getattr(self, "is_published", True):
             return False
 
         return True
@@ -119,13 +119,6 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
         deferred to the parent object """
 
         return self
-
-    def is_published(self):
-        '''
-        By default everything is published
-        (known to be overriden by PublishableBaseContent)
-        '''
-        return True
 
     @property
     def keywordslist(self):

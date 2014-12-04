@@ -10,7 +10,7 @@
 
   {% block header %}
   <header>
-    <h1>{% title object %}</h1>
+    <h1>{% block title %}{% title object %}{% endblock %}</h1>
   </header>
 
   {% block metainfo %}
