@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-04 12:46+0100\n"
-"PO-Revision-Date: 2014-12-04 12:51+0100\n"
+"PO-Revision-Date: 2014-12-04 14:59+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -342,7 +342,7 @@ msgstr "Delen"
 #: templates/djinn_contenttypes/snippets/title.html:4
 #, python-format
 msgid "%(object_name)s is removed"
-msgstr "%(object_name) is verwijderd"
+msgstr "%(object_name)s is verwijderd"
 
 #. Translators: edit form status message
 #: views/base.py:564
