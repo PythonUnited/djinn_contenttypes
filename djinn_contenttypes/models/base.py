@@ -94,11 +94,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         if self.in_closed_group:
             return False
-
-        if not getattr(self, "is_published", True):
-            return False
-
-        return True
+        else:
+            return True
 
     @property
     def is_deleted(self):
@@ -178,6 +175,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         view = Permission.objects.get(codename="view")
 
+        if self.is_public:
+            _viewers.add("group_users")
+        elif self.parentusergroup:
+            _viewers.add("group_%d" % self.parentusergroup.id)
+
         for lrole in self.get_local_roles():
             if view in lrole.role.permissions.all():
 
@@ -197,17 +199,17 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
                     if viewusergroup:
                         _viewers.add("group_%d" % viewusergroup.id)
 
-        if self.parentusergroup and not self.ct_name == "groupprofile":
-            if self.parentusergroup.membership_type != 1:
-                _viewers.add("group_users")
-            else:
-                _viewers.add("group_%d" % self.parentusergroup.id)
-        elif self.parentusergroup and self.ct_name == "groupprofile":
-            _viewers.add("group_users")
-        elif not self.parentusergroup:
-            _viewers.add("group_users")
-
         return list(_viewers)
+
+    @property
+    def acquire_global_roles(self):
+
+        """ Do we need to acquire global roles? Only if published... """
+
+        if not self.is_published:
+            return False
+        else:
+            return True
 
     class Meta:
         abstract = True
