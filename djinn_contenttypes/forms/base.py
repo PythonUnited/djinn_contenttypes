@@ -234,7 +234,7 @@ class BaseContentForm(BaseSharingForm):
         # Check publication sanity
         #
         if self.cleaned_data.get('publish_to') and self.cleaned_data.get(
-                'publish_to'):
+                'publish_from'):
             if self.cleaned_data.get('publish_to') < \
                self.cleaned_data.get('publish_from'):
                 raise forms.ValidationError(

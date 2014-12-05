@@ -2,7 +2,7 @@ import logging
 from importlib import import_module
 from django.db import models
 from django.db.models import get_model
-from django.conf.urls.defaults import url, patterns
+from django.conf.urls import url, patterns
 from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
 from base import DetailView, CreateView, UpdateView, DeleteView
