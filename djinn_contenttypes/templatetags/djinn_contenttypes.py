@@ -103,12 +103,12 @@ def title(obj, truncate=-1):
 
     """ obj should be a regular content type for djinn """
 
-    return {'obj': obj, 'include_href': False, 'truncate': truncate}
+    return {'obj': obj, 'truncate': truncate}
 
 
-@register.inclusion_tag('djinn_contenttypes/snippets/title.html')
+@register.inclusion_tag('djinn_contenttypes/snippets/reference.html')
 def reference(obj, truncate=-1):
 
     """ obj should be a regular content type for djinn """
 
-    return {'obj': obj, 'include_href': True, 'truncate': truncate}
+    return {'obj': obj, 'truncate': truncate}
