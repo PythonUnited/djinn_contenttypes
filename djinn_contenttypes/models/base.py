@@ -98,6 +98,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
             return True
 
     @property
+    def is_published(self):
+
+        return True
+
+    @property
     def is_deleted(self):
 
         try:
