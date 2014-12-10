@@ -17,9 +17,11 @@ class PublishableMixin(object):
 
         now = datetime.now()
 
-        return (not self.is_tmp) and (
-            (not self.publish_from or self.publish_from <= now) and (
-                not self.publish_to or self.publish_to > now))
+        return (
+            (not self.is_tmp) and
+            (self.publish_from) and
+            (self.publish_from <= now) and
+            (not self.publish_to or self.publish_to > now))
 
     def is_scheduled(self):
 
