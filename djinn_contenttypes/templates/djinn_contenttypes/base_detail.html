@@ -15,7 +15,7 @@
 
   {% block metainfo %}
   <div class="meta-info">
-    <span class="profile-type">{{ contentitem.ct_label }}</span>
+    <span class="profile-type">{{ object.ct_label }}</span>
     {% if not object.is_tmp %}
     {% if object.publish_from %}
     {% trans "Published on" %}: {{ object.publish_from }}, 
