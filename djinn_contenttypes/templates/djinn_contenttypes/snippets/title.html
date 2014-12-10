@@ -3,12 +3,8 @@
 {% if obj.is_deleted %}
 <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is removed{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
 {% elif not obj.is_published %}
-<a href="{{ obj.get_absolute_url }}">
-  {{ obj.title|abbreviate:truncate }}
-  <span class="status private">{% trans "not published" %}</span>
-</a>
+{{ obj.title|abbreviate:truncate }}
+<span class="status private">{% trans "not published" %}</span>
 {% else %}
-<a href="{{ obj.get_absolute_url }}">
-  {{ obj.title|abbreviate:truncate }}
-</a>
+{{ obj.title|abbreviate:truncate }}
 {% endif %}

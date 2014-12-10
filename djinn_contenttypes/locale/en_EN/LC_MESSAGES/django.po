@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-10 10:31+0100\n"
+"POT-Creation-Date: 2014-12-10 10:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -337,14 +337,20 @@ msgstr ""
 msgid "Close window"
 msgstr ""
 
-#: templates/djinn_contenttypes/snippets/share.html:7
-#: templates/djinn_contenttypes/snippets/share.html:72
-msgid "Share"
-msgstr ""
-
+#: templates/djinn_contenttypes/snippets/reference.html:4
 #: templates/djinn_contenttypes/snippets/title.html:4
 #, python-format
 msgid "%(object_name)s is removed"
+msgstr ""
+
+#: templates/djinn_contenttypes/snippets/reference.html:6
+#, python-format
+msgid "%(object_name)s is not available"
+msgstr ""
+
+#: templates/djinn_contenttypes/snippets/share.html:7
+#: templates/djinn_contenttypes/snippets/share.html:72
+msgid "Share"
 msgstr ""
 
 #. Translators: edit form status message
