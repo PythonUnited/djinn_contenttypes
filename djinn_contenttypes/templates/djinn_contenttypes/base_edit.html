@@ -96,21 +96,21 @@
     {% block savecontrols %}
     {% if not object or object.is_tmp %}
         <button class="btn btn-primary save-action" type="submit"
-                value="save" name="action">
+                value="save_publish" name="action">
           {% trans "Save and publish" %}
         </button>
         <button class="btn btn-primary save-action" type="submit"
-                value="save_as_concept" name="action">
+                value="save_draft" name="action">
           {% trans "Save as concept" %}
         </button>
     {% else %}
       {% if not object.is_published and not object.is_scheduled %}
         <button class="btn btn-primary save-action" type="submit"
-                value="save_as_concept" name="action">
+                value="save" name="action">
           {% trans "Save" %}
         </button>
         <button class="btn btn-primary save-action" type="submit"
-                value="save" name="action">
+                value="save_publish" name="action">
           {% trans "Save and publish" %}
         </button>
       {% else %}

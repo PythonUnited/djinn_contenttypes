@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 12:46+0100\n"
-"PO-Revision-Date: 2014-12-04 14:59+0100\n"
+"POT-Creation-Date: 2014-12-10 10:31+0100\n"
+"PO-Revision-Date: 2014-12-10 10:33+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -36,7 +36,6 @@ msgstr "Collega's/groepen die deze pagina mogen bewerken"
 
 #. Translators: content shares help
 #: forms/base.py:97
-#, fuzzy
 msgid "Select users or groups to share editing role"
 msgstr "_EMPTY_"
 
@@ -109,7 +108,7 @@ msgstr "Zoek relatie"
 
 #. Translators: djinn_contenttypes group make a choice label
 #. Translators: djinn_contenttypes parentusergroup required
-#: forms/base.py:209 forms/base.py:258
+#: forms/base.py:209 forms/base.py:265
 msgid "Make a choice"
 msgstr "Maak keuze"
 
@@ -118,11 +117,19 @@ msgstr "Maak keuze"
 msgid "Do not add to a group"
 msgstr "Niet aan een groep toevoegen"
 
-#: forms/base.py:240
-msgid "Publish to date should be after publish from date"
-msgstr "Publicatie tot datum moet na publicatie vanaf datum zijn"
+#: forms/base.py:233
+msgid "Publication to date is in the past and you're saving as published"
+msgstr "Publicatie 'tot' is in het verleden"
 
-#: forms/base.py:267
+#: forms/base.py:241
+msgid "Publication date is in the past and you're saving as draft"
+msgstr "Publicatiedatum is in het verleden"
+
+#: forms/base.py:250
+msgid "Publish to date should be after publish from date"
+msgstr "'Publiceren tot' datum moet na de 'Publiceren op' datum liggen"
+
+#: forms/base.py:274
 msgid "You must set the publish to date"
 msgstr "Publicatie datum is verplicht"
 
@@ -179,7 +186,6 @@ msgstr "Een groep is verplicht"
 
 #. Translators: sharing user required
 #: forms/share.py:86
-#, fuzzy
 msgid "Selecting a user is required"
 msgstr "Voeg een collega of groep toe"
 
@@ -220,9 +226,8 @@ msgid "Event sent"
 msgstr "Event verstuurd"
 
 #: models/publishable.py:58
-#, fuzzy
 msgid "Publish event is sent"
-msgstr "Publiceren vanaf"
+msgstr "Publicatie event is verzonden"
 
 #: models/publishable.py:60
 msgid "Remove the content ater publication to has past"
@@ -236,8 +241,8 @@ msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:37
-#: templates/djinn_contenttypes/base_edit.html:107
-#: templates/djinn_contenttypes/base_edit.html:116
+#: templates/djinn_contenttypes/base_edit.html:110
+#: templates/djinn_contenttypes/base_edit.html:119
 #: templates/djinn_contenttypes/base_edit_modal.html:38
 msgid "Save"
 msgstr "Opslaan"
@@ -245,7 +250,7 @@ msgstr "Opslaan"
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:44
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:124
+#: templates/djinn_contenttypes/base_edit.html:127
 #: templates/djinn_contenttypes/base_edit_modal.html:45
 #: templates/djinn_contenttypes/snippets/share.html:73
 #: templatetags/djinn_contenttypes.py:53
@@ -311,16 +316,16 @@ msgstr "Concept"
 msgid "Please correct the following errors"
 msgstr "Het formulier is niet helemaal correct ingevuld. "
 
-#: templates/djinn_contenttypes/base_edit.html:97
-#: templates/djinn_contenttypes/base_edit.html:111
+#: templates/djinn_contenttypes/base_edit.html:100
+#: templates/djinn_contenttypes/base_edit.html:114
 msgid "Save and publish"
 msgstr "Opslaan en publiceren"
 
-#: templates/djinn_contenttypes/base_edit.html:101
+#: templates/djinn_contenttypes/base_edit.html:104
 msgid "Save as concept"
 msgstr "Opslaan als concept"
 
-#: templates/djinn_contenttypes/base_edit.html:134
+#: templates/djinn_contenttypes/base_edit.html:137
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr "Verwijder dit %(object_name)s"

@@ -222,21 +222,30 @@ class BaseContentForm(BaseSharingForm):
 
     def clean(self):
 
-        # Check whether the 'save_as_concept' was used
+        now = datetime.now()
+        _data = self.cleaned_data
+
+        # Check whether the 'save_draft' or 'save_publish' was used
         #
-        if self.data.get("action") == "save":
-            if not self.cleaned_data['publish_from']:
-                self.cleaned_data['publish_from'] = datetime.now()
+        if self.data.get("action") == "save_publish":
+            if _data['publish_to'] and _data['publish_to'] < now:
+                raise forms.ValidationError(
+                    _(u"Publication to date is in the past and you're "
+                      "saving as published"),
+                    code='invalid')
+            if not _data['publish_from'] or _data['publish_from'] > now:
+                _data['publish_from'] = now
         elif self.data.get("action") == "save_as_concept":
-            self.cleaned_data['publish_from'] = None
-            self.cleaned_data['publish_to'] = None
+            if _data['publish_from'] < now:
+                raise forms.ValidationError(
+                    _(u"Publication date is in the past and you're "
+                      "saving as draft"),
+                    code='invalid')
 
         # Check publication sanity
         #
-        if self.cleaned_data.get('publish_to') and self.cleaned_data.get(
-                'publish_from'):
-            if self.cleaned_data.get('publish_to') < \
-               self.cleaned_data.get('publish_from'):
+        if _data.get('publish_to') and _data.get('publish_from'):
+            if _data.get('publish_to') < _data.get('publish_from'):
                 raise forms.ValidationError(
                     _(u"Publish to date should be after publish from date"),
                     code='invalid')
