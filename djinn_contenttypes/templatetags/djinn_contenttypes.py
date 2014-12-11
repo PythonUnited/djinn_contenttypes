@@ -107,8 +107,9 @@ def title(obj, truncate=-1):
 
 
 @register.inclusion_tag('djinn_contenttypes/snippets/reference.html')
-def reference(obj, truncate=-1):
+def reference(obj, truncate=-1, cssclass=''):
 
-    """ obj should be a regular content type for djinn """
+    """ obj should be a regular content type for djinn. If cssclass is
+    provided, put this on the link. """
 
-    return {'obj': obj, 'truncate': truncate}
+    return {'obj': obj, 'truncate': truncate, 'cssclass': cssclass}

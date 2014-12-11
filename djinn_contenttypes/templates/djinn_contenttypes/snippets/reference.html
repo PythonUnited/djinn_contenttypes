@@ -5,7 +5,7 @@
 {% elif not obj.is_published %}
 <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is not available{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
 {% else %}
-<a href="{{ obj.get_absolute_url }}">
+<a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
   {{ obj.title|abbreviate:truncate }}
 </a>
 {% endif %}

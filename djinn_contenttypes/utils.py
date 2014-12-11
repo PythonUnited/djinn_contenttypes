@@ -95,4 +95,4 @@ def check_get_url(url):
 
     """ return http status for fetching this url """
 
-    return requests.get(url).status_code
+    return requests.get(url, allow_redirects=False).status_code

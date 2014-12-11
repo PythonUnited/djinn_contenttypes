@@ -230,6 +230,7 @@ class HistoryMixin(object):
             if check_get_url(self.request.build_absolute_uri(url)) == 200:
 
                 success_url = url
+                break
 
         if not success_url:
             success_url = self.request.user.profile.get_absolute_url()
@@ -636,7 +637,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
     def get(self, request, *args, **kwargs):
 
         """ Make sure that the confirm delete is sent as text/plain, given that
-        it is show as a modal. """
+        it is shown as a modal. """
 
         self.object = self.get_object()
         context = self.get_context_data(object=self.object, **kwargs)
