@@ -103,6 +103,14 @@ class BaseSharingForm(BaseForm, RelateMixin, ShareMixin):
                    })
         )
 
+    def __init__(self, *args, **kwargs):
+
+        super(BaseSharingForm, self).__init__(*args, **kwargs)
+
+        if not self.instance.get_owner(fail_silently=True) and self.user:
+            self.fields['owner'].initial = self.user.profile
+            self.fields['owner'].widget.initial = True
+
 
 class BaseContentForm(BaseSharingForm):
 
