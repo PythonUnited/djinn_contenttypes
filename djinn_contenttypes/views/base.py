@@ -92,6 +92,7 @@ class MimeTypeMixin(object):
         """ Override so as to add mimetype """
 
         response_kwargs['mimetype'] = self.mimetype
+        response_kwargs['content_type'] = self.mimetype
 
         return super(MimeTypeMixin, self).render_to_response(
             context, **response_kwargs)
