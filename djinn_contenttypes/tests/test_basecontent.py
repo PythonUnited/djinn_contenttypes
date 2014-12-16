@@ -13,6 +13,7 @@ class BaseContentTest(TestCase):
 
         self.user = user_model.objects.create(username="bobdobalina")
         self.content = news_model.objects.create(
+            publish_from=datetime.now(),
             changed_by=self.user,
             title="test news",
             creator=self.user)

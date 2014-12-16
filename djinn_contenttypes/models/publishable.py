@@ -64,7 +64,8 @@ class PublishableContent(PublishableMixin, BaseContent):
     @property
     def is_public(self):
 
-        return super(PublishableContent, self).is_public and self.is_published
+        return (super(PublishableContent, self).is_public and
+                self.is_published)
 
     class Meta:
         abstract = True
