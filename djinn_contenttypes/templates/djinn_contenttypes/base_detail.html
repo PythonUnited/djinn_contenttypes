@@ -27,7 +27,7 @@
     {% trans "Draft" %},
     {% endif %}
     {% endif %}
-    {% if not hightlight_from %}{% trans "Last change" %}: {{ object.changed }},{% endwith %}
+    {% if not hightlight_from %}{% trans "Last change" %}: {{ object.changed }},{% endif %}
     {% trans "Reactions" %}: {% comment_count_for user object %}
   {% endwith %}
   </div>
