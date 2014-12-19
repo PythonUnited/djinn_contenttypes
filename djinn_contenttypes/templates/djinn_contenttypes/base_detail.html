@@ -15,21 +15,21 @@
 
   {% block metainfo %}
   <div class="meta-info">
+  {% with hightlight_from=object.highlight_from %}
     <span class="profile-type">{{ object.ct_label }}</span>
     {% if not object.is_tmp %}
     {% if object.publish_from %}
     {% trans "Published on" %}: {{ object.publish_from }},
-        {% with hightlight_from=object.highlight_from %}
-            {% if hightlight_from %}
-                {% trans "Placed on homepage on" %}: {{ hightlight_from }}
-            {% endif %}
-        {% endwith %}
+        {% if hightlight_from %}
+            {% trans "Placed on homepage on" %}: {{ hightlight_from }}
+        {% endif %}
     {% else %}
-    {% trans "Draft" %}, 
+    {% trans "Draft" %},
     {% endif %}
     {% endif %}
-    {% trans "Last change" %}: {{ object.changed }}, 
+    {% if not hightlight_from %}{% trans "Last change" %}: {{ object.changed }},{% endwith %}
     {% trans "Reactions" %}: {% comment_count_for user object %}
+  {% endwith %}
   </div>
   {% endblock metainfo %}
   {% endblock header %}
