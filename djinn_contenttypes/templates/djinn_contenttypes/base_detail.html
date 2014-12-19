@@ -18,7 +18,12 @@
     <span class="profile-type">{{ object.ct_label }}</span>
     {% if not object.is_tmp %}
     {% if object.publish_from %}
-    {% trans "Published on" %}: {{ object.publish_from }}, 
+    {% trans "Published on" %}: {{ object.publish_from }},
+        {% with hightlight_from=object.highlight_from %}
+            {% if hightlight_from %}
+                {% trans "Placed on homepage on" %}: {{ hightlight_from }}
+            {% endif %}
+        {% endwith %}
     {% else %}
     {% trans "Draft" %}, 
     {% endif %}
