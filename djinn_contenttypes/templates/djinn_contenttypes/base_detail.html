@@ -20,7 +20,7 @@
     {% if not object.is_tmp %}
     {% if object.publish_from %}
     {% trans "Published on" %}: {{ object.publish_from }},
-        {% if hightlight_from %}
+        {% if hightlight_from and hightlight_from <= hightlight_from.now %}
             {% trans "Placed on homepage on" %}: {{ hightlight_from }}
         {% endif %}
     {% else %}
