@@ -16,6 +16,7 @@ from djinn_contenttypes.utils import (
     get_object_by_ctype_id, has_permission, check_get_url)
 from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.utils import json_serializer
+from djinn_workflow.utils import get_state
 from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
 
@@ -264,6 +265,16 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
                 + templates
 
         return templates
+
+    @property
+    def state(self):
+
+        return get_state(self.object)
+
+    @property
+    def created(self):
+
+        return self.object.publish_from or self.object.created
 
     def get(self, request, *args, **kwargs):
 

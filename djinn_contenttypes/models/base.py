@@ -7,8 +7,9 @@ from django.core.urlresolvers import reverse
 from pgauth.base import LocalRoleMixin, Role
 from pgauth.models import UserGroup
 from pgauth.settings import VIEWER_ROLE_ID
-from sharing import SharingMixin
-from relatable import RelatableMixin
+from djinn_contenttypes.models.sharing import SharingMixin
+from djinn_contenttypes.models.relatable import RelatableMixin
+from djinn_workflow.utils import get_state
 
 
 class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
@@ -89,10 +90,9 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     @property
     def is_public(self):
 
-        """ We are public if we are not in a closed group, and if we
-        are published"""
+        """ We are public if we are not in a closed group """
 
-        if self.in_closed_group:
+        if self.in_closed_group or get_state(self).name == "private":
             return False
         else:
             return True
@@ -211,7 +211,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         """ Do we need to acquire global roles? Only if published... """
 
-        if not self.is_published:
+        if not self.is_public:
             return False
         else:
             return True

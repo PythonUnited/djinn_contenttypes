@@ -16,7 +16,6 @@ class PublishableTest(TestCase):
         self.content = news_model.objects.create(
             changed_by=self.user,
             title="test news",
-            publish_from=datetime.now(),
             creator=self.user)
 
     def test_is_public(self):
@@ -53,7 +52,6 @@ class PublishableTest(TestCase):
     def test_unpublish(self):
 
         tomorrow = datetime.now() + timedelta(days=1)
-        yesterday = datetime.now() - timedelta(days=1)
 
         self.assertTrue(self.content.is_published)
 

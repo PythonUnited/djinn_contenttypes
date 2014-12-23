@@ -11,38 +11,18 @@ class PublishableMixin(object):
 
         """ Are we published? This is true iff:
           - not initial still
-          - publish from is set and is earlier than now
-          - if publish to is set, it is later than now
+          - publish_from is empty or earlier than now
+          - publish_to is empty or later than now
         """
 
         now = datetime.now()
 
         return (
-            (not self.is_tmp) and
-            (self.publish_from) and
-            (self.publish_from <= now) and
+            (not self.is_tmp)
+            and
+            (not self.publish_from or self.publish_from < now)
+            and
             (not self.publish_to or self.publish_to > now))
-
-    def is_scheduled(self):
-
-        """
-        Are we scheduled to be published later?
-        """
-
-        now = datetime.now()
-        return not self.is_tmp and \
-            (self.publish_from and self.publish_from > now) and \
-            (not self.publish_to or self.publish_to > now)
-
-    @property
-    def acquire_global_roles(self):
-
-        """ Do we need to acquire global roles? Only if published... """
-
-        if not self.is_published:
-            return False
-        else:
-            return True
 
 
 class PublishableContent(PublishableMixin, BaseContent):

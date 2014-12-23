@@ -3,6 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djinn_forms.fields.share import ShareField
 from djinn_forms.forms.share import ShareMixin
+from djinn_workflow.utils import get_workflow, get_state
 from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleSingleField
@@ -148,6 +149,15 @@ class BaseContentForm(BaseSharingForm):
             )
         )
 
+    state = forms.ChoiceField(
+        # Translators: contenttypes status label
+        label=_("Status"),
+        # Translators: contenttypes publish_to help
+        help_text=_("Enter a publish-to date and time"),
+        choices=[],
+        required=False,
+        widget=forms.RadioSelect)
+
     userkeywords = KeywordField(
         # Translators: contenttypes userkeywords label
         label=_("Keywords"),
@@ -182,6 +192,17 @@ class BaseContentForm(BaseSharingForm):
 
         self.fields['parentusergroup'].choices = self._group_choices()
         self.fields['userkeywords'].show_label = True
+
+        wf = get_workflow(self.instance)
+
+        state = get_state(self.instance)
+
+        if not state:
+            state = wf.initial_state
+
+        self.fields['state'].choices = [
+            (trans.name, trans.name) for trans in
+            state.get_transitions(self.instance, self.user)]
 
         # If there is no parentusergroup in the instance, and the instance is
         # a temporary one, set the group to -1.
@@ -223,6 +244,9 @@ class BaseContentForm(BaseSharingForm):
 
         res = super(BaseContentForm, self).save(commit=commit)
 
+        if commit and "state" in self.changed_data:
+            self.instance.set_status(self.cleaned_data.get("state"))
+
         self.save_relations(commit=commit)
         self.save_shares(commit=commit)
 
@@ -230,25 +254,7 @@ class BaseContentForm(BaseSharingForm):
 
     def clean(self):
 
-        now = datetime.now()
         _data = self.cleaned_data
-
-        # Check whether the 'save_draft' or 'save_publish' was used
-        #
-        if self.data.get("action") == "save_publish":
-            if _data['publish_to'] and _data['publish_to'] < now:
-                raise forms.ValidationError(
-                    _(u"Publication to date is in the past and you're "
-                      "saving as published"),
-                    code='invalid')
-            if not _data['publish_from'] or _data['publish_from'] > now:
-                _data['publish_from'] = now
-        elif self.data.get("action") == "save_as_concept":
-            if _data['publish_from'] < now:
-                raise forms.ValidationError(
-                    _(u"Publication date is in the past and you're "
-                      "saving as draft"),
-                    code='invalid')
 
         # Check publication sanity
         #

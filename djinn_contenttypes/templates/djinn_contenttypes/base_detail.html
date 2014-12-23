@@ -16,9 +16,10 @@
   {% block metainfo %}
   <div class="meta-info">
     <span class="profile-type">{{ object.ct_label }}</span>
+    {{ view.state }}
     {% if not object.is_tmp %}
     {% if object.publish_from %}
-    {% trans "Published on" %}: {{ object.publish_from }}, 
+    {% trans "Published on" %}: {{ view.created }}, 
     {% else %}
     {% trans "Draft" %}, 
     {% endif %}
