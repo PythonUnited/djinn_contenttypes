@@ -1,8 +1,8 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
-
 
 class Highlight(models.Model):
 
@@ -23,6 +23,16 @@ class Highlight(models.Model):
     object_ct = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('object_ct', 'object_id')
+
+    @property
+    def human_date(self):
+
+        delta = datetime.now() - self.date_from
+
+        if delta.days == 0:
+            return self.date_from.strftime('%H:%M')
+        else:
+            return self.date_from.strftime('%d-%m')
 
     def __unicode__(self):
 

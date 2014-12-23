@@ -15,17 +15,22 @@
 
   {% block metainfo %}
   <div class="meta-info">
+  {% with hightlight_from=object.highlight_from %}
     <span class="profile-type">{{ object.ct_label }}</span>
     {{ view.state }}
     {% if not object.is_tmp %}
     {% if object.publish_from %}
     {% trans "Published on" %}: {{ view.created }}, 
+        {% if hightlight_from and hightlight_from <= hightlight_from.now %}
+            {% trans "Placed on homepage on" %}: {{ hightlight_from }}
+        {% endif %}
     {% else %}
-    {% trans "Draft" %}, 
+    {% trans "Draft" %},
     {% endif %}
     {% endif %}
-    {% trans "Last change" %}: {{ object.changed }}, 
+    {% if not hightlight_from or hightlight_from > hightlight_from.now %}{% trans "Last change" %}: {{ object.changed }},{% endif %}
     {% trans "Reactions" %}: {% comment_count_for user object %}
+  {% endwith %}
   </div>
   {% endblock metainfo %}
   {% endblock header %}
