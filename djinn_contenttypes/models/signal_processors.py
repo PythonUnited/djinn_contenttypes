@@ -6,6 +6,7 @@ from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.models.history import (
     CREATED, CHANGED, PUBLISHED, UNPUBLISHED, History)
 from djinn_contenttypes.utils import implements
+from djinn_workflow.signals import state_change
 
 
 unpublish = django.dispatch.Signal(providing_args=["instance"])
@@ -28,13 +29,20 @@ def basecontent_post_save(sender, instance, **kwargs):
 @receiver(post_delete)
 def basecontent_post_delete(sender, instance, **kwargs):
 
-    History.objects.delete_instance_log(instance)
+    if implements(instance, BaseContent):
+        History.objects.delete_instance_log(instance)
+
+
+@receiver(state_change)
+def publishable_state_change(sender, instance, **kwargs):
+
+    publishable_post_save(sender, instance, **kwargs)
 
 
 @receiver(post_save)
 def publishable_post_save(sender, instance, **kwargs):
 
-    """Publishable post save hook. If the content is new and 'is_published'
+    """Publishable post save hook. If the content is new and 'is_public'
     is true:
     * if  there is no history of publishing, send publish with first_edition
       flag.
@@ -44,19 +52,27 @@ def publishable_post_save(sender, instance, **kwargs):
 
     if implements(instance, PublishableContent):
 
-        if instance.is_published:
+        if instance.is_public:
+
+            changed = False
 
             if not History.objects.has_been(instance, PUBLISHED, UNPUBLISHED):
+
                 publish.send(sender, instance=instance, first_edition=True)
+                changed = True
+
             elif History.objects.get_last(
                     instance, PUBLISHED, UNPUBLISHED,
                     as_flag=True) == UNPUBLISHED:
+
                 publish.send(sender, instance=instance)
+                changed = True
 
-            History.objects.log(instance, PUBLISHED, user=instance.changed_by)
-
-            instance.__class__.objects.filter(pk=instance.pk).update(
-                publish_notified=True)
+            if changed:
+                History.objects.log(instance, PUBLISHED,
+                                    user=instance.changed_by)
+                instance.__class__.objects.filter(pk=instance.pk).update(
+                    publish_notified=True)
 
         else:
             if History.objects.get_last(
@@ -65,5 +81,5 @@ def publishable_post_save(sender, instance, **kwargs):
 
                 unpublish.send(sender, instance=instance)
 
-            History.objects.log(instance, UNPUBLISHED,
-                                user=instance.changed_by)
+                History.objects.log(instance, UNPUBLISHED,
+                                    user=instance.changed_by)

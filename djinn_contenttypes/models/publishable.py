@@ -7,10 +7,11 @@ from djinn_contenttypes.models.base import BaseContent
 class PublishableMixin(object):
 
     @property
-    def is_published(self):
+    def is_public(self):
 
         """ Are we published? This is true iff:
           - not initial still
+          - state is public
           - publish_from is empty or earlier than now
           - publish_to is empty or later than now
         """
@@ -18,6 +19,8 @@ class PublishableMixin(object):
         now = datetime.now()
 
         return (
+            super(PublishableMixin, self).is_public
+            and
             (not self.is_tmp)
             and
             (not self.publish_from or self.publish_from < now)
@@ -40,12 +43,6 @@ class PublishableContent(PublishableMixin, BaseContent):
         help_text=_("Publish event is sent"))
     remove_after_publish_to = models.BooleanField(
         _('Remove the content ater publication to has past'), default=False)
-
-    @property
-    def is_public(self):
-
-        return (super(PublishableContent, self).is_public and
-                self.is_published)
 
     class Meta:
         abstract = True

@@ -60,3 +60,11 @@ class HistoryTest(TestCase):
                         History.objects.get_last(
                             self.content,
                             PUBLISHED, UNPUBLISHED).status_flag)
+
+    def test_auto_cleanup(self):
+
+        History.objects.log(self.content, PUBLISHED)
+
+        self.content.delete()
+
+        self.assertEquals(None, History.objects.get_last(self.content))

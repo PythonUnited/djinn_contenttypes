@@ -2,7 +2,7 @@
 
 {% if obj.is_deleted %}
 <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is removed{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
-{% elif not obj.is_published %}
+{% elif not obj.is_public %}
 {% if show_link %}
 <a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
   {{ obj.title|abbreviate:truncate }}

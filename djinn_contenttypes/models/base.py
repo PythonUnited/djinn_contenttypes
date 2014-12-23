@@ -92,15 +92,16 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         """ We are public if we are not in a closed group """
 
-        if self.in_closed_group or get_state(self).name == "private":
+        if not self.id:
+            return False
+        elif self.is_tmp:
+            return False
+        elif self.in_closed_group:
+            return False
+        elif get_state(self).name == "private":
             return False
         else:
             return True
-
-    @property
-    def is_published(self):
-
-        return True
 
     @property
     def is_deleted(self):

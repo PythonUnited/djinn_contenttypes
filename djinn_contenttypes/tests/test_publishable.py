@@ -20,40 +20,32 @@ class PublishableTest(TestCase):
 
     def test_is_public(self):
 
-        self.assertTrue(self.content.is_public)
-
-        self.content.is_tmp = True
-
-        self.assertFalse(self.content.is_public)
-
-    def test_is_published(self):
-
         tomorrow = datetime.now() + timedelta(days=1)
         yesterday = datetime.now() - timedelta(days=1)
 
-        self.assertTrue(self.content.is_published)
+        self.assertTrue(self.content.is_public)
 
         self.content.publish_from = tomorrow
 
-        self.assertFalse(self.content.is_published)
+        self.assertFalse(self.content.is_public)
 
         self.content.publish_from = yesterday
 
-        self.assertTrue(self.content.is_published)
+        self.assertTrue(self.content.is_public)
 
         self.content.publish_to = tomorrow
 
-        self.assertTrue(self.content.is_published)
+        self.assertTrue(self.content.is_public)
 
         self.content.publish_to = yesterday
 
-        self.assertFalse(self.content.is_published)
+        self.assertFalse(self.content.is_public)
 
     def test_unpublish(self):
 
         tomorrow = datetime.now() + timedelta(days=1)
 
-        self.assertTrue(self.content.is_published)
+        self.assertTrue(self.content.is_public)
 
         def unpublish_callback(sender, instance, **kwargs):
 

@@ -244,8 +244,8 @@ class BaseContentForm(BaseSharingForm):
 
         res = super(BaseContentForm, self).save(commit=commit)
 
-        if commit and "state" in self.changed_data:
-            self.instance.set_status(self.cleaned_data.get("state"))
+        # if commit and "state" in self.changed_data:
+        #    self.instance.set_status(self.cleaned_data.get("state"))
 
         self.save_relations(commit=commit)
         self.save_shares(commit=commit)

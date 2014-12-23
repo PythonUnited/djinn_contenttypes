@@ -12,7 +12,7 @@
     {% with ct_label=view.ct_label %}
     {% if object and not object.is_tmp %}
     {% blocktrans %}Edit {{ ct_label }}{% endblocktrans %}
-    {% if not object.is_published %}
+    {% if not object.is_public %}
     <span class="status private">{% trans "not published" %}</span>
     {% endif %}
     {% else %}
