@@ -11,7 +11,8 @@ requires = [
     'requests',
     'djinn_core',
     'django-bootstrap-form',
-    'djinn_forms>=1.2.3'
+    'djinn_forms>=1.2.3',
+    'djinn_workflow'
     ]
 
 setup(name='djinn_contenttypes',

@@ -6,7 +6,7 @@
 
 {% block left-pane %}
 
-<article>
+<article class="{% if not object.is_published %}unpublished{% endif %}">
 
   {% block header %}
   <header>
@@ -14,24 +14,36 @@
   </header>
 
   {% block metainfo %}
+  {% with perm=object|edit_permission_id %}
   <div class="meta-info">
-  {% with hightlight_from=object.highlight_from %}
+  {% with highlight_from=object.highlight_from %}
     <span class="profile-type">{{ object.ct_label }}</span>
-    {{ view.state }}
     {% if not object.is_tmp %}
-    {% if object.publish_from %}
-    {% trans "Published on" %}: {{ view.created }}, 
-        {% if hightlight_from and hightlight_from <= hightlight_from.now %}
-            {% trans "Placed on homepage on" %}: {{ hightlight_from }}
-        {% endif %}
+    {% trans "Published on" %}: {{ view.created }}
+    {% if highlight_from and highlight_from <= highlight_from.now %}
+    , {% trans "Placed on homepage on" %}: {{ highlight_from }}
+    {% endif %}
     {% else %}
     {% trans "Draft" %},
     {% endif %}
-    {% endif %}
-    {% if not hightlight_from or hightlight_from > hightlight_from.now %}{% trans "Last change" %}: {{ object.changed }},{% endif %}
-    {% trans "Reactions" %}: {% comment_count_for user object %}
+
+    {% ifpermission object request.user perm %}
+      {% if object.publish_to %}
+      , {% trans "Published till" %}: {{ object.publish_to }}
+      {% endif %}                             
+    {% else %}
+      {% if not highlight_from or highlight_from > highlight_from.now %}
+      {% trans "Last change" %}: {{ object.changed }}
+      {% endif %}
+    
+      {% if object|implements:"djinn_contenttypes.Commentable" %}
+      , {% trans "Reactions" %}: {% comment_count_for user object %}
+      {% endif %}
+    {% endifpermission %}
+
   {% endwith %}
   </div>
+  {% endwith %}
   {% endblock metainfo %}
   {% endblock header %}
 
@@ -62,26 +74,26 @@
 {% if object.parentusergroup %}
 
 <section id="content-for-group">
-  
+
   <h3>Geplaatst in de groep</h3>
-  
+
   {% with group=object.parentusergroup.profile %}
   <div class="groupprofilesummary">
-    
+
     <figure>
       <a class="groupprofile" href="{{ group.get_absolute_url }}">
         <img src="{{ group.avatar_url }}"/>
       </a>
     </figure>
-    
+
     <div class="text">
-      <a class="groupprofile" 
+      <a class="groupprofile"
          href="{{ group.get_absolute_url }}">{{ group }}</a>
     </div>
 
   </div>
   {% endwith %}
-  
+
 </section>
 
 {% endif %}

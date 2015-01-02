@@ -44,6 +44,32 @@ class PublishableTest(TestCase):
 
         self.assertFalse(self.content.is_public)
 
+    def test_is_published(self):
+
+        tomorrow = datetime.now() + timedelta(days=1)
+        yesterday = datetime.now() - timedelta(days=1)
+
+        # If nothing is said about publish_from or publish_to, the content is
+        # public.
+        #
+        self.assertTrue(self.content.is_published)
+
+        self.content.publish_from = tomorrow
+
+        self.assertFalse(self.content.is_published)
+
+        self.content.publish_from = yesterday
+
+        self.assertTrue(self.content.is_published)
+
+        self.content.publish_to = tomorrow
+
+        self.assertTrue(self.content.is_published)
+
+        self.content.publish_to = yesterday
+
+        self.assertFalse(self.content.is_published)
+
     def test_unpublish(self):
 
         tomorrow = datetime.now() + timedelta(days=1)

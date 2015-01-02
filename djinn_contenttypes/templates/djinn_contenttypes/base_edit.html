@@ -12,9 +12,6 @@
     {% with ct_label=view.ct_label %}
     {% if object and not object.is_tmp %}
     {% blocktrans %}Edit {{ ct_label }}{% endblocktrans %}
-    {% if not object.is_public %}
-    <span class="status private">{% trans "not published" %}</span>
-    {% endif %}
     {% else %}
     {% blocktrans %}Add {{ ct_label }}{% endblocktrans %}
     {% endif %}
@@ -23,23 +20,6 @@
   </h1>
 </header>
 {% block metainfo %}
-<div class="meta-info">
-  {% if not object.is_tmp %}
-  {% if object.is_publishable %}
-  {% if object.publish_from %}
-  {# Translators: metadata publication date #}
-  {% trans "Published on" %}: {{ object.publish_from }},
-  {% else %}
-  {# Translators: metadata status #}
-  {% trans "Status" %}: {% trans "draft" %},
-  {% endif %}
-  {% endif %}
-  {% endif %}
-  {# Translators: metadata last changed #}
-  {% trans "Last change" %}: {{ object.changed }}, 
-  {# Translators: metadata reactions #}
-  {% trans "Reactions" %}: {% comment_count_for user object %}
-</div>
 {% endblock metainfo %}
 {% endblock header %}
 

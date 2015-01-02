@@ -82,6 +82,12 @@ def edit_permission_id(obj):
 
 
 @register.filter
+def view_permission_id(obj):
+
+    return "%s.view_%s" % (obj.app_label, obj.ct_name)
+
+
+@register.filter
 def delete_permission_id(obj):
 
     return "%s.delete_%s" % (obj.app_label, obj.ct_name)

@@ -7,25 +7,37 @@ from djinn_contenttypes.models.base import BaseContent
 class PublishableMixin(object):
 
     @property
+    def is_published(self):
+
+        """The content is considered published if either dates are not set, or
+        publish_from is earlier than now, and publish_to is later than
+        now.  Note that this is not the same as 'is_public', since
+        that also depends on visibility!
+
+        """
+
+        now = datetime.now()
+
+        return ((not self.publish_from or self.publish_from < now)
+                and
+                (not self.publish_to or self.publish_to > now))
+
+    @property
     def is_public(self):
 
-        """ Are we published? This is true iff:
+        """ Are we public? This is true iff:
           - not initial still
           - state is public
           - publish_from is empty or earlier than now
           - publish_to is empty or later than now
         """
 
-        now = datetime.now()
-
         return (
             super(PublishableMixin, self).is_public
             and
-            (not self.is_tmp)
+            not self.is_tmp
             and
-            (not self.publish_from or self.publish_from < now)
-            and
-            (not self.publish_to or self.publish_to > now))
+            self.is_published)
 
 
 class PublishableContent(PublishableMixin, BaseContent):
