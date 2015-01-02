@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from django.test.testcases import TestCase
 from django.db import models
 from django.contrib.auth import get_user_model
-from djinn_contenttypes.models.signal_processors import unpublish
+from djinn_contenttypes.models.signal_processors import unpublish, publish
 
 
 class PublishableTest(TestCase):
@@ -23,6 +23,9 @@ class PublishableTest(TestCase):
         tomorrow = datetime.now() + timedelta(days=1)
         yesterday = datetime.now() - timedelta(days=1)
 
+        # If nothing is said about publish_from or publish_to, the content is
+        # public.
+        #
         self.assertTrue(self.content.is_public)
 
         self.content.publish_from = tomorrow
@@ -58,3 +61,50 @@ class PublishableTest(TestCase):
         self.content.save()
 
         self.assertFalse(self.content.publish_notified)
+
+    def test_publish(self):
+
+        tomorrow = datetime.now() + timedelta(days=1)
+
+        self.assertTrue(self.content.is_public)
+
+        self.content.publish_from = tomorrow
+        self.content.save()
+
+        self.assertFalse(self.content.is_public)
+
+        def publish_callback(sender, instance, **kwargs):
+
+            instance.publish_notified = True
+
+        publish.connect(publish_callback)
+
+        self.content.publish_notified = False
+        self.content.publish_from = datetime.now()
+        self.content.save()
+
+        self.assertTrue(self.content.publish_notified)
+
+    def test_remove_after_unpublish(self):
+
+        yesterday = datetime.now() + timedelta(days=-1)
+        tomorrow = datetime.now() + timedelta(days=1)
+
+        self.content.publish_to = yesterday
+
+        self.content.save()
+
+        self.assertFalse(self.content.is_deleted)
+
+        self.content.publish_to = tomorrow
+
+        self.content.save()
+
+        self.assertFalse(self.content.is_deleted)
+
+        self.content.publish_to = yesterday
+        self.content.remove_after_publish_to = True
+
+        self.content.save()
+
+        self.assertTrue(self.content.is_deleted)

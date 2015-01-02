@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import django.dispatch
@@ -13,6 +14,23 @@ unpublish = django.dispatch.Signal(providing_args=["instance"])
 publish = django.dispatch.Signal(providing_args=["instance"])
 created = django.dispatch.Signal(providing_args=["instance"])
 changed = django.dispatch.Signal(providing_args=["instance"])
+
+
+@receiver(unpublish)
+def basecontent_unpublish(sender, instance, **kwargs):
+
+    """ If publishable content has the remove_after_publish_to flag set,
+    and the publish_to date is in the past, remove the instance. """
+
+    if implements(instance, PublishableContent):
+
+        now = datetime.now()
+
+        if instance.remove_after_publish_to:
+
+            if instance.publish_to and instance.publish_to < now:
+
+                instance.delete()
 
 
 @receiver(post_save)
@@ -81,5 +99,8 @@ def publishable_post_save(sender, instance, **kwargs):
 
                 unpublish.send(sender, instance=instance)
 
-                History.objects.log(instance, UNPUBLISHED,
-                                    user=instance.changed_by)
+                # The instance may not be there anymore...
+                #
+                if not instance.is_deleted:
+                    History.objects.log(instance, UNPUBLISHED,
+                                        user=instance.changed_by)
