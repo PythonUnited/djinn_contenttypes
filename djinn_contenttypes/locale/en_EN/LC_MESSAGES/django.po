@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-19 13:04+0100\n"
+"POT-Creation-Date: 2015-01-02 17:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,116 +18,113 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Translators: Contentype owner label
-#: forms/base.py:82
+#: forms/base.py:83
 msgid "Owner"
 msgstr ""
 
 #. Translators: content type owner hint
-#: forms/base.py:87
+#: forms/base.py:88
 msgid "Select a name"
 msgstr ""
 
 #. Translators: Contentype shares/editors label
-#: forms/base.py:95
+#: forms/base.py:96
 msgid "Editors"
 msgstr ""
 
 #. Translators: content shares help
-#: forms/base.py:97
+#: forms/base.py:98
 msgid "Select users or groups to share editing role"
 msgstr ""
 
 #. Translators: content type owner hint
-#: forms/base.py:102
+#: forms/base.py:103
 msgid "Select a user or group name "
 msgstr ""
 
 #. Translators: contenttypes title label
-#: forms/base.py:118 models/base.py:18
+#: forms/base.py:119 models/base.py:19
 msgid "Title"
 msgstr ""
 
 #. Translators: contenttypes usergroup label
-#: forms/base.py:123
+#: forms/base.py:124
 msgid "Add to group"
 msgstr ""
 
 #. Translators: contenttypes publish_from label
-#: forms/base.py:129 models/publishable.py:52
+#: forms/base.py:130 models/publishable.py:47
 msgid "Publish from"
 msgstr ""
 
 #. Translators: contenttypes publish_from help
-#: forms/base.py:131
+#: forms/base.py:132
 msgid "Enter a publish-from date and time"
 msgstr ""
 
-#: forms/base.py:134 forms/base.py:146
+#: forms/base.py:135 forms/base.py:147
 msgid "Date"
 msgstr ""
 
-#: forms/base.py:135 forms/base.py:147
+#: forms/base.py:136 forms/base.py:148
 msgid "Time"
 msgstr ""
 
 #. Translators: contenttypes publish_to label
-#: forms/base.py:141 models/publishable.py:55
+#: forms/base.py:142 models/publishable.py:50
 msgid "Publish to"
 msgstr ""
 
 #. Translators: contenttypes publish_to help
-#: forms/base.py:143
+#: forms/base.py:144 forms/base.py:156
 msgid "Enter a publish-to date and time"
 msgstr ""
 
+#. Translators: contenttypes status label
+#: forms/base.py:154
+msgid "Status"
+msgstr ""
+
 #. Translators: contenttypes userkeywords label
-#: forms/base.py:153 models/base.py:25
+#: forms/base.py:163 models/base.py:26
 msgid "Keywords"
 msgstr ""
 
 #. Translators: contenttypes userkeywords help
-#: forms/base.py:156
+#: forms/base.py:166
 msgid "Enter keywords separated by spaces"
 msgstr ""
 
 #. Translators: contenttypes related label
-#: forms/base.py:163
+#: forms/base.py:173
 msgid "Related content"
 msgstr ""
 
 #. Translators: Translators: contenttypes related hint
-#: forms/base.py:166
+#: forms/base.py:176
 msgid "Select related content"
 msgstr ""
 
-#: forms/base.py:168
+#: forms/base.py:178
 msgid "Search relation"
 msgstr ""
 
 #. Translators: djinn_contenttypes group make a choice label
 #. Translators: djinn_contenttypes parentusergroup required
-#: forms/base.py:217 forms/base.py:273
+#: forms/base.py:238 forms/base.py:279
 msgid "Make a choice"
 msgstr "Maak keuze"
 
 #. Translators: djinn_contenttypes group no group label
-#: forms/base.py:219
+#: forms/base.py:240
 msgid "Do not add to a group"
 msgstr ""
 
-#: forms/base.py:241
-msgid "Publication to date is in the past and you're saving as published"
-msgstr ""
-
-#: forms/base.py:249
-msgid "Publication date is in the past and you're saving as draft"
-msgstr ""
-
-#: forms/base.py:258
+#: forms/base.py:264
 msgid "Publish to date should be after publish from date"
 msgstr ""
 
-#: forms/base.py:282
+#: forms/base.py:288
 msgid "You must set the publish to date"
 msgstr ""
 
@@ -191,19 +188,19 @@ msgstr ""
 msgid "title"
 msgstr ""
 
-#: models/base.py:19
+#: models/base.py:20
 msgid "Created"
 msgstr ""
 
-#: models/base.py:20
+#: models/base.py:21
 msgid "Changed"
 msgstr ""
 
-#: models/base.py:23
+#: models/base.py:24
 msgid "Creator naam"
 msgstr ""
 
-#: models/base.py:31
+#: models/base.py:32
 msgid "Temporary"
 msgstr ""
 
@@ -211,7 +208,7 @@ msgstr ""
 msgid "Collega's kunnen reageren"
 msgstr ""
 
-#: models/highlight.py:16
+#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:24
 msgid "Highlight from"
 msgstr ""
 
@@ -219,28 +216,27 @@ msgstr ""
 msgid "Highlight to"
 msgstr ""
 
-#: models/publishable.py:59
+#: models/publishable.py:54
 msgid "Event sent"
 msgstr ""
 
-#: models/publishable.py:60
+#: models/publishable.py:55
 msgid "Publish event is sent"
 msgstr ""
 
-#: models/publishable.py:62
+#: models/publishable.py:57
 msgid "Remove the content ater publication to has past"
 msgstr ""
 
 #: templates/djinn_contenttypes/base_add.html:10
-#: templates/djinn_contenttypes/base_edit.html:19
+#: templates/djinn_contenttypes/base_edit.html:16
 #, python-format
 msgid "Add %(ct_label)s"
 msgstr "%(ct_label)s toevoegen"
 
 #: templates/djinn_contenttypes/base_add.html:22
 #: templates/djinn_contenttypes/base_add_modal.html:37
-#: templates/djinn_contenttypes/base_edit.html:110
-#: templates/djinn_contenttypes/base_edit.html:119
+#: templates/djinn_contenttypes/base_edit.html:78
 #: templates/djinn_contenttypes/base_edit_modal.html:38
 msgid "Save"
 msgstr ""
@@ -248,7 +244,7 @@ msgstr ""
 #: templates/djinn_contenttypes/base_add.html:26
 #: templates/djinn_contenttypes/base_add_modal.html:44
 #: templates/djinn_contenttypes/base_delete_modal.html:12
-#: templates/djinn_contenttypes/base_edit.html:127
+#: templates/djinn_contenttypes/base_edit.html:82
 #: templates/djinn_contenttypes/base_edit_modal.html:45
 #: templates/djinn_contenttypes/snippets/share.html:73
 #: templatetags/djinn_contenttypes.py:53
@@ -269,29 +265,23 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#. Translators: metadata publication date
-#: templates/djinn_contenttypes/base_detail.html:21
-#: templates/djinn_contenttypes/base_edit.html:31
+#: templates/djinn_contenttypes/base_detail.html:22
 msgid "Published on"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:24
-msgid "Placed on homepage on"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_detail.html:28
+#: templates/djinn_contenttypes/base_detail.html:27
 msgid "Draft"
 msgstr ""
 
-#. Translators: metadata last changed
-#: templates/djinn_contenttypes/base_detail.html:31
-#: templates/djinn_contenttypes/base_edit.html:39
+#: templates/djinn_contenttypes/base_detail.html:32
+msgid "Published till"
+msgstr ""
+
+#: templates/djinn_contenttypes/base_detail.html:36
 msgid "Last change"
 msgstr ""
 
-#. Translators: metadata reactions
-#: templates/djinn_contenttypes/base_detail.html:32
-#: templates/djinn_contenttypes/base_edit.html:41
+#: templates/djinn_contenttypes/base_detail.html:40
 msgid "Reactions"
 msgstr ""
 
@@ -300,35 +290,11 @@ msgstr ""
 msgid "Edit %(ct_label)s"
 msgstr "%(ct_label)s bewerken"
 
-#: templates/djinn_contenttypes/base_edit.html:16
-#: templates/djinn_contenttypes/snippets/reference.html:9
-#: templates/djinn_contenttypes/snippets/title.html:9
-msgid "not published"
-msgstr ""
-
-#. Translators: metadata status
-#: templates/djinn_contenttypes/base_edit.html:34
-msgid "Status"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:34
-msgid "draft"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:64
+#: templates/djinn_contenttypes/base_edit.html:44
 msgid "Please correct the following errors"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_edit.html:100
-#: templates/djinn_contenttypes/base_edit.html:114
-msgid "Save and publish"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:104
-msgid "Save as concept"
-msgstr ""
-
-#: templates/djinn_contenttypes/base_edit.html:137
+#: templates/djinn_contenttypes/base_edit.html:92
 #, python-format
 msgid "Delete this %(object_name)s"
 msgstr ""
@@ -348,6 +314,11 @@ msgstr ""
 msgid "%(object_name)s is removed"
 msgstr ""
 
+#: templates/djinn_contenttypes/snippets/reference.html:9
+#: templates/djinn_contenttypes/snippets/title.html:9
+msgid "hidden"
+msgstr ""
+
 #: templates/djinn_contenttypes/snippets/reference.html:12
 #, python-format
 msgid "%(object_name)s is not available"
@@ -359,7 +330,7 @@ msgid "Share"
 msgstr ""
 
 #. Translators: edit form status message
-#: views/base.py:566
+#: views/base.py:577
 msgid "Saved changes"
 msgstr ""
 
