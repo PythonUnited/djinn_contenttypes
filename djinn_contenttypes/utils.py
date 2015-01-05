@@ -91,8 +91,9 @@ def get_comment_model():
         return model
 
 
-def check_get_url(url):
+def check_get_url(url, cookies=None):
 
     """ return http status for fetching this url """
 
-    return requests.get(url, allow_redirects=False).status_code
+    return requests.get(url, cookies=cookies,
+                        allow_redirects=False).status_code

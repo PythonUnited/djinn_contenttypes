@@ -208,18 +208,26 @@ class AbstractBaseView(TemplateResolverMixin, SwappableMixin, AcceptMixin):
 
 class HistoryMixin(object):
 
-    def add_to_history(self, path):
+    def add_to_history(self, request=None):
 
         """ Check on session history, and add path if need be """
 
-        if 'history' not in self.request.session:
-            self.request.session['history'] = []
+        if not request:
+            request = self.request
 
-        if len(self.request.session['history']) > 10:
-            self.request.session['history'].pop(0)
+        if 'history' not in request.session:
+            request.session['history'] = []
 
-        self.request.session['history'].append(path)
-        self.request.session.modified = True
+        if len(request.session['history']) > 10:
+            request.session['history'].pop()
+
+        path = request.path
+
+        if request.META.get('QUERY_STRING'):
+            path = "%s?%s" % (path, request.META['QUERY_STRING'])
+
+        request.session['history'].insert(0, path)
+        request.session.modified = True
 
     def get_redir_url(self):
 
@@ -229,7 +237,10 @@ class HistoryMixin(object):
 
         for url in self.request.session.get('history', []):
 
-            if check_get_url(self.request.build_absolute_uri(url)) == 200:
+            absolute_url = self.request.build_absolute_uri(url)
+            cookies = self.request.COOKIES
+
+            if check_get_url(absolute_url, cookies=cookies) == 200:
 
                 success_url = url
                 break
@@ -293,7 +304,7 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
         content_type = self._determine_content_type()
 
         if content_type == "text/html":
-            self.add_to_history(request.path)
+            self.add_to_history()
 
         return self.render_to_response(context, content_type=content_type)
 
