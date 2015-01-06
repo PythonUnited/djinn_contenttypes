@@ -6,7 +6,7 @@ from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.models.history import (
     CREATED, CHANGED, PUBLISHED, UNPUBLISHED, History)
-from djinn_contenttypes.utils import implements
+from djinn_core.utils import implements
 from djinn_workflow.signals import state_change
 
 
@@ -74,11 +74,15 @@ def publishable_post_save(sender, instance, **kwargs):
 
             changed = False
 
+            # Have we not been published before?
+            #
             if not History.objects.has_been(instance, PUBLISHED, UNPUBLISHED):
 
                 publish.send(sender, instance=instance, first_edition=True)
                 changed = True
 
+            # Yes we have. But maybe currently we're unpublished?
+            #
             elif History.objects.get_last(
                     instance, PUBLISHED, UNPUBLISHED,
                     as_flag=True) == UNPUBLISHED:
@@ -93,6 +97,9 @@ def publishable_post_save(sender, instance, **kwargs):
                     publish_notified=True)
 
         else:
+            # We're are not public. So if the last state was 'published',
+            # actively unpublish
+            #
             if History.objects.get_last(
                     instance, PUBLISHED, UNPUBLISHED,
                     as_flag=True) == PUBLISHED:
