@@ -6,7 +6,7 @@
 {% if show_link %}
 <a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
   {{ obj.title|abbreviate:truncate }}
-  <span class="status private">{% trans "hidden" %}</span>
+  <span class="status private">({% trans "hidden" %})</span>
 </a>
 {% else %}
 <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is not available{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
