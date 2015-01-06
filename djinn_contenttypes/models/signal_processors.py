@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import django.dispatch
+from haystack import signal_processor
 from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.models.history import (
@@ -54,7 +55,11 @@ def basecontent_post_delete(sender, instance, **kwargs):
 @receiver(state_change)
 def publishable_state_change(sender, instance, **kwargs):
 
+    """ After a state change, always call reindex given that a change of
+    state usually means a change in permissions"""
+
     publishable_post_save(sender, instance, **kwargs)
+    signal_processor.handle_save(sender, instance)
 
 
 @receiver(post_save)
