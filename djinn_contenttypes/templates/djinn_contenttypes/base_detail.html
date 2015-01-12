@@ -31,8 +31,6 @@
       {% if highlight_from and highlight_from <= highlight_from.now %}
       , {% trans "Highlight from" %}: {{ highlight_from }}
       {% endif %}
-    {% else %}
-      {% trans "Draft" %}
     {% endif %}
 
     {% ifpermission object request.user perm %}
