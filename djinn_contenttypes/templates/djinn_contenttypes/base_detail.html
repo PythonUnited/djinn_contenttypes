@@ -2,11 +2,11 @@
 
 {% load pgcomment_tags i18n djinn_contenttypes auth_tags contentaction_tags %}
 
-{% block body_class %}ct {{ object.ct_name }} view{% endblock %}
+{% block body_class %}ct {{ object.ct_name }} view {% if not object.is_published %}unpublished{% endif %}{% endblock %}
 
 {% block left-pane %}
 
-<article class="{% if not object.is_published %}unpublished{% endif %}">
+<article>
 
   {% block header %}
   <header>
