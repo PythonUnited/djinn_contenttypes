@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-02 17:04+0100\n"
+"POT-Creation-Date: 2015-01-12 14:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,8 @@ msgstr ""
 
 #. Translators: contenttypes publish_from label
 #: forms/base.py:130 models/publishable.py:47
+#: templates/djinn_contenttypes/base_detail.html:24
+#: templates/djinn_contenttypes/base_detail.html:40
 msgid "Publish from"
 msgstr ""
 
@@ -208,7 +210,7 @@ msgstr ""
 msgid "Collega's kunnen reageren"
 msgstr ""
 
-#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:24
+#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:32
 msgid "Highlight from"
 msgstr ""
 
@@ -265,23 +267,24 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:22
+#: templates/djinn_contenttypes/base_detail.html:26
+#: templates/djinn_contenttypes/base_detail.html:29
 msgid "Published on"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:27
-msgid "Draft"
+#: templates/djinn_contenttypes/base_detail.html:35
+msgid "Unpublished"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:32
+#: templates/djinn_contenttypes/base_detail.html:43
 msgid "Published till"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:36
+#: templates/djinn_contenttypes/base_detail.html:47
 msgid "Last change"
 msgstr ""
 
-#: templates/djinn_contenttypes/base_detail.html:40
+#: templates/djinn_contenttypes/base_detail.html:51
 msgid "Reactions"
 msgstr ""
 
@@ -315,11 +318,12 @@ msgid "%(object_name)s is removed"
 msgstr ""
 
 #: templates/djinn_contenttypes/snippets/reference.html:9
+#: templates/djinn_contenttypes/snippets/reference.html:13
 #: templates/djinn_contenttypes/snippets/title.html:9
 msgid "hidden"
 msgstr ""
 
-#: templates/djinn_contenttypes/snippets/reference.html:12
+#: templates/djinn_contenttypes/snippets/reference.html:21
 #, python-format
 msgid "%(object_name)s is not available"
 msgstr ""
@@ -330,7 +334,7 @@ msgid "Share"
 msgstr ""
 
 #. Translators: edit form status message
-#: views/base.py:577
+#: views/base.py:588
 msgid "Saved changes"
 msgstr ""
 
