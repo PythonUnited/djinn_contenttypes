@@ -9,8 +9,7 @@
     <span class="status private">({% trans "hidden" %})</span>
   </a>
   {% else %}
-    {{ obj.title|abbreviate:truncate }}
-    <span class="status private">({% trans "hidden" %})</span>
+  <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is not available{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
   {% endif %}
 {% elif not obj.is_public %}
   {% if show_link %}
