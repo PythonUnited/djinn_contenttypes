@@ -149,16 +149,26 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     def get_local_roles(self, **kwargs):
 
-        """ Override get_local_roles, so as to be able to add viewers """
+        """ local roles are assigned as follows:
+            1. if the content is public, the viewer role is given to all
+            2. if the content is private, no one is allowed
+            3. if the content is not public, but also not private,
+               group members are given access.
+        """
 
         roles = super(BaseContent, self).get_local_roles(**kwargs)
 
         if kwargs.get("as_role", False):
+
             if self.is_public:
 
                 viewer = Role.objects.filter(
                     name=VIEWER_ROLE_ID).select_related()
                 roles = roles | viewer
+
+            elif get_state(self).name == "private":
+
+                pass
 
             elif self.in_closed_group and kwargs.get("user", None):
 
@@ -183,7 +193,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         if self.is_public:
             _viewers.add("group_users")
-        elif self.parentusergroup:
+        elif self.parentusergroup and get_state(self).name != "private":
             _viewers.add("group_%d" % self.parentusergroup.id)
 
         for lrole in self.get_local_roles():
