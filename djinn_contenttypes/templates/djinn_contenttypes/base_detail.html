@@ -42,15 +42,15 @@
       {% if object.publish_to %}
       {% trans "Published till" %}: {{ object.publish_to }},
       {% endif %}                             
-    {% else %}
-      {% if not highlight_from or highlight_from > highlight_from.now %}
-      {% trans "Last change" %}: {{ object.changed }},
-      {% endif %}
-    
-      {% if object|implements:"djinn_contenttypes.Commentable" %}
-      {% trans "Reactions" %}: {% comment_count_for user object %}
-      {% endif %}
     {% endifpermission %}
+
+    {% if not highlight_from or highlight_from > highlight_from.now %}
+    {% trans "Last change" %}: {{ object.changed }},
+    {% endif %}
+    
+    {% if object|implements:"djinn_contenttypes.Commentable" %}
+    {% trans "Reactions" %}: {% comment_count_for user object %}
+    {% endif %}
 
   {% endwith %}
   </div>
