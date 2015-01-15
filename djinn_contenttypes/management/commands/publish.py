@@ -2,6 +2,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.registry import CTRegistry
+from django.utils import translation
 
 
 class Command(BaseCommand):
@@ -15,6 +16,7 @@ class Command(BaseCommand):
         and let the signal handlers take care of the rest. """
 
         now = datetime.now()
+        translation.activate("nl_NL")
 
         for ctype in CTRegistry.list_types():
 
