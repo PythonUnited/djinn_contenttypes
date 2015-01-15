@@ -91,25 +91,39 @@ class PublishableTest(TestCase):
     def test_publish(self):
 
         tomorrow = datetime.now() + timedelta(days=1)
+        yesterday = datetime.now() + timedelta(days=-1)
+        signalled = []
 
-        self.assertTrue(self.content.is_public)
+        def publish_callback(sender, instance, **kwargs):
+
+            signalled.append("published")
+
+        publish.connect(publish_callback)
+
+        self.assertTrue(self.content.is_published)
 
         self.content.publish_from = tomorrow
         self.content.save()
 
-        self.assertFalse(self.content.is_public)
+        self.assertFalse(self.content.is_published)
 
-        def publish_callback(sender, instance, **kwargs):
-
-            instance.publish_notified = True
-
-        publish.connect(publish_callback)
-
-        self.content.publish_notified = False
         self.content.publish_from = datetime.now()
         self.content.save()
 
-        self.assertTrue(self.content.publish_notified)
+        self.assertTrue(self.content.is_published)
+        self.assertTrue(len(signalled) == 1 and signalled[0] == "published")
+
+        self.content.publish_from = yesterday
+        self.content.publish_to = yesterday
+        self.content.save()
+
+        self.assertFalse(self.content.is_published)
+
+        self.content.publish_to = None
+        self.content.save()
+
+        self.assertTrue(self.content.is_published)
+        self.assertTrue(len(signalled) == 2 and signalled[1] == "published")
 
     def test_remove_after_unpublish(self):
 
