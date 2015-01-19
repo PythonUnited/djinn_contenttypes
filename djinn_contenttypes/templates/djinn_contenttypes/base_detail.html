@@ -2,11 +2,11 @@
 
 {% load pgcomment_tags i18n djinn_contenttypes auth_tags contentaction_tags %}
 
-{% block body_class %}ct {{ object.ct_name }} view{% endblock %}
+{% block body_class %}ct {{ object.ct_name }} view {% if not object.is_published %}unpublished{% endif %}{% endblock %}
 
 {% block left-pane %}
 
-<article class="{% if not object.is_published %}unpublished{% endif %}">
+<article>
 
   {% block header %}
   <header>
@@ -21,36 +21,36 @@
     {% if object.is_public %}
       {% ifpermission object request.user perm %}
         {% if object.publish_from %}
-          {% trans "Publish from" %}: {{ object.publish_from }}
+          {% trans "Publish from" %}: {{ object.publish_from }},
         {% else %}
-          {% trans "Published on" %}: {{ view.created }}
+          {% trans "Published on" %}: {{ view.created }},
         {% endif %}
       {% else %}
-        {% trans "Published on" %}: {{ view.created }}
+        {% trans "Published on" %}: {{ view.created }},
       {% endifpermission %}
       {% if highlight_from and highlight_from <= highlight_from.now %}
-      , {% trans "Highlight from" %}: {{ highlight_from }}
+      {% trans "Highlight from" %}: {{ highlight_from }},
       {% endif %}
-    {% else %}
-      {% trans "Draft" %}
+    {% elif not object.is_published %}
+      {% trans "Unpublished" %},
     {% endif %}
 
     {% ifpermission object request.user perm %}
       {% if object.publish_from and not object.is_public %}
-      , {% trans "Publish from" %}: {{ object.publish_from }}
+      {% trans "Publish from" %}: {{ object.publish_from }},
       {% endif %}                             
       {% if object.publish_to %}
-      , {% trans "Published till" %}: {{ object.publish_to }}
+      {% trans "Published till" %}: {{ object.publish_to }},
       {% endif %}                             
-    {% else %}
-      {% if not highlight_from or highlight_from > highlight_from.now %}
-      {% trans "Last change" %}: {{ object.changed }}
-      {% endif %}
-    
-      {% if object|implements:"djinn_contenttypes.Commentable" %}
-      , {% trans "Reactions" %}: {% comment_count_for user object %}
-      {% endif %}
     {% endifpermission %}
+
+    {% if not highlight_from or highlight_from > highlight_from.now %}
+    {% trans "Last change" %}: {{ object.changed }},
+    {% endif %}
+    
+    {% if object|implements:"djinn_contenttypes.Commentable" %}
+    {% trans "Reactions" %}: {% comment_count_for user object %}
+    {% endif %}
 
   {% endwith %}
   </div>

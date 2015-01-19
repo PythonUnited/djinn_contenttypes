@@ -11,9 +11,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        """Check contentitems that just have reached published state
-        due to publish timestamp. We just call 'save' on the instance,
-        and let the signal handlers take care of the rest. """
+        """Check contentitems that are beyond the publish_to date.  We just
+        call 'save' on the instance, and let the signal handlers take
+        care of the rest.
+
+        """
 
         now = datetime.now()
         translation.activate("nl_NL")
@@ -24,7 +26,6 @@ class Command(BaseCommand):
 
             if issubclass(model, PublishableContent):
 
-                for instance in model.objects.filter(publish_notified=False,
-                                                     publish_from__lt=now):
+                for instance in model.objects.filter(publish_to__lt=now):
 
                     instance.save()

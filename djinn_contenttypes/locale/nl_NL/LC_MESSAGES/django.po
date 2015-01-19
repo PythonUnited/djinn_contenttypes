@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-02 17:04+0100\n"
-"PO-Revision-Date: 2015-01-02 17:05+0100\n"
+"POT-Creation-Date: 2015-01-12 14:43+0100\n"
+"PO-Revision-Date: 2015-01-12 14:43+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -56,6 +56,8 @@ msgstr "Toevoegen aan groep"
 
 #. Translators: contenttypes publish_from label
 #: forms/base.py:130 models/publishable.py:47
+#: templates/djinn_contenttypes/base_detail.html:24
+#: templates/djinn_contenttypes/base_detail.html:40
 msgid "Publish from"
 msgstr "Publiceren vanaf"
 
@@ -210,7 +212,7 @@ msgstr "Tijdelijk"
 msgid "Collega's kunnen reageren"
 msgstr "Collega's kunnen reageren"
 
-#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:24
+#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:32
 msgid "Highlight from"
 msgstr "Highlight vanaf"
 
@@ -267,23 +269,24 @@ msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: templates/djinn_contenttypes/base_detail.html:22
+#: templates/djinn_contenttypes/base_detail.html:26
+#: templates/djinn_contenttypes/base_detail.html:29
 msgid "Published on"
 msgstr "Publiceren vanaf"
 
-#: templates/djinn_contenttypes/base_detail.html:27
-msgid "Draft"
-msgstr "Concept"
+#: templates/djinn_contenttypes/base_detail.html:35
+msgid "Unpublished"
+msgstr "Niet gepubliceerd"
 
-#: templates/djinn_contenttypes/base_detail.html:32
+#: templates/djinn_contenttypes/base_detail.html:43
 msgid "Published till"
 msgstr "Publiceren tot"
 
-#: templates/djinn_contenttypes/base_detail.html:36
+#: templates/djinn_contenttypes/base_detail.html:47
 msgid "Last change"
 msgstr "Laatste wijziging"
 
-#: templates/djinn_contenttypes/base_detail.html:40
+#: templates/djinn_contenttypes/base_detail.html:51
 msgid "Reactions"
 msgstr "Reacties"
 
@@ -317,11 +320,12 @@ msgid "%(object_name)s is removed"
 msgstr "%(object_name)s is verwijderd"
 
 #: templates/djinn_contenttypes/snippets/reference.html:9
+#: templates/djinn_contenttypes/snippets/reference.html:13
 #: templates/djinn_contenttypes/snippets/title.html:9
 msgid "hidden"
 msgstr "verborgen"
 
-#: templates/djinn_contenttypes/snippets/reference.html:12
+#: templates/djinn_contenttypes/snippets/reference.html:21
 #, python-format
 msgid "%(object_name)s is not available"
 msgstr "%(object_name)s is niet beschikbaar"
@@ -332,7 +336,7 @@ msgid "Share"
 msgstr "Delen"
 
 #. Translators: edit form status message
-#: views/base.py:577
+#: views/base.py:588
 msgid "Saved changes"
 msgstr "Wijzigingen opgeslagen"
 
@@ -346,3 +350,6 @@ msgstr "Deel %(obj)s met:"
 #: views/share.py:119
 msgid "Share this message with:"
 msgstr "Deel dit bericht met:"
+
+#~ msgid "Draft"
+#~ msgstr "Concept"
