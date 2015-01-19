@@ -6,11 +6,11 @@
   {% if show_link %}
   <a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
     {{ obj.title|abbreviate:truncate }}
-    <span class="status private">({% trans "hidden" %})</span>
+    <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
   </a>
   {% else %}
     {{ obj.title|abbreviate:truncate }}
-    <span class="status private">({% trans "hidden" %})</span>
+    <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
   {% endif %}
 {% elif not obj.is_public %}
   {% if show_link %}
