@@ -26,6 +26,8 @@ class Command(BaseCommand):
 
             if issubclass(model, PublishableContent):
 
-                for instance in model.objects.filter(publish_to__lt=now):
+                for instance in model.objects.filter(
+                    unpublish_notified=False,
+                    publish_to__isnull=False, publish_to__lt=now):
 
                     instance.save()
