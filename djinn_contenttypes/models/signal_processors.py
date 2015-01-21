@@ -102,12 +102,15 @@ def publishable_post_save(sender, instance, **kwargs):
                     publish_notified=True)
 
         else:
-            # We're are not public. So if the last state was 'published',
-            # actively unpublish
+            # We're are not public. So if the last state was
+            # 'published', actively unpublish. We assume that no
+            # history means published...
             #
-            if History.objects.get_last(
-                    instance, PUBLISHED, UNPUBLISHED,
-                    as_flag=True) == PUBLISHED:
+            last_state = History.objects.get_last(
+                instance, PUBLISHED, UNPUBLISHED,
+                as_flag=True) == PUBLISHED
+
+            if last_state == PUBLISHED or not last_state:
 
                 unpublish.send(sender, instance=instance)
 
