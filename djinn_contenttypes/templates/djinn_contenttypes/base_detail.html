@@ -10,43 +10,51 @@
 
   {% block header %}
   <header>
-    <h1>{% block title %}{% title object %}{% endblock %}</h1>
-  </header>
+    <h1>{% block title %}{% title object %}{% endblock %}
+    {% if not object.is_published %}
+        <i class="icon-hidden"><span>{% trans "Unpublished" %}</span></i>
+    {% endif %}
 
-  {% block metainfo %}
-  {% with perm=object|edit_permission_id %}
-  <div class="meta-info">
-  {% with highlight_from=object.highlight_from %}
-    <span class="profile-type">{{ object.ct_label }}</span>
+    {% with perm=object|edit_permission_id highlight_from=object.highlight_from %}
     {% if object.is_public %}
-      <i class="icon-pubdate">
-      <span>
+      <i class="icon-pubdate"><span>
       {% ifpermission object request.user perm %}
         {% if object.publish_from %}
-          {% trans "Publish from" %}: {{ object.publish_from }},
+          {% trans "Publish from" %}: {{ object.publish_from }}
         {% else %}
-          {% trans "Published on" %}: {{ view.created }},
+          {% trans "Published on" %}: {{ view.created }}
         {% endif %}
       {% else %}
-        {% trans "Published on" %}: {{ view.created }},
+        {% trans "Published on" %}: {{ view.created }}
       {% endifpermission %}
-      </span>
-      </i>
       {% if highlight_from and highlight_from <= highlight_from.now %}
-      {% trans "Highlight from" %}: {{ highlight_from }},
+          {% trans "Highlight from" %}: {{ highlight_from }}
       {% endif %}
-    {% elif not object.is_published %}
-      <i class="icon-hidden"><span>{% trans "Unpublished" %}</span></i>,
+      </span></i>
     {% endif %}
 
     {% ifpermission object request.user perm %}
+      {% if object.publish_from and not object.is_public or object.publish_to %}
+        <i class="icon-pubdate"><span>
+      {% endif %}
       {% if object.publish_from and not object.is_public %}
-      <i class="icon-pubdate"><span>{% trans "Publish from" %}: {{ object.publish_from }}</span></i>,
-      {% endif %}                             
+          {% trans "Publish from" %}: {{ object.publish_from }}
+      {% endif %}
       {% if object.publish_to %}
-      <i class="icon-pubdate"><span>{% trans "Published till" %}: {{ object.publish_to }}</span></i>,
-      {% endif %}                             
+            {% trans "to" %}: {{ object.publish_to }}
+      {% endif %}
+      {% if object.publish_from and not object.is_public or object.publish_to %}
+        </span></i>
+      {% endif %}
     {% endifpermission %}
+    {% endwith %}
+    </h1>
+  </header>
+
+  {% block metainfo %}
+  <div class="meta-info">
+  {% with highlight_from=object.highlight_from %}
+    <span class="profile-type">{{ object.ct_label }}</span>
 
     {% if not highlight_from or highlight_from > highlight_from.now %}
     {% trans "Last change" %}: {{ object.changed }},
@@ -55,10 +63,8 @@
     {% if object|implements:"djinn_contenttypes.Commentable" %}
     {% trans "Reactions" %}: {% comment_count_for user object %}
     {% endif %}
-
   {% endwith %}
   </div>
-  {% endwith %}
   {% endblock metainfo %}
   {% endblock header %}
 
