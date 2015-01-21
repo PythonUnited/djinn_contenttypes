@@ -6,7 +6,7 @@
 {{ obj.title|abbreviate:truncate }}
 {% elif obj|state == "private" %}
 {{ obj.title|abbreviate:truncate }}
- <span class="status private">({% trans "hidden" %})</span>
+ <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
 {% else %}
 {{ obj.title|abbreviate:truncate }}
 {% endif %}

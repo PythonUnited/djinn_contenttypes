@@ -19,6 +19,8 @@
   {% with highlight_from=object.highlight_from %}
     <span class="profile-type">{{ object.ct_label }}</span>
     {% if object.is_public %}
+      <i class="icon-pubdate">
+      <span>
       {% ifpermission object request.user perm %}
         {% if object.publish_from %}
           {% trans "Publish from" %}: {{ object.publish_from }},
@@ -28,19 +30,21 @@
       {% else %}
         {% trans "Published on" %}: {{ view.created }},
       {% endifpermission %}
+      </span>
+      </i>
       {% if highlight_from and highlight_from <= highlight_from.now %}
       {% trans "Highlight from" %}: {{ highlight_from }},
       {% endif %}
     {% elif not object.is_published %}
-      {% trans "Unpublished" %},
+      <i class="icon-hidden"><span>{% trans "Unpublished" %}</span></i>,
     {% endif %}
 
     {% ifpermission object request.user perm %}
       {% if object.publish_from and not object.is_public %}
-      {% trans "Publish from" %}: {{ object.publish_from }},
+      <i class="icon-pubdate"><span>{% trans "Publish from" %}: {{ object.publish_from }}</span></i>,
       {% endif %}                             
       {% if object.publish_to %}
-      {% trans "Published till" %}: {{ object.publish_to }},
+      <i class="icon-pubdate"><span>{% trans "Published till" %}: {{ object.publish_to }}</span></i>,
       {% endif %}                             
     {% endifpermission %}
 

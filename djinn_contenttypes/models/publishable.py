@@ -53,6 +53,9 @@ class PublishableContent(PublishableMixin, BaseContent):
     publish_notified = models.BooleanField(
         _('Event sent'), default=False,
         help_text=_("Publish event is sent"))
+    unpublish_notified = models.BooleanField(
+        _('Event sent'), default=False,
+        help_text=_("Un-publish event is sent"))
     remove_after_publish_to = models.BooleanField(
         _('Remove the content ater publication to has past'), default=False)
 
