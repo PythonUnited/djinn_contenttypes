@@ -20,15 +20,15 @@
       <i class="icon-pubdate"><span>
       {% ifpermission object request.user perm %}
         {% if object.publish_from %}
-          {% trans "Publish from" %}: {{ object.publish_from }}
+          {% trans "Publish from" %} {{ object.publish_from }}
         {% else %}
-          {% trans "Published on" %}: {{ view.created }}
+          {% trans "Published on" %} {{ view.created }}
         {% endif %}
       {% else %}
-        {% trans "Published on" %}: {{ view.created }}
+        {% trans "Published on" %} {{ view.created }}
       {% endifpermission %}
       {% if highlight_from and highlight_from <= highlight_from.now %}
-          {% trans "Highlight from" %}: {{ highlight_from }}
+          {% trans "Highlight from" %} {{ highlight_from }}
       {% endif %}
       </span></i>
     {% endif %}
@@ -38,10 +38,10 @@
         <i class="icon-pubdate"><span>
       {% endif %}
       {% if object.publish_from and not object.is_public %}
-          {% trans "Publish from" %}: {{ object.publish_from }}
+          {% trans "Publish from" %} {{ object.publish_from }}
       {% endif %}
       {% if object.publish_to %}
-            {% trans "to" %}: {{ object.publish_to }}
+            {% trans "to" %} {{ object.publish_to }}
       {% endif %}
       {% if object.publish_from and not object.is_public or object.publish_to %}
         </span></i>
