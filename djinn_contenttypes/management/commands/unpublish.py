@@ -29,5 +29,5 @@ class Command(BaseCommand):
                 for instance in model.objects.filter(
                     unpublish_notified=False,
                     publish_to__isnull=False, publish_to__lt=now):
-
+                    instance.unpublish_notified = True
                     instance.save()
