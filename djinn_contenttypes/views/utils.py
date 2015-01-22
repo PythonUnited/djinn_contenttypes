@@ -3,6 +3,7 @@ from importlib import import_module
 from django.db import models
 from django.db.models import get_model
 from django.conf.urls import url, patterns
+from django.conf import settings
 from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
 from base import DetailView, CreateView, UpdateView, DeleteView
@@ -181,6 +182,16 @@ def find_form_class(model, modulename):
     formclassname = "%sForm" % model.__name__
     modelname = model.__name__.lower()
     form_class = module = None
+    setting_attr = "%s_%s_FORM" % (modulename.upper(), modelname.upper())
+
+    if getattr(settings, setting_attr, None):
+
+        parts = getattr(settings, setting_attr).split(".")
+
+        module = import_module(".".join(parts[:-1]))
+        form_class = getattr(module, parts[-1])
+
+        return form_class
 
     if model._meta.swapped:
         modulename, modelname = model._meta.swapped.split(".")

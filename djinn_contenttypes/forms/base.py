@@ -12,6 +12,7 @@ from djinn_forms.fields.keyword import KeywordField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
+from djinn_workflow.utils import get_state, apply_transition, set_state
 
 
 class PartialUpdateMixin(object):
@@ -244,8 +245,9 @@ class BaseContentForm(BaseSharingForm):
 
         res = super(BaseContentForm, self).save(commit=commit)
 
-        # if commit and "state" in self.changed_data:
-        #    self.instance.set_status(self.cleaned_data.get("state"))
+        if commit and "state" in self.changed_data:
+
+            apply_transition(self.instance, self.cleaned_data['state'])
 
         self.save_relations(commit=commit)
         self.save_shares(commit=commit)
