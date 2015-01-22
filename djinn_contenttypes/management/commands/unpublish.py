@@ -30,6 +30,7 @@ class Command(BaseCommand):
                         unpublish_notified=False,
                         publish_to__isnull=False, publish_to__lt=now):
 
+                    instance.unpublish_notified = True
                     instance.save()
 
                 # clean up tenacious content...
