@@ -174,7 +174,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
                     name=VIEWER_ROLE_ID).select_related()
                 roles = roles | viewer
 
-            elif get_state(self).name == "private":
+            elif get_state(self).name == "private" or not self.is_published:
 
                 pass
 
@@ -201,7 +201,9 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         if self.is_public:
             _viewers.add("group_users")
-        elif self.parentusergroup and get_state(self).name != "private":
+        elif self.parentusergroup and self.is_published and get_state(
+                self).name != "private":
+
             _viewers.add("group_%d" % self.parentusergroup.id)
 
         for lrole in self.get_local_roles():
