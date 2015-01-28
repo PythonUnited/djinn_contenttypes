@@ -43,6 +43,7 @@ setup(name='djinn_contenttypes',
       entry_points="""\
       [djinn.app]
       js=djinn_contenttypes:get_js
+      css=djinn_contenttypes:get_css
       urls=djinn_contenttypes:get_urls
       """
       )

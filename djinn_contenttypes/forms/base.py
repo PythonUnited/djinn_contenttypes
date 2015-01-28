@@ -1,9 +1,8 @@
-from datetime import datetime
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djinn_forms.fields.share import ShareField
 from djinn_forms.forms.share import ShareMixin
-from djinn_workflow.utils import get_workflow, get_state
+from djinn_workflow.utils import get_workflow, get_state, apply_transition
 from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleSingleField
@@ -12,7 +11,6 @@ from djinn_forms.fields.keyword import KeywordField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
-from djinn_workflow.utils import get_state, apply_transition, set_state
 
 
 class PartialUpdateMixin(object):

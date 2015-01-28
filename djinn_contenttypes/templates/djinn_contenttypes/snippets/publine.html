@@ -1,0 +1,7 @@
+{% load i18n djinn_contenttypes_tags djinn_workflow_tags %}
+
+<div id="publine">
+  {% if object.is_scheduled %}
+  {% scheduled_line object %}
+  {% endif %}
+</div>

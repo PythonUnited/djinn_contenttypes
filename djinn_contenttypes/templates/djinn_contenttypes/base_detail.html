@@ -1,8 +1,10 @@
 {% extends "layout-8x4.html" %}
 
-{% load pgcomment_tags i18n djinn_contenttypes auth_tags contentaction_tags %}
+{% load pgcomment_tags i18n djinn_contenttypes djinn_contenttypes_tags %}
+{% load djinn_auth_tags auth_tags djinn_workflow_tags %}
 
-{% block body_class %}ct {{ object.ct_name }} view {% if not object.is_published %}unpublished{% endif %}{% endblock %}
+{% block body_class %}ct {{ object.ct_name }} view {% pub_classes object %}
+{% endblock %}
 
 {% block left-pane %}
 
@@ -11,43 +13,18 @@
   {% block header %}
   <header>
     <h1>{% block title %}{% title object %}{% endblock %}
-    {% if not object.is_published %}
-        <i class="icon-hidden"><span>{% trans "Unpublished" %}</span></i>
-    {% endif %}
+  
+      {% if_has_perm object request.user 'change' %}
+      {% include "djinn_contenttypes/snippets/publabels.html" %}
+      {% endif_has_perm %}
 
-    {% with perm=object|edit_permission_id highlight_from=object.highlight_from %}
-    {% if object.is_public %}
-      <i class="icon-pubdate"><span>
-      {% ifpermission object request.user perm %}
-        {% if object.publish_from %}
-          {% trans "Publish from" %} {{ object.publish_from }}
-        {% else %}
-          {% trans "Published on" %} {{ view.created }}
-        {% endif %}
-      {% else %}
-        {% trans "Published on" %} {{ view.created }}
-      {% endifpermission %}
+      {% with highlight_from=object.highlight_from %}
       {% if highlight_from and highlight_from <= highlight_from.now %}
+        <span class="label label-success">
           {% trans "Highlight from" %} {{ highlight_from }}
+        </span>
       {% endif %}
-      </span></i>
-    {% endif %}
-
-    {% ifpermission object request.user perm %}
-      {% if object.publish_from and not object.is_public or object.publish_to %}
-        <i class="icon-pubdate"><span>
-      {% endif %}
-      {% if object.publish_from and not object.is_public %}
-          {% trans "Publish from" %} {{ object.publish_from }}
-      {% endif %}
-      {% if object.publish_to %}
-            {% trans "to" %} {{ object.publish_to }}
-      {% endif %}
-      {% if object.publish_from and not object.is_public or object.publish_to %}
-        </span></i>
-      {% endif %}
-    {% endifpermission %}
-    {% endwith %}
+      {% endwith %}
     </h1>
   </header>
 
@@ -55,6 +32,12 @@
   <div class="meta-info">
   {% with highlight_from=object.highlight_from %}
     <span class="profile-type">{{ object.ct_label }}</span>
+
+    {% if_has_perm object request.user 'change' %}
+    {% include "djinn_contenttypes/snippets/publine.html" %}
+    {% else %}
+    {% trans "Created" %}: {{ view.created }}
+    {% endif_has_perm %}
 
     {% if not highlight_from or highlight_from > highlight_from.now %}
     {% trans "Last change" %}: {{ object.changed }},
@@ -81,11 +64,9 @@
 {% block right-pane %}
 <div class="action-bar">
   {% block extra_actions %}{% endblock extra_actions %}
-  {% with perm=object|edit_permission_id %}
-  {% ifpermission object request.user perm %}
+  {% if_has_perm object request.user 'change' %}
   {% edit_action object %}
-  {% endifpermission %}
-  {% endwith %}
+  {% endif_has_perm %}
 </div>
 
 <section id="ownership">

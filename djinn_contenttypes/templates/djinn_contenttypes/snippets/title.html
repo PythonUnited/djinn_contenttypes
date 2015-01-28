@@ -1,12 +1,3 @@
-{% load i18n djinn_contenttypes djinn_workflow_tags %}
+{% load djinn_contenttypes %}
 
-{% if obj.is_deleted %}
-<del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is removed{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
-{% elif obj.is_tmp %}
 {{ obj.title|abbreviate:truncate }}
-{% elif obj|state == "private" %}
-{{ obj.title|abbreviate:truncate }}
- <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
-{% else %}
-{{ obj.title|abbreviate:truncate }}
-{% endif %}

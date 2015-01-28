@@ -6,17 +6,15 @@
   {% if show_link %}
   <a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
     {{ obj.title|abbreviate:truncate }}
-    <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
   </a>
   {% else %}
     <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is not available{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
-    <i class="icon-hidden"><span>{% trans "hidden" %}</span></i>
   {% endif %}
-{% elif not obj.is_public %}
+{% elif not obj.is_published %}
   {% if show_link %}
   <a href="{{ obj.get_absolute_url }}" class="{{ cssclass }}">
     {{ obj.title|abbreviate:truncate }}
-  </a>    
+  </a>
   {% else %}
   <del title="{% blocktrans with object_name=obj.ct_label %}{{ object_name }} is not available{% endblocktrans %}">{{ obj.title|abbreviate:truncate }}</del>
   {% endif %}

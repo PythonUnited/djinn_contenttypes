@@ -23,6 +23,17 @@ class PublishableMixin(object):
                 (not self.publish_to or self.publish_to > now))
 
     @property
+    def is_scheduled(self):
+
+        """Determine whether one of date_from or date_to are set.  If so, we
+        consider publishing to be 'scheduled', not considering the
+        actual dates.
+
+        """
+
+        return self.publish_from or self.publish_to
+
+    @property
     def is_public(self):
 
         """ Are we public? This is true iff:

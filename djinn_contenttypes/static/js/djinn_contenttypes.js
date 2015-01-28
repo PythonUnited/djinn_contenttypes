@@ -73,6 +73,9 @@ $(document).ready(function() {
   $('input').placehold();
   $('textarea').placehold();
 
+  // tooltips
+  $('[data-toggle="tooltip"]').tooltip();
+
   $(document).on("modal_action_show", function(e) {
 
     var modal = $(e.target);
