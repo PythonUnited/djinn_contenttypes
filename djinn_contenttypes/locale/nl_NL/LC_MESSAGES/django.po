@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 12:00+0100\n"
-"PO-Revision-Date: 2015-01-29 12:02+0100\n"
+"POT-Creation-Date: 2015-01-29 17:39+0100\n"
+"PO-Revision-Date: 2015-01-29 17:40+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -190,7 +190,7 @@ msgstr "Voeg een collega of groep toe"
 msgid "title"
 msgstr "Titel"
 
-#: models/base.py:20 templates/djinn_contenttypes/base_detail.html:39
+#: models/base.py:20
 msgid "Created"
 msgstr "Aangemaakt"
 
@@ -271,6 +271,11 @@ msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
 msgid "Delete"
 msgstr "Verwijderen"
 
+#: templates/djinn_contenttypes/base_detail.html:39
+msgctxt "content meta info"
+msgid "Created"
+msgstr "Geplaatst"
+
 #: templates/djinn_contenttypes/base_detail.html:43
 msgid "Last change"
 msgstr "Laatste wijziging"
@@ -314,7 +319,7 @@ msgstr "Publicatie gepland"
 msgid "published"
 msgstr "Gepubliceerd"
 
-#: templates/djinn_contenttypes/snippets/publine.html:7
+#: templates/djinn_contenttypes/snippets/publine.html:6
 msgctxt "content meta info"
 msgid "Published"
 msgstr "Geplaatst op"
@@ -345,7 +350,7 @@ msgstr "Vanaf %(publish_from)s tot %(publish_to)s"
 msgid "From %(publish_from)s"
 msgstr "Vanaf %(publish_from)s"
 
-#: templatetags/djinn_contenttypes_tags.py:29
+#: templatetags/djinn_contenttypes_tags.py:28
 #, python-format
 msgid "Till %(publish_to)s"
 msgstr "Tot %(publish_to)s"

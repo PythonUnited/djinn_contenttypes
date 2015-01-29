@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 12:00+0100\n"
+"POT-Creation-Date: 2015-01-29 17:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,7 +188,7 @@ msgstr ""
 msgid "title"
 msgstr ""
 
-#: models/base.py:20 templates/djinn_contenttypes/base_detail.html:39
+#: models/base.py:20
 msgid "Created"
 msgstr ""
 
@@ -269,6 +269,11 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+#: templates/djinn_contenttypes/base_detail.html:39
+msgctxt "content meta info"
+msgid "Created"
+msgstr ""
+
 #: templates/djinn_contenttypes/base_detail.html:43
 msgid "Last change"
 msgstr ""
@@ -312,7 +317,7 @@ msgstr ""
 msgid "published"
 msgstr ""
 
-#: templates/djinn_contenttypes/snippets/publine.html:7
+#: templates/djinn_contenttypes/snippets/publine.html:6
 msgctxt "content meta info"
 msgid "Published"
 msgstr ""
@@ -343,7 +348,7 @@ msgstr ""
 msgid "From %(publish_from)s"
 msgstr ""
 
-#: templatetags/djinn_contenttypes_tags.py:29
+#: templatetags/djinn_contenttypes_tags.py:28
 #, python-format
 msgid "Till %(publish_to)s"
 msgstr ""
