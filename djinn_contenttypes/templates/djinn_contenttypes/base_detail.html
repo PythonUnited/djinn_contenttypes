@@ -36,7 +36,7 @@
     {% if_has_perm object request.user 'change' %}
     {% include "djinn_contenttypes/snippets/publine.html" %}
     {% else %}
-    {% trans "Created" %}: {{ view.created }}
+    {% trans "Created" %}: {{ view.created }},
     {% endif_has_perm %}
 
     {% if not highlight_from or highlight_from > highlight_from.now %}

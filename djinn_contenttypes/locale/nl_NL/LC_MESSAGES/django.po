@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-29 12:00+0100\n"
-"PO-Revision-Date: 2015-01-29 12:00+0100\n"
+"PO-Revision-Date: 2015-01-29 12:02+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -317,7 +317,7 @@ msgstr "Gepubliceerd"
 #: templates/djinn_contenttypes/snippets/publine.html:7
 msgctxt "content meta info"
 msgid "Published"
-msgstr "Geplaatst"
+msgstr "Geplaatst op"
 
 #: templates/djinn_contenttypes/snippets/reference.html:4
 #, python-format
