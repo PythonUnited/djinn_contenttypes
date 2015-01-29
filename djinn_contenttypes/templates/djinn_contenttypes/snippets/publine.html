@@ -1,7 +1,9 @@
-{% load i18n djinn_contenttypes_tags djinn_workflow_tags %}
+{% load i18n djinn_contenttypes_tags %}
 
 <div id="publine">
   {% if object.is_scheduled %}
   {% scheduled_line object %}
+  {% else %}
+  {% trans "Published" context "content meta info" %}: {{ view.created }}
   {% endif %}
 </div>
