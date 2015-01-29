@@ -1,5 +1,5 @@
 from django.template import Library
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from djinn_workflow.utils import get_state
 
 
@@ -15,19 +15,17 @@ def scheduled_line(obj):
 
     if obj.publish_from and obj.publish_to:
 
-        line = _("From %(publish_from)s till %(publish_to)s" %
-                 {'publish_from': obj.publish_from,
-                  'publish_to': obj.publish_to})
+        line = _("From %(publish_from)s till %(publish_to)s") % {
+            'publish_from': obj.publish_from,
+            'publish_to': obj.publish_to}
 
     elif obj.publish_from:
 
-        line = _("From %(publish_from)s" %
-                 {'publish_from': obj.publish_from})
+        line = _("From %(publish_from)s") % {'publish_from': obj.publish_from}
 
     elif obj.publish_to:
 
-        line = _("Till %(publish_to)s" %
-                 {'publish_to': obj.publish_to})
+        line = _("Till %(publish_to)s") % {'publish_to': obj.publish_to}
 
     return line
 
