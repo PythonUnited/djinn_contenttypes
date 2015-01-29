@@ -37,7 +37,6 @@
     {% include "djinn_contenttypes/snippets/publine.html" %}
     {% else %}
     {% trans "Created" context "content meta info" %}: {{ view.created }},
-    {% endif_has_perm %}
 
     {% if not highlight_from or highlight_from > highlight_from.now %}
     {% trans "Last change" %}: {{ object.changed }},
@@ -46,6 +45,9 @@
     {% if object|implements:"djinn_contenttypes.Commentable" %}
     {% trans "Reactions" %}: {% comment_count_for user object %}
     {% endif %}
+
+    {% endif_has_perm %}
+
   {% endwith %}
   </div>
   {% endblock metainfo %}
