@@ -70,5 +70,12 @@ class PublishableContent(PublishableMixin, BaseContent):
     remove_after_publish_to = models.BooleanField(
         _('Remove the content ater publication to has past'), default=False)
 
+    @property
+    def publishing_date(self):
+
+        """ If publish_from is set, use that, otherwise use created """
+
+        return self.publish_from or self.created
+
     class Meta:
         abstract = True

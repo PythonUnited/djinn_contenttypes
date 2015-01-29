@@ -3,5 +3,5 @@
 {% if object.is_scheduled %}
 {% scheduled_line object %},
 {% else %}
-{% trans "Published" context "content meta info" %}: {{ view.created }},
+{% trans "Published" context "content meta info" %}: {{ object.publishing_date }},
 {% endif %}
