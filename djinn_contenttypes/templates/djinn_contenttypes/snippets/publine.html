@@ -1,7 +1,7 @@
 {% load i18n djinn_contenttypes_tags %}
 
 {% if object.is_scheduled %}
-{% scheduled_line object %},
+{% trans "scheduled" %}. {% scheduled_line object %},
 {% else %}
-{% trans "Published" context "content meta info" %}: {{ object.publishing_date }},
+{% trans "published" %}. {% trans "Published" context "content meta info" %}: {{ object.publishing_date }},
 {% endif %}
