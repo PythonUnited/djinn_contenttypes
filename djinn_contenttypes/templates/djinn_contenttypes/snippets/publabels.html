@@ -8,14 +8,14 @@
 
   {% if object.is_scheduled %}
   {% if not object.is_published %}
-  <span class="label label-warning"
+  <span class="publishing label label-warning"
         data-toggle="tooltip"
         title="{% scheduled_line object %}"
         >
     {% trans "scheduled" %}
   </span>
   {% else %}
-  <span class="label label-info"
+  <span class="publishing label label-info"
         data-toggle="tooltip"
         title="{% scheduled_line object %}"
         >

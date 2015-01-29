@@ -20,7 +20,7 @@
 
       {% with highlight_from=object.highlight_from %}
       {% if highlight_from and highlight_from <= highlight_from.now %}
-        <span class="label label-success">
+        <span class="highlight label label-success">
           {% trans "Highlight from" %} {{ highlight_from }}
         </span>
       {% endif %}
