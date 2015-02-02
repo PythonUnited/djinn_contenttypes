@@ -6,7 +6,7 @@
 {% else %}
 {% trans "published" %}.
 {% endif %}
-{% scheduled_line object %},
+{% scheduled_line object %}
 {% else %}
-{% trans "Published" context "content meta info" %}: {{ object.publishing_date }},
+{% trans "Published" context "content meta info" %}: {{ object.publishing_date }}
 {% endif %}
