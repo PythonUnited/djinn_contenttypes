@@ -1,12 +1,12 @@
 {% load i18n djinn_contenttypes_tags %}
 
 {% if object.is_scheduled %}
-{% if not object.is_published %}
-{% trans "scheduled" %}.
-{% else %}
-{% trans "published" %}.
-{% endif %}
-{% scheduled_line object %}
-{% else %}
-{% trans "Published" context "content meta info" %}: {{ object.publishing_date }}
+<span class="publine">
+  {% if not object.is_published %}
+  {% trans "scheduled" %}.
+  {% else %}
+  {% trans "published" %}.
+  {% endif %}
+  {% scheduled_line object %}
+</span>
 {% endif %}
