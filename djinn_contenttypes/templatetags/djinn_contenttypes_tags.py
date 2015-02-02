@@ -1,6 +1,8 @@
 from django.template import Library
 from django.utils.translation import ugettext as _
 from djinn_workflow.utils import get_state
+from djinn_core.utils import implements
+# from djinn_contenttypes.models.publishable import PublishableContent
 
 
 register = Library()
@@ -36,6 +38,10 @@ def pub_classes(obj):
     """ publishing related CSS classes """
 
     classes = []
+
+    # if not implements(obj, PublishableContent):
+    if not hasattr(obj, "is_published"):
+        return ""
 
     if not obj.is_published:
         classes.append("unpublished")
