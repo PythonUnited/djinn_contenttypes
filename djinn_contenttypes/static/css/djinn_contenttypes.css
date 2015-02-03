@@ -1,8 +1,8 @@
-#publabels {
+.publabels {
     display: inline;
     margin-left: 20px;
 }
 
-#publine {
+.publine {
     display: inline;
 }
