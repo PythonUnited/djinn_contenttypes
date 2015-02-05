@@ -1,8 +1,8 @@
 from django.template import Library
 from django.utils.translation import ugettext as _
+from django.conf import settings
+from django.utils import dateformat
 from djinn_workflow.utils import get_state
-from djinn_core.utils import implements
-# from djinn_contenttypes.models.publishable import PublishableContent
 
 
 register = Library()
@@ -18,16 +18,22 @@ def scheduled_line(obj):
     if obj.publish_from and obj.publish_to:
 
         line = _("From %(publish_from)s till %(publish_to)s") % {
-            'publish_from': obj.publish_from,
-            'publish_to': obj.publish_to}
+            'publish_from': dateformat.format(obj.publish_from,
+                                              settings.DATETIME_FORMAT),
+            'publish_to': dateformat.format(obj.publish_to,
+                                            settings.DATETIME_FORMAT)}
 
     elif obj.publish_from:
 
-        line = _("From %(publish_from)s") % {'publish_from': obj.publish_from}
+        line = _("From %(publish_from)s") % {
+            'publish_from': dateformat.format(obj.publish_from,
+                                              settings.DATETIME_FORMAT)}
 
     elif obj.publish_to:
 
-        line = _("Till %(publish_to)s") % {'publish_to': obj.publish_to}
+        line = _("Till %(publish_to)s") % {
+            'publish_to': dateformat.format(obj.publish_to,
+                                            settings.DATETIME_FORMAT)}
 
     return line
 
