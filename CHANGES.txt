@@ -1,10 +1,12 @@
-1.3.1
+1.4.0
 =====
 * Added highlight model
 * Added history mixin to get a better behavior on cancel and delete actions
 * changes for publishing mechanism
 * new class on buttons for protection of double submit etc.
 * move to Django 1.6.x
+* Added djinn_workflow
+* overhaul of publishing semantics
 
 1.3.0
 =====
