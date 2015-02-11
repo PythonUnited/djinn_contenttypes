@@ -16,7 +16,6 @@
   
       {% if_has_perm object request.user 'change' %}
       {% include "djinn_contenttypes/snippets/publabels.html" %}
-      {% endif_has_perm %}
 
       {% with highlight_from=object.highlight_from %}
       {% if highlight_from and highlight_from <= highlight_from.now %}
@@ -25,6 +24,7 @@
         </span>
       {% endif %}
       {% endwith %}
+      {% endif_has_perm %}
     </h1>
   </header>
 
