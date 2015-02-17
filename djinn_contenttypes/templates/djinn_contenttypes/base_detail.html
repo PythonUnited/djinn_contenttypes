@@ -13,17 +13,8 @@
   {% block header %}
   <header>
     <h1>{% block title %}{% title object %}{% endblock %}
-  
       {% if_has_perm object request.user 'change' %}
       {% include "djinn_contenttypes/snippets/publabels.html" %}
-
-      {% with highlight_from=object.highlight_from %}
-      {% if highlight_from and highlight_from <= highlight_from.now %}
-        <span class="highlight label label-success">
-          {% trans "Highlight from" %} {{ highlight_from }}
-        </span>
-      {% endif %}
-      {% endwith %}
       {% endif_has_perm %}
     </h1>
   </header>

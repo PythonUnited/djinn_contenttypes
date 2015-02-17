@@ -254,6 +254,8 @@ class BaseContentForm(BaseSharingForm):
 
     def clean(self):
 
+        super(BaseContentForm, self).clean()
+
         _data = self.cleaned_data
 
         # Check publication sanity
@@ -263,6 +265,12 @@ class BaseContentForm(BaseSharingForm):
                 raise forms.ValidationError(
                     _(u"Publish to date should be after publish from date"),
                     code='invalid')
+
+        # Remove after publish requires the publish_to date to be set
+        #
+        if self.cleaned_data.get('remove_after_publish_to') and \
+           not self.cleaned_data.get('publish_to'):
+            raise forms.ValidationError(_(u"You must set the publish to date"))
 
         return self.cleaned_data
 
@@ -279,12 +287,3 @@ class BaseContentForm(BaseSharingForm):
                 raise forms.ValidationError(_(u"Make a choice"))
 
         return group
-
-    def clean_remove_after_publish_to(self):
-
-        value = self.cleaned_data.get('remove_after_publish_to')
-
-        if value and not self.cleaned_data.get('publish_to'):
-            raise forms.ValidationError(_(u"You must set the publish to date"))
-
-        return value
