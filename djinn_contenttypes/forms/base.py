@@ -2,7 +2,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djinn_forms.fields.share import ShareField
 from djinn_forms.forms.share import ShareMixin
-from djinn_workflow.utils import get_workflow, get_state, apply_transition
+from djinn_workflow.utils import (
+    get_workflow, get_state, apply_transition, set_state)
 from pgauth.models import UserGroup
 from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
 from djinn_forms.fields.role import LocalRoleSingleField
@@ -242,6 +243,14 @@ class BaseContentForm(BaseSharingForm):
     def save(self, commit=True):
 
         res = super(BaseContentForm, self).save(commit=commit)
+
+        # if the instance is created, set initial state, else apply
+        # transition
+        #
+        if self.instance.is_tmp and "state" in self.changed_data:
+            if self.cleaned_data['state'] == "make_private":
+                set_state(self.instance, "private")
+                del self.changed_data[self.changed_data.index('state')]
 
         if commit and "state" in self.changed_data:
 
