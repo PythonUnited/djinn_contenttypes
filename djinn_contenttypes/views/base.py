@@ -19,7 +19,8 @@ from djinn_contenttypes.utils import json_serializer
 from djinn_workflow.utils import get_state
 from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
-
+from django.utils.encoding import iri_to_uri
+from django.conf import settings
 
 class TemplateResolverMixin(object):
 
@@ -237,7 +238,10 @@ class HistoryMixin(object):
 
         for url in self.request.session.get('history', []):
 
-            absolute_url = self.request.build_absolute_uri(url)
+            # absolute_url = self.request.build_absolute_uri(url)
+            # history url testing ONLY agains local server
+            absolute_url = "http://%s%s" % (settings.HTTP_HOST, url)
+            absolute_url = iri_to_uri(absolute_url)
             cookies = self.request.COOKIES
 
             if check_get_url(absolute_url, cookies=cookies) == 200:
