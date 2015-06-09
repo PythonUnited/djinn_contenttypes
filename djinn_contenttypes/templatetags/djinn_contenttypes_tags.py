@@ -54,7 +54,7 @@ def pub_classes(obj):
     else:
         classes.append("published")
 
-    if obj.is_scheduled:
+    if hasattr(obj, 'is_scheduled') and obj.is_scheduled:
         classes.append("scheduled")
 
     try:
