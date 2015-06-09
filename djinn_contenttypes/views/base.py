@@ -1,3 +1,4 @@
+from urlparse import urlparse
 from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
@@ -21,6 +22,7 @@ from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import iri_to_uri
 from django.conf import settings
+
 
 class TemplateResolverMixin(object):
 
@@ -238,11 +240,15 @@ class HistoryMixin(object):
 
         for url in self.request.session.get('history', []):
 
-            # absolute_url = self.request.build_absolute_uri(url)
+            absolute_url = self.request.build_absolute_uri(url)
             # history url testing ONLY agains local server
-            absolute_url = "http://%s%s" % (settings.HTTP_HOST, url)
-            absolute_url = iri_to_uri(absolute_url)
+            # absolute_url = "http://%s%s" % (settings.HTTP_HOST, url)
+            # absolute_url = iri_to_uri(absolute_url)
             cookies = self.request.COOKIES
+
+            # if absolute_url == url:
+            #    parsed = urlparse(absolute_url)
+            #    if parsed.hostname == self.request.
 
             if check_get_url(absolute_url, cookies=cookies) == 200:
 
