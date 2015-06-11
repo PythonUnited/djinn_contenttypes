@@ -75,10 +75,6 @@ def publishable_post_save(sender, instance, **kwargs):
 
     if implements(instance, PublishableContent):
 
-        # MJB: niet 100 punten zeker, maar volgens mij moet hier alleen
-        # op timestamp dingen gecontroleerd worden en niet of het in gesloten
-        # groep is geplaatst
-        # if instance.is_public:
         if instance.is_published:
 
             changed = False
