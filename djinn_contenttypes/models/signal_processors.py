@@ -75,7 +75,7 @@ def publishable_post_save(sender, instance, **kwargs):
 
     if implements(instance, PublishableContent):
 
-        if instance.is_published:
+        if instance.is_public:
 
             changed = False
 
