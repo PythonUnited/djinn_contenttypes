@@ -1,3 +1,7 @@
+1.4.4
+=====
+* Temporarily switched off history
+
 1.4.3
 =====
 * improved history behavior
