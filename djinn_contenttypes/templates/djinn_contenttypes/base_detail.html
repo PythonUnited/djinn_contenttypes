@@ -2,6 +2,7 @@
 
 {% load pgcomment_tags i18n djinn_contenttypes djinn_contenttypes_tags %}
 {% load djinn_auth_tags auth_tags djinn_workflow_tags %}
+{% load djinn_likes %}
 
 {% block body_class %}ct {{ object.ct_name }} view {% pub_classes object %}
 {% endblock %}
@@ -38,6 +39,9 @@
       {% if object|implements:"djinn_contenttypes.Commentable" %}
         {% trans "Reactions" %}: {% comment_count_for user object %}
       {% endif %}
+
+      {% likes object %}
+
     </span>
 
   {% endwith %}
@@ -57,6 +61,7 @@
 
 {% block right-pane %}
 <div class="action-bar">
+  {% like_button object %}
   {% block extra_actions %}{% endblock extra_actions %}
   {% if_has_perm object request.user 'change' %}
   {% edit_action object %}
