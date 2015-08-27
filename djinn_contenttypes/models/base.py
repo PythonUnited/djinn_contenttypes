@@ -43,7 +43,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         if self.userkeywords:
             self.userkeywords = self.userkeywords.replace("'", '')
-            self.userkeywords = " ".join(self.userkeywords.split()[:10])
+            kw_list = self.userkeywords.split(',')[:10]
+            self.userkeywords = ",".join([kw.strip() for kw in kw_list])
         super(BaseContent, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -134,7 +135,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     @property
     def keywordslist(self):
         if self.userkeywords:
-            return self.userkeywords.split()
+            return self.userkeywords.split(',')
         return []
 
     def pre_delete(self):
