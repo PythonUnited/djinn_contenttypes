@@ -39,13 +39,13 @@
       {% if object|implements:"djinn_contenttypes.Commentable" %}
         {% trans "Reactions" %}: {% comment_count_for user object %}
       {% endif %}
-
-      {% likes object %}
-
     </span>
 
   {% endwith %}
   </div>
+
+  {% likes object %}
+
   {% endblock metainfo %}
   {% endblock header %}
 
