@@ -13,7 +13,6 @@ from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
 
-
 class PartialUpdateMixin(object):
 
     partial_support = True
@@ -125,6 +124,7 @@ class BaseContentForm(BaseSharingForm):
                                              required=False,
                                              queryset=UserGroup.objects.all())
 
+
     publish_from = forms.DateTimeField(
         # Translators: contenttypes publish_from label
         label=_("Publish from"),
@@ -133,7 +133,9 @@ class BaseContentForm(BaseSharingForm):
         required=False,
         widget=DateTimeWidget(
             attrs={'date_hint': _("Date"),
-                   'time_hint': _("Time")}
+                   'time_hint': _("Time"),
+                   'direct': True
+                   }
             )
         )
 
@@ -274,6 +276,11 @@ class BaseContentForm(BaseSharingForm):
                 raise forms.ValidationError(
                     _(u"Publish to date should be after publish from date"),
                     code='invalid')
+
+        if _data.get('publish_from') == None and self.data.get('radiodirect') == "NotDirect":
+            raise forms.ValidationError(
+                _(u"When Publish from is selected, you should enter a publish from date"),
+                code='invalid')
 
         # Remove after publish requires the publish_to date to be set
         #
