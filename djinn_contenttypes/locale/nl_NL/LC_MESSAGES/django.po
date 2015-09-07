@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 17:39+0100\n"
+"POT-Creation-Date: 2015-09-07 17:05+0200\n"
 "PO-Revision-Date: 2015-01-29 17:40+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,78 +55,82 @@ msgid "Add to group"
 msgstr "Toevoegen aan groep"
 
 #. Translators: contenttypes publish_from label
-#: forms/base.py:129 models/publishable.py:58
+#: forms/base.py:130 models/publishable.py:58
 msgid "Publish from"
-msgstr "Publiceren vanaf"
+msgstr "Publiceren"
 
 #. Translators: contenttypes publish_from help
-#: forms/base.py:131
+#: forms/base.py:132
 msgid "Enter a publish-from date and time"
 msgstr "_EMPTY_"
 
-#: forms/base.py:134 forms/base.py:146
+#: forms/base.py:135 forms/base.py:149
 msgid "Date"
 msgstr "Datum"
 
-#: forms/base.py:135 forms/base.py:147
+#: forms/base.py:136 forms/base.py:150
 msgid "Time"
 msgstr "Tijd"
 
 #. Translators: contenttypes publish_to label
-#: forms/base.py:141 models/publishable.py:61
+#: forms/base.py:144 models/publishable.py:61
 msgid "Publish to"
 msgstr "Publiceren tot"
 
 #. Translators: contenttypes publish_to help
-#: forms/base.py:143 forms/base.py:155
+#: forms/base.py:146 forms/base.py:158
 msgid "Enter a publish-to date and time"
 msgstr "_EMPTY_"
 
 #. Translators: contenttypes status label
-#: forms/base.py:153
+#: forms/base.py:156
 msgid "Status"
 msgstr "Status"
 
 #. Translators: contenttypes userkeywords label
-#: forms/base.py:162 models/base.py:26
+#: forms/base.py:165 models/base.py:26
 msgid "Keywords"
 msgstr "Trefwoorden"
 
 #. Translators: contenttypes userkeywords help
-#: forms/base.py:165
+#: forms/base.py:168
 msgid "Enter keywords separated by spaces"
 msgstr "Begin te typen om een trefwoord toe te voegen of te vinden"
 
 #. Translators: contenttypes related label
-#: forms/base.py:172
+#: forms/base.py:175
 msgid "Related content"
 msgstr "Voeg links naar andere content toe"
 
 #. Translators: Translators: contenttypes related hint
-#: forms/base.py:175
+#: forms/base.py:178
 msgid "Select related content"
 msgstr "_EMPTY_"
 
-#: forms/base.py:177
+#: forms/base.py:180
 msgid "Search relation"
 msgstr "Zoek relatie"
 
 #. Translators: djinn_contenttypes group make a choice label
 #. Translators: djinn_contenttypes parentusergroup required
-#: forms/base.py:237 forms/base.py:279
+#: forms/base.py:240 forms/base.py:303
 msgid "Make a choice"
 msgstr "Maak keuze"
 
 #. Translators: djinn_contenttypes group no group label
-#: forms/base.py:239
+#: forms/base.py:242
 msgid "Do not add to a group"
 msgstr "Niet aan een groep toevoegen"
 
-#: forms/base.py:264
+#: forms/base.py:277
 msgid "Publish to date should be after publish from date"
 msgstr "'Publiceren tot' datum moet na de 'Publiceren op' datum liggen"
 
-#: forms/base.py:288
+#: forms/base.py:282
+msgid "When Publish from is selected, you should enter a publish from date"
+msgstr "Wanneer publiceren vanaf is geselecteerd, moet er een datum ingevuld worden."
+
+#: forms/base.py:289
 msgid "You must set the publish to date"
 msgstr "Publicatie datum is verplicht"
 
@@ -210,11 +214,11 @@ msgstr "Tijdelijk"
 msgid "Collega's kunnen reageren"
 msgstr "Collega's kunnen reageren"
 
-#: models/highlight.py:16 templates/djinn_contenttypes/base_detail.html:24
+#: models/highlight.py:17
 msgid "Highlight from"
 msgstr "Highlight vanaf"
 
-#: models/highlight.py:20
+#: models/highlight.py:21
 msgid "Highlight to"
 msgstr "Highlight tot"
 
@@ -271,16 +275,16 @@ msgstr "Weet je zeker dat je %(object)s wil verwijderen?"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: templates/djinn_contenttypes/base_detail.html:39
+#: templates/djinn_contenttypes/base_detail.html:33
 msgctxt "content meta info"
 msgid "Created"
 msgstr "Geplaatst"
 
-#: templates/djinn_contenttypes/base_detail.html:43
+#: templates/djinn_contenttypes/base_detail.html:36
 msgid "Last change"
 msgstr "Laatste wijziging"
 
-#: templates/djinn_contenttypes/base_detail.html:47
+#: templates/djinn_contenttypes/base_detail.html:40
 msgid "Reactions"
 msgstr "Reacties"
 
@@ -312,17 +316,14 @@ msgid "hidden"
 msgstr "verborgen"
 
 #: templates/djinn_contenttypes/snippets/publabels.html:15
+#: templates/djinn_contenttypes/snippets/publine.html:6
 msgid "scheduled"
 msgstr "Publicatie gepland"
 
 #: templates/djinn_contenttypes/snippets/publabels.html:22
+#: templates/djinn_contenttypes/snippets/publine.html:8
 msgid "published"
 msgstr "Gepubliceerd"
-
-#: templates/djinn_contenttypes/snippets/publine.html:6
-msgctxt "content meta info"
-msgid "Published"
-msgstr "Geplaatst op"
 
 #: templates/djinn_contenttypes/snippets/reference.html:4
 #, python-format
@@ -340,23 +341,23 @@ msgstr "%(object_name)s is niet beschikbaar"
 msgid "Share"
 msgstr "Delen"
 
-#: templatetags/djinn_contenttypes_tags.py:18
+#: templatetags/djinn_contenttypes_tags.py:20
 #, python-format
 msgid "From %(publish_from)s till %(publish_to)s"
 msgstr "Vanaf %(publish_from)s tot %(publish_to)s"
 
-#: templatetags/djinn_contenttypes_tags.py:24
+#: templatetags/djinn_contenttypes_tags.py:28
 #, python-format
 msgid "From %(publish_from)s"
 msgstr "Vanaf %(publish_from)s"
 
-#: templatetags/djinn_contenttypes_tags.py:28
+#: templatetags/djinn_contenttypes_tags.py:34
 #, python-format
 msgid "Till %(publish_to)s"
 msgstr "Tot %(publish_to)s"
 
 #. Translators: edit form status message
-#: views/base.py:588
+#: views/base.py:598
 msgid "Saved changes"
 msgstr "Wijzigingen opgeslagen"
 
@@ -370,6 +371,13 @@ msgstr "Deel %(obj)s met:"
 #: views/share.py:119
 msgid "Share this message with:"
 msgstr "Deel dit bericht met:"
+
+#~ msgid "Publish"
+#~ msgstr "Publiceren"
+
+#~ msgctxt "content meta info"
+#~ msgid "Published"
+#~ msgstr "Geplaatst op"
 
 #~ msgid "Published on"
 #~ msgstr "Publiceren vanaf"
