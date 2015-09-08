@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: djinn_contenttypes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-07 17:05+0200\n"
+"POT-Creation-Date: 2015-09-08 20:18+0200\n"
 "PO-Revision-Date: 2015-01-29 17:40+0100\n"
 "Last-Translator:   <d.bosch@provinciegroningen.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgstr "'Publiceren tot' datum moet na de 'Publiceren op' datum liggen"
 
 #: forms/base.py:282
 msgid "When Publish from is selected, you should enter a publish from date"
-msgstr "Wanneer publiceren vanaf is geselecteerd, moet er een datum ingevuld worden."
+msgstr "Wanneer Publiceren vanaf is geselecteerd, moet er een datum ingevuld worden."
 
 #: forms/base.py:289
 msgid "You must set the publish to date"
