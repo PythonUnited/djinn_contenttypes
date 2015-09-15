@@ -279,7 +279,7 @@ class BaseContentForm(BaseSharingForm):
 
         if _data.get('publish_from') == None and self.data.get('radiodirect') == "NotDirect":
             raise forms.ValidationError(
-                _(u"When Publish from is selected, you should enter a publish from date"),
+                (""),
                 code='invalid')
 
         # Remove after publish requires the publish_to date to be set
