@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.registry import CTRegistry
 from django.utils import translation
@@ -25,6 +26,9 @@ class Command(BaseCommand):
             if issubclass(model, PublishableContent):
 
                 for instance in model.objects.filter(publish_notified=False,
-                                                     publish_from__lt=now):
+                                                     publish_from__lt=now).\
+                        filter(Q(publish_to__isnull=True) |
+                        Q(publish_to__gt=now)):
 
+                    # print "publishing %s-%d" % (instance.ct_name, instance.id)
                     instance.save()

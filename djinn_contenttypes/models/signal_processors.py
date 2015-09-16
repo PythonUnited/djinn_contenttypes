@@ -81,6 +81,7 @@ def publishable_post_save(sender, instance, **kwargs):
 
             # Have we not been published before?
             #
+
             if not History.objects.has_been(instance, PUBLISHED, UNPUBLISHED):
 
                 publish.send(sender, instance=instance, first_edition=True)
@@ -99,7 +100,7 @@ def publishable_post_save(sender, instance, **kwargs):
                 History.objects.log(instance, PUBLISHED,
                                     user=instance.changed_by)
                 instance.__class__.objects.filter(pk=instance.pk).update(
-                    publish_notified=True)
+                    publish_notified=True, unpublish_notified=False)
 
         else:
             # We're are not public. So if the last state was
@@ -112,6 +113,8 @@ def publishable_post_save(sender, instance, **kwargs):
             if last_state == PUBLISHED:
 
                 unpublish.send(sender, instance=instance)
+                instance.__class__.objects.filter(pk=instance.pk).update(
+                    unpublish_notified=True)
 
                 # The instance may not be there anymore...
                 #

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.registry import CTRegistry
 from django.utils import translation
@@ -28,9 +29,19 @@ class Command(BaseCommand):
 
                 for instance in model.objects.filter(
                         unpublish_notified=False,
-                        publish_to__isnull=False, publish_to__lt=now):
+                        publish_to__isnull=False).filter(
+                            Q(publish_to__lt=now) | Q(publish_from__gt=now)):
 
+                        # model.objects.filter(
+                        # unpublish_notified=False,
+                        # publish_to__isnull=False, publish_to__lt=now):
+
+                    # be sure this unpublish is not handled again
                     instance.unpublish_notified = True
+
+                    # prepare for a following publication of this instance
+                    # print "un-publishing %s-%d" % (instance.ct_name, instance.id)
+                    instance.publish_notified = False
                     instance.save()
 
                 # clean up tenacious content...
