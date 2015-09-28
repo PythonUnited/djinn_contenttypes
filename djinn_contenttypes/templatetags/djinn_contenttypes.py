@@ -113,7 +113,7 @@ def title(obj, truncate=-1):
 
 
 @register.inclusion_tag('djinn_contenttypes/snippets/reference.html')
-def reference(obj, truncate=-1, cssclass='', user=None):
+def reference(obj, truncate=-1, cssclass='', user=None, title_url=None):
 
     """ obj should be a regular content type for djinn. If cssclass is
     provided, put this on the link. """
@@ -123,5 +123,8 @@ def reference(obj, truncate=-1, cssclass='', user=None):
     else:
         show_link = False
 
+    if not title_url:
+        title_url = obj.get_absolute_url()
+
     return {'obj': obj, 'truncate': truncate, 'cssclass': cssclass,
-            'show_link': show_link}
+            'show_link': show_link, 'title_url': title_url}
