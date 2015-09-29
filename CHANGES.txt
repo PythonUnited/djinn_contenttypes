@@ -1,3 +1,8 @@
+1.4.6
+=====
+* publishing mechanism in front-end slightly modified
+* link to content-item-detail in searchresults can be overridden
+
 1.4.5
 =====
 * added support for djinn_likes
