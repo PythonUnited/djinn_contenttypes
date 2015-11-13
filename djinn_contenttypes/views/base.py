@@ -10,7 +10,7 @@ from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from django.utils import simplejson as json
+import json
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import (
@@ -89,14 +89,15 @@ class MimeTypeMixin(object):
     """ Mixin class to set mimetype. Make sure this is the first class in the
     line of extended classes that do render_to_response... """
 
-    mimetype = "text/html"
+    content_type = "text/html"
 
     def render_to_response(self, context, **response_kwargs):
 
         """ Override so as to add mimetype """
 
-        response_kwargs['mimetype'] = self.mimetype
-        response_kwargs['content_type'] = self.mimetype
+        #MJB mimetype was removed in django 1.7:
+        # response_kwargs['mimetype'] = self.mimetype
+        response_kwargs['content_type'] = self.content_type
 
         return super(MimeTypeMixin, self).render_to_response(
             context, **response_kwargs)

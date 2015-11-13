@@ -18,7 +18,7 @@ class ShareView(MimeTypeMixin, FormView, CTMixin):
     form_class = ShareForm
     success_url = "#"
     notification_type = RETWEET_CONTENTITEM
-    mimetype = "text/plain"
+    content_type = "text/plain"
 
     @property
     def page_title(self):
