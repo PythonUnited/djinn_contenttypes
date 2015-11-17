@@ -12,6 +12,7 @@ from djinn_forms.fields.keyword import KeywordField
 from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
+from djinn_contenttypes import settings
 
 class PartialUpdateMixin(object):
 
@@ -134,7 +135,8 @@ class BaseContentForm(BaseSharingForm):
         widget=DateTimeWidget(
             attrs={'date_hint': _("Date"),
                    'time_hint': _("Time"),
-                   'direct': True
+                   'direct': True,
+                   'date_format': settings.DEFAULT_DATE_INPUT_FORMAT
                    }
             )
         )
@@ -147,7 +149,8 @@ class BaseContentForm(BaseSharingForm):
         required=False,
         widget=DateTimeWidget(
             attrs={'date_hint': _("Date"),
-                   'time_hint': _("Time")}
+                   'time_hint': _("Time"),
+                   'date_format': settings.DEFAULT_DATE_INPUT_FORMAT}
             )
         )
 
