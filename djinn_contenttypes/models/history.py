@@ -85,7 +85,11 @@ class History(models.Model):
         except:
             status = self.status_flag
 
-        return "'%s' %s" % (self.content_object, status)
+        try:
+            return u"'%s' %s" % (self.content_object, status)
+        except:
+            # may give unicode error
+            return u"History(id=%d) %s" % (self.id, status)
 
     class Meta:
 

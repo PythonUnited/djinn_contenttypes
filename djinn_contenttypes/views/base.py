@@ -296,7 +296,8 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
     @property
     def created(self):
 
-        return self.object.publish_from or self.object.created
+        return (hasattr(self.object, 'publish_from') and
+                self.object.publish_from) or self.object.created
 
     def get(self, request, *args, **kwargs):
 
