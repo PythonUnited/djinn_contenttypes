@@ -22,6 +22,7 @@ from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.encoding import iri_to_uri
 from django.conf import settings
+from djinn_search.utils import update_index_for_instance
 
 
 class TemplateResolverMixin(object):
@@ -395,7 +396,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
                         value = form.fields[field].clean(form.data[field])
                         setattr(obj, field, value)
 
-            obj.save()
+                    obj.save()
 
             return obj
 
@@ -485,6 +486,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if implements(self.object, BaseContent):
             self.object.set_owner(self.request.user)
+
+        update_index_for_instance(self.object)
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -599,6 +602,9 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             # Translators: edit form status message
             messages.success(self.request, _("Saved changes"))
 
+        # call once after all save's
+        update_index_for_instance(self.object)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
@@ -644,6 +650,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             pass
 
         if deleted:
+
             if self.is_json:
                 return HttpResponse(json.dumps({'message': 'bye bye'}),
                                     content_type='application/json')
