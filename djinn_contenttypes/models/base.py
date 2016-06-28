@@ -85,8 +85,9 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     @property
     def in_closed_group(self):
 
-        return self.parentusergroup and self.parentusergroup.profile and \
-            self.parentusergroup.profile.is_closed
+        # Checks for membership_type in UserGroup this content_item possibly is
+        # placed in
+        return self.parentusergroup and self.parentusergroup.is_closed
 
     @property
     def is_public(self):
