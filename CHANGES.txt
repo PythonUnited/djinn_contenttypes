@@ -1,3 +1,7 @@
+1.4.9
+=====
+* fixed membership checks 
+
 1.4.7
 =====
 * django 1.8 compatibility
