@@ -15,7 +15,7 @@ from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import (
     get_object_by_ctype_id, has_permission, check_get_url)
-from djinn_contenttypes.models.base import BaseContent
+from djinn_contenttypes.models.base import BaseContent, LocalRoleMixin
 from djinn_contenttypes.utils import json_serializer
 from djinn_workflow.utils import get_state
 from pgauth.models import UserGroup
@@ -583,6 +583,9 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
     def form_valid(self, form):
 
+        if implements(self.object, LocalRoleMixin):
+            orig_owner = form.instance.get_owner()
+
         if hasattr(form, "update") and self.partial:
             self.object = form.update()
         else:
@@ -590,6 +593,11 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if implements(self.object, BaseContent):
             self.object.changed_by = self.request.user
+
+        if implements(self.object, LocalRoleMixin) and \
+                        'owner' in form.changed_data and \
+                        orig_owner != form.cleaned_data['owner']:
+            self.object.set_owner(form.cleaned_data['owner'].user)
 
         try:
             self.object.is_tmp = False
