@@ -73,7 +73,7 @@ class History(models.Model):
     object_ct = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('object_ct', 'object_id')
-    status_flag = models.PositiveSmallIntegerField()
+    status_flag = models.PositiveSmallIntegerField(db_index=True)
     change_message = models.TextField(blank=True)
 
     objects = HistoryManager()
