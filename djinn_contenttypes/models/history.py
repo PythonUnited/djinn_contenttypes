@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 CREATED = 1
@@ -69,10 +69,10 @@ class History(models.Model):
     """ status history of content """
 
     date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
-    object_ct = models.ForeignKey(ContentType)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    object_ct = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('object_ct', 'object_id')
+    content_object = GenericForeignKey('object_ct', 'object_id')
     status_flag = models.PositiveSmallIntegerField(db_index=True)
     change_message = models.TextField(blank=True)
 
@@ -90,6 +90,8 @@ class History(models.Model):
         except:
             # may give unicode error
             return u"History(id=%d) %s" % (self.id, status)
+
+    __str__ = __unicode__
 
     class Meta:
 

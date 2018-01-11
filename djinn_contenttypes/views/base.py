@@ -1,4 +1,3 @@
-from urlparse import urlparse
 from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
@@ -6,8 +5,8 @@ from django.views.generic.edit import CreateView as BaseCreateView
 from django.views.generic.base import TemplateResponseMixin
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseForbidden
-from django.db.models import get_model
-from django.core.urlresolvers import reverse
+from django.apps import apps
+from django.urls import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 import json
@@ -91,6 +90,7 @@ class MimeTypeMixin(object):
     line of extended classes that do render_to_response... """
 
     content_type = "text/html"
+    mimetype = "text/html"
 
     def render_to_response(self, context, **response_kwargs):
 
@@ -117,6 +117,20 @@ class CTMixin(object):
             self.kwargs.get('id', self.kwargs.get('pk', None)))
 
 
+class RequestDataMixin(object):
+
+    """ get data from request.GET or request.POST """
+
+    @property
+    def request_data(self):
+
+        if self.request.method in ['POST', 'PUT']:
+            return self.request.POST
+
+        return self.request.GET
+
+
+
 class SwappableMixin(object):
 
     """ Allow for swapped models. This is an undocumented feature of
@@ -126,11 +140,12 @@ class SwappableMixin(object):
     @property
     def real_model(self):
 
-        if not self.model._meta.swapped:
+        if not hasattr(self.model._meta, 'swapped') or \
+                not self.model._meta.swapped:
             return self.model
         else:
             module, model = self.model._meta.swapped.split(".")
-            return get_model(module, model)
+            return apps.get_model(module, model)
 
     def get_queryset(self):
 
@@ -248,10 +263,6 @@ class HistoryMixin(object):
             # absolute_url = iri_to_uri(absolute_url)
             cookies = self.request.COOKIES
 
-            # if absolute_url == url:
-            #    parsed = urlparse(absolute_url)
-            #    if parsed.hostname == self.request.
-
             if check_get_url(absolute_url, cookies=cookies) == 200:
 
                 success_url = url
@@ -282,7 +293,7 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
         templates = super(DetailView, self).get_template_names()
 
         if self.request.is_ajax() and \
-                not self.request.REQUEST.get("modal", False):
+                not self.request.GET.get("modal", False):
             templates = ["%s/snippets/%s.html" %
                          (self.app_label, self.ct_name)] \
                 + templates
@@ -334,17 +345,23 @@ class CTDetailView(CTMixin, DetailView):
 
 
 class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
-                 BaseCreateView, HistoryMixin):
+                 RequestDataMixin, BaseCreateView, HistoryMixin):
 
     mode = "add"
     fk_fields = []
+
+    def get_form_class(self):
+
+        # if self.__class__ == CreateView:
+        #     self.fields = '__all__'
+        return super(CreateView, self).get_form_class()
 
     def get_initial(self):
 
         initial = {}
 
-        for fld in self.request.GET.keys():
-            initial[fld] = self.request.GET[fld]
+        for fld in self.request_data.keys():
+            initial[fld] = self.request_data[fld]
 
         for fld in self.fk_fields:
             initial[fld] = self.kwargs[fld]
@@ -371,9 +388,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         if not getattr(self.real_model, "create_tmp_object", False):
             return None
         else:
-            if self.request.REQUEST.get("tmp_id"):
+            if self.request_data.get("tmp_id"):
                 obj = self.real_model.objects.get(
-                    id=self.request.REQUEST.get("tmp_id"))
+                    id=self.request_data.get("tmp_id"))
             else:
                 obj = self.real_model.objects.create(
                     creator=self.request.user,
@@ -393,8 +410,9 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
                     form.cleaned_data = {}
 
                     for field in self.get_initial().keys():
-                        value = form.fields[field].clean(form.data[field])
-                        setattr(obj, field, value)
+                        if field in form.data and field in form.fields:
+                            value = form.fields[field].clean(form.data[field])
+                            setattr(obj, field, value)
 
                     obj.save()
 
@@ -508,7 +526,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
 
 class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
-                 BaseUpdateView, HistoryMixin):
+                 RequestDataMixin, BaseUpdateView, HistoryMixin):
 
     mode = "edit"
 
@@ -521,7 +539,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         """ Allow partial update """
 
-        return self.request.REQUEST.get('partial', False)
+        return self.request_data.get('partial', False)
 
     def get_form_kwargs(self):
 
@@ -596,6 +614,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         if implements(self.object, LocalRoleMixin) and \
                         'owner' in form.changed_data and \
+                        form.cleaned_data['owner'] and \
                         orig_owner != form.cleaned_data['owner']:
             self.object.set_owner(form.cleaned_data['owner'].user)
 

@@ -1,5 +1,5 @@
 from django.forms import CharField
-from django.template.defaultfilters import removetags
+from sanitizer.templatetags.sanitizer import strip_filter
 
 
 class NoScriptCharField(CharField):
@@ -16,6 +16,6 @@ class NoScriptCharField(CharField):
 
         if value:
             value = value.replace("\r\n", "\n")
-            return removetags(value, 'script')
+            return strip_filter(value)
         else:
             return None

@@ -1,10 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from djinn_contenttypes.views.share import ShareView, ShareActivityView
 
 
-urlpatterns = patterns(
-
-    '',
+urlpatterns = [
 
     url(r'^content/share/(?P<ctype>[\w]+)/(?P<id>[\d]+)/?$',
         ShareView.as_view(),
@@ -13,4 +11,4 @@ urlpatterns = patterns(
     url(r'^content/share/(?P<activity_id>[\d]+)/?$',
         ShareActivityView.as_view(),
         name="djinn_contenttypes_share"),
-)
+]

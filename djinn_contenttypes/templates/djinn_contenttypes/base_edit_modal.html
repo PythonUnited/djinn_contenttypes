@@ -20,7 +20,7 @@
 
 {% block form %}
 <form action="{{ view.edit_url }}" method="POST"
-      class="protected">
+      class="protected"  name="ct_edit_form" novalidate>
 
   {% csrf_token %}
 

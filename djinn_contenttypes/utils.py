@@ -2,7 +2,8 @@ import requests
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
-from django.db.models import Model, get_model
+from django.db.models import Model
+from django.apps import apps
 from django.core import exceptions
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
@@ -84,7 +85,7 @@ def get_comment_model():
         try:
             parts = settings.DJINN_COMMENT_MODEL.split('.')
 
-            model = get_model(parts[0], parts[-1])
+            model = apps.get_model(parts[0], parts[-1])
         except:
             raise exceptions.ImproperlyConfigured('Erroneous comment model')
 

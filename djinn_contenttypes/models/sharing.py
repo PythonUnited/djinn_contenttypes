@@ -38,7 +38,7 @@ class SharingMixin(object):
                         users=tgt.usergroup.members.all(),
                         content=self, mode=mode)
         else:
-            raise
+            raise Exception('No valid target to share')
 
     def rm_share(self, ctype, cid, mode):
 
@@ -58,7 +58,7 @@ class SharingMixin(object):
         elif getattr(tgt, "usergroup", None):
             self.rm_local_role(role, tgt.usergroup)
         else:
-            raise
+            raise Exception('No valid share to remove')
 
     @property
     def shares(self):

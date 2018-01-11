@@ -41,6 +41,8 @@ class Attachment(models.Model):
 
         return u"%s" % self._file.name
 
+    __str__ = __unicode__
+
     class Meta:
         abstract = True
         app_label = "djinn_contenttypes"

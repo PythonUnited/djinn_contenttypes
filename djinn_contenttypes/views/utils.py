@@ -1,12 +1,12 @@
 import logging
 from importlib import import_module
 from django.db import models
-from django.db.models import get_model
-from django.conf.urls import url, patterns
+from django.apps import apps
+from django.conf.urls import url
 from django.conf import settings
 from djinn_core.utils import extends
 from djinn_contenttypes.models.base import FKContentMixin
-from base import DetailView, CreateView, UpdateView, DeleteView
+from .base import DetailView, CreateView, UpdateView, DeleteView
 
 
 LOGGER = logging.getLogger("djinn_contenttypes")
@@ -61,13 +61,14 @@ def generate_model_urls(*models, **kwargs):
             views.append(generate_delete_url(model, modelname, modulename,
                                              name=delname))
 
-    return patterns("", *views)
+    # return ("", *views)
+    return views
 
 
 def generate_view_url(model, modelname, modulename, name=None):
 
     if model._meta.swapped:
-        real_model = get_model(*model._meta.swapped.split("."))
+        real_model = apps.get_model(*model._meta.swapped.split("."))
     else:
         real_model = model
 

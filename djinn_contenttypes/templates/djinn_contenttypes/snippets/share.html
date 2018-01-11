@@ -40,11 +40,13 @@
     <div class="controls">
       
       <label class="radio">
-        {{ view.render_recipients.0|removetags:'label' }}
+{#        {{ view.render_recipients.0|removetags:'label' }}#}
+        {{ view.render_recipients.recipient.0 }}
       </label>
       
       <label class="radio">
-        {{ view.render_recipients.1|removetags:'label' }}
+{#        {{ view.render_recipients.1|removetags:'label' }}#}
+        {{ view.render_recipients.recipient.1 }}
       </label>
       
       <div class="controls 
@@ -54,7 +56,8 @@
       </div>
       
       <label class="radio">
-        {{ view.render_recipients.2|removetags:'label' }}
+{#        {{ view.render_recipients.2|removetags:'label' }}#}
+        {{ view.render_recipients.recipient.2 }}
       </label>
       
       <div class="controls

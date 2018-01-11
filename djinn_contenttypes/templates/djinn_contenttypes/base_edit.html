@@ -23,12 +23,16 @@
 {% endblock metainfo %}
 {% endblock header %}
 
+{% block edit_info %}
+    Je kunt nu deze {{ view.ct_label }} bewerken. <a href="{{ view.view_url }}" class="edit toggle-inline">Terug naar de detailpagina</a>
+{% endblock %}
+
 {% block form_preamble %}
 {% endblock %}
 
 {% block form %}
 
-<form action="" method="POST" 
+<form action="" method="POST" name="ct_edit_form" novalidate
       id="editform" class="protected {% block form_class %}{% endblock %}">
 
   {{ form.media }}

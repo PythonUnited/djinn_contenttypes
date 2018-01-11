@@ -47,12 +47,20 @@ class ShareView(MimeTypeMixin, FormView, CTMixin):
 
         options = []
 
-        for opt in recipient.widget.get_renderer('recipient', ''):
+        # for opt in recipient.widget.get_renderer('recipient', ''):
+        #
+        #     opt.value = value
+        #     options.append(opt)
+        #
+        # return [option.render(value=value) for option in options]
 
-            opt.value = value
-            options.append(opt)
+        #MJB
+        # options = recipient.widget.subwidgets(name='recipient', value=value)
+        # result = [option for option in options]
+        #
+        # return result
 
-        return [option.render(value=value) for option in options]
+        return form
 
     @property
     def obj(self):

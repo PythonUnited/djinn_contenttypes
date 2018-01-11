@@ -3,7 +3,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Permission
 from django.template.defaultfilters import slugify
-from django.core.urlresolvers import reverse
+import django
+if django.VERSION < (1, 10):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 from pgauth.base import LocalRoleMixin, Role
 from pgauth.models import UserGroup
 from pgauth.settings import VIEWER_ROLE_ID
@@ -19,8 +23,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     title = models.CharField(_('Title'), max_length=200)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     changed = models.DateTimeField(_('Changed'), auto_now=True)
-    creator = models.ForeignKey(User, related_name='%(class)s_creator')
-    changed_by = models.ForeignKey(User, related_name='%(class)s_changed_by')
+    creator = models.ForeignKey(User, related_name='%(class)s_creator', on_delete=models.CASCADE)
+    changed_by = models.ForeignKey(User, related_name='%(class)s_changed_by', on_delete=models.CASCADE)
     removed_creator_name = models.CharField(_('Creator naam'), max_length=100,
                                             blank=True, null=True)
     userkeywords = models.CharField(_('Keywords'), max_length=500,
@@ -50,6 +54,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     def __unicode__(self):
 
         return self.title
+
+    __str__ = __unicode__
 
     @property
     def slug(self):

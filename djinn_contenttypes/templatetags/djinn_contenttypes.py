@@ -6,7 +6,7 @@ modulename.. it breaks the import from djinn_contenttypes
 
 from django.template import Library
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from djinn_core.utils import implements as _implements
 from djinn_core.utils import object_to_urn as obj_to_urn
 from djinn_core.utils import HTMLTruncate
@@ -22,6 +22,7 @@ def abbreviate(text, length=50, truncate_str='...'):
     it is more than 'length' chars, and adds trailing dots.
     If length is negative, do nothing.
     """
+    length = int(length)
 
     if length > 0 and len(text) > length:
         return "%s%s" % (text[:length], truncate_str)

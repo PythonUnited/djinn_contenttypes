@@ -20,7 +20,7 @@
 
 {% block form %}
 <form action="{{ view.add_url }}" method="POST"
-      class="protected">
+      class="protected"  name="ct_add_form" novalidate>
   {% csrf_token %}
 
   {% block formfields %}

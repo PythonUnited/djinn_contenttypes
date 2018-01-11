@@ -53,5 +53,7 @@ class CTRegistry(object):
 
         """ Only list the 'full' keys: those with the app id and model id """
 
-        return filter(lambda x: x not in excludes and "." in x,
-                      CTRegistry.content_types.keys())
+        return list(filter(
+            lambda x: x not in excludes and "." in x,
+            CTRegistry.content_types.keys()
+        ))

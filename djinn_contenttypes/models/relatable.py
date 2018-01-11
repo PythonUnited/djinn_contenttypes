@@ -1,5 +1,6 @@
 import logging
 from django.db import models
+from django.apps import apps
 
 
 LOG = logging.getLogger("djinn_contenttypes")
@@ -14,7 +15,7 @@ class RelatableMixin(object):
 
         """ Dynamically fetch model, so as to remove module dependency """
 
-        return models.get_model("pgcontent", "SimpleRelation")
+        return apps.get_model("pgcontent", "SimpleRelation")
 
     def get_related(self, relation_type=None, inverse=False):
 

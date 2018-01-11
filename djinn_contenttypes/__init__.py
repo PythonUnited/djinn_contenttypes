@@ -10,6 +10,6 @@ def get_css():
 
 def get_urls():
 
-    from urls import urlpatterns
+    from .urls import urlpatterns
 
     return urlpatterns

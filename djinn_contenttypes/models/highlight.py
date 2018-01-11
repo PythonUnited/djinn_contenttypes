@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -21,9 +21,9 @@ class Highlight(models.Model):
         _('Highlight to'), null=True,
         blank=True)
 
-    object_ct = models.ForeignKey(ContentType)
+    object_ct = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('object_ct', 'object_id')
+    content_object = GenericForeignKey('object_ct', 'object_id')
 
     @property
     def human_date(self):
@@ -38,6 +38,8 @@ class Highlight(models.Model):
     def __unicode__(self):
 
         return "%s highlight" % self.content_object
+
+    __str__ = __unicode__
 
     class Meta:
 
