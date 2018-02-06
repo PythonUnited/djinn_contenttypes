@@ -502,7 +502,8 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         #
         self.object = form.save()
 
-        if implements(self.object, BaseContent):
+        if not self.object.get_owner() and \
+                implements(self.object, BaseContent):
             self.object.set_owner(self.request.user)
 
         update_index_for_instance(self.object)
@@ -557,8 +558,8 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         initial = {}
 
-        for fld in self.request.GET.keys():
-            initial[fld] = self.request.GET[fld]
+        for fld in self.request_data.keys():
+            initial[fld] = self.request_data[fld]
 
         return initial
 
