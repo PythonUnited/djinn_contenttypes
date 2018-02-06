@@ -19,9 +19,12 @@ from djinn_contenttypes.utils import json_serializer
 from djinn_workflow.utils import get_state
 from pgauth.models import UserGroup
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.encoding import iri_to_uri
-from django.conf import settings
 from djinn_search.utils import update_index_for_instance
+
+
+def forbidden_page(request):
+
+    return '<html>No permission for %s</html>' % request.path
 
 
 class TemplateResolverMixin(object):
@@ -322,7 +325,7 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
                                                 'contenttypes.view')
 
         if not has_permission(perm, self.request.user, self.object):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         context = self.get_context_data(object=self.object)
         content_type = self._determine_content_type()
@@ -439,7 +442,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             context = None
 
         if not self.request.user.has_perm(perm, obj=context):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         self.object = self.get_object()
 
@@ -464,7 +467,7 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         else:
             theobj = None
         if not self.request.user.has_perm(perm, obj=theobj):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         self.object = self.get_object()
 
@@ -574,7 +577,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             'contenttypes.change_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         return super(UpdateView, self).get(request, *args, **kwargs)
 
@@ -592,7 +595,7 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             'contenttypes.change_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         if self.request.POST.get('action', None) == "cancel":
 
@@ -661,7 +664,7 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             'contenttypes.delete_contenttype')
 
         if not has_permission(perm, self.request.user, self.object):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden(forbidden_page(request))
 
         deleted = False
 
