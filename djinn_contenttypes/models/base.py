@@ -4,6 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Permission
 from django.template.defaultfilters import slugify
 import django
+from djinn_contenttypes.models.swappablemodel_mixin import SwappableModelMixin
+
 if django.VERSION < (1, 10):
     from django.core.urlresolvers import reverse
 else:
@@ -16,7 +18,8 @@ from djinn_contenttypes.models.relatable import RelatableMixin
 from djinn_workflow.utils import get_state
 
 
-class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
+class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
+                  SwappableModelMixin):
 
     """ All Djinn content extends this base class. Or should... """
 
@@ -45,11 +48,17 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
     def save(self, *args, **kwargs):
 
+        is_new = self.id == None
+
         if self.userkeywords:
             self.userkeywords = self.userkeywords.replace("'", '')
             kw_list = self.userkeywords.split(',')[:10]
             self.userkeywords = ",".join([kw.strip() for kw in kw_list])
+
         super(BaseContent, self).save(*args, **kwargs)
+
+        if is_new and not self.get_owner():
+            self.set_owner(self.creator)
 
     def __unicode__(self):
 
@@ -60,7 +69,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
     @property
     def slug(self):
 
-        return slugify(self.title)
+        return slugify(self.title or '_new_%s_' % str(self.__class__))
 
     @property
     def ct_class(self):
@@ -155,6 +164,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin):
 
         for lrole in self.get_local_roles():
             lrole.delete()
+
+        self.pre_delete()
 
         return super(BaseContent, self).delete()
 
