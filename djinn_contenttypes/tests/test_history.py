@@ -3,13 +3,14 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from djinn_contenttypes.models.history import (
     History, CHANGED, CREATED, PUBLISHED, UNPUBLISHED)
+from django.apps import apps
 
 
 class HistoryTest(TestCase):
 
     def setUp(self):
 
-        news_model = models.get_model("djinn_news", "News")
+        news_model = apps.get_model("djinn_news", "News")
         user_model = get_user_model()
 
         self.user = user_model.objects.create(username="bobdobalina")

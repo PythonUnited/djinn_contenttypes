@@ -3,13 +3,13 @@ from django.test.testcases import TestCase
 from django.db import models
 from django.contrib.auth import get_user_model
 from djinn_contenttypes.models.signal_processors import unpublish, publish
-
+from django.apps import apps
 
 class PublishableTest(TestCase):
 
     def setUp(self):
 
-        news_model = models.get_model("djinn_news", "News")
+        news_model = apps.get_model("djinn_news", "News")
         user_model = get_user_model()
 
         self.user = user_model.objects.create(username="bobdobalina")
