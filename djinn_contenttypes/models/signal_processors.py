@@ -2,7 +2,7 @@ from datetime import datetime
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import django.dispatch
-#MJB from haystack import signal_processor
+# MJB from haystack import signal_processor
 from djinn_contenttypes.models.publishable import PublishableContent
 from djinn_contenttypes.models.base import BaseContent
 from djinn_contenttypes.models.history import (
@@ -62,7 +62,7 @@ def publishable_state_change(sender, instance, **kwargs):
     # signal_processor.handle_save(sender, instance)
 
 
-@receiver(post_save)
+#MJB @receiver(post_save)
 def publishable_post_save(sender, instance, **kwargs):
 
     """Publishable post save hook. If the content is new and 'is_public'
@@ -72,6 +72,8 @@ def publishable_post_save(sender, instance, **kwargs):
     * if the content does have a publishing history, omit this, but signal
       published.
     """
+
+    print("publishable_post_save::: %s - %s" % (str(sender), str(instance)))
 
     if implements(instance, PublishableContent):
 

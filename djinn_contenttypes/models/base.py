@@ -193,7 +193,8 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
                     name=VIEWER_ROLE_ID).select_related()
                 roles = roles | viewer
 
-            elif get_state(self).name == "private" or not self.is_published:
+            elif get_state(self).name == "private" or (
+                    hasattr(self, 'is_published') and not self.is_published):
 
                 pass
 

@@ -35,7 +35,10 @@ djinn.contenttypes.show_modal = function(data, args) {
   });
 
   // bind some actions to this modal
-  modal.on("click", ".cancel", function() { modal.modal('hide'); });
+  modal.on("click", ".cancel", function(e) {
+    e.preventDefault();
+    modal.modal('hide');
+  });
 
   /*
    * The behavior of a modal form is: on success (status code 200)

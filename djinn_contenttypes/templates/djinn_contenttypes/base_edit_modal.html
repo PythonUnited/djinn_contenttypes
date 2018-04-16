@@ -1,28 +1,51 @@
-{% extends "layout-modal.html" %}
-{% load i18n auth_tags bootstrap %}
+{#{% extends "layout-modal.html" %}#}
+{% extends "djinn_contenttypes/snippets/modal.html" %}
+{% load i18n auth_tags bootstrap djinn_contenttypes %}
 
-{% block header %}
+{#{% block header %}#}
+{#<header>#}
+{#  {% if form.labels.header %}#}
+{#  {{ form.labels.header }}#}
+{#  {% else %}#}
+{#      {% if object and object.is_tmp %}#}
+{#          <h2>{% trans "New" %} {{ view.ct_label|lower }}</h2>#}
+{#      {% else %}#}
+{#          <h2>{% trans "Edit" %} {{ view.ct_label|lower }}</h2>#}
+{#      {% endif %}#}
+{#  {% endif %}#}
+{#</header>#}
+{#{% endblock %}#}
 
-<header>
+{% block title %}
   {% if form.labels.header %}
-  {{ form.labels.header }}
+      {{ form.labels.header }}
   {% else %}
-  <h2>{% trans "Edit" %} {{ view.ct_label|lower }}</h2>
+      {% if object and object.is_tmp %}
+          <h2>{% trans "New" %} {{ view.ct_label|lower }}</h2>
+      {% else %}
+          <h2>{% trans "Edit" %} {{ view.ct_label|lower }}</h2>
+      {% endif %}
   {% endif %}
-</header>
-
 {% endblock %}
 
 {% block body %}
 
-{% block errors %}
-{% endblock %}
+{#{% block errors %}#}
+{#{% endblock %}#}
 
 {% block form %}
 <form action="{{ view.edit_url }}" method="POST"
-      class="protected"  name="ct_edit_form" novalidate>
+      class="protectedp modalform"  name="ct_edit_form" novalidate>
 
+  {{ form.media }}
   {% csrf_token %}
+
+  {% if object %}
+      {% if object.is_tmp %}
+        <input type="hidden" name="tmp_id" value="{{ object.pk }}" />
+      {% endif %}
+      <input type="hidden" name="urn" value="{{ object|object_to_urn|default:'' }}" />
+  {% endif %}
 
   {% block formfields %}
   {{ form|bootstrap }}
