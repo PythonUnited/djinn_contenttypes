@@ -78,6 +78,9 @@ class TemplateResolverMixin(object):
     @property
     def view_url(self):
 
+        if not self.object:
+            return "/"
+
         kwargs = {"pk": self.object.id}
 
         if hasattr(self.object, "slug"):
