@@ -62,7 +62,8 @@ def publishable_state_change(sender, instance, **kwargs):
     # signal_processor.handle_save(sender, instance)
 
 
-#MJB @receiver(post_save)
+#MJB
+@receiver(post_save)
 def publishable_post_save(sender, instance, **kwargs):
 
     """Publishable post save hook. If the content is new and 'is_public'
