@@ -546,7 +546,8 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         """ Allow partial update """
 
-        return self.request_data.get('partial', False)
+        return self.request.POST.get('partial', False) or \
+               self.request.GET.get('partial', False)
 
     def get_form_kwargs(self):
 
