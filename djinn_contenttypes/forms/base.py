@@ -261,6 +261,11 @@ class BaseContentForm(BaseSharingForm):
 
             apply_transition(self.instance, self.cleaned_data['state'])
 
+        # Op de een of andere manier wordt de owner nergens gezet. Dan
+        # maar hier
+        if 'owner' in self.cleaned_data.keys():
+            self.instance.set_owner(self.cleaned_data['owner'].user)
+
         self.save_relations(commit=commit)
         self.save_shares(commit=commit)
 
