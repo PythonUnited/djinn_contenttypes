@@ -74,7 +74,7 @@ def publishable_post_save(sender, instance, **kwargs):
       published.
     """
 
-    print("publishable_post_save::: %s - %s" % (str(sender), str(instance)))
+    # print("publishable_post_save::: %s - %s" % (str(sender), str(instance)))
 
     if implements(instance, PublishableContent):
 

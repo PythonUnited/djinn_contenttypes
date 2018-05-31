@@ -565,8 +565,8 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         initial = {}
 
-        for fld in self.request_data.keys():
-            initial[fld] = self.request_data[fld]
+        for fld in self.request.GET.keys():
+            initial[fld] = self.request.GET[fld]
 
         return initial
 
