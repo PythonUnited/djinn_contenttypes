@@ -2,6 +2,9 @@ from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djinn_contenttypes.models.base import BaseContent
+import logging
+
+log = logging.getLogger('statistics')
 
 
 class PublishableMixin(object):
@@ -76,6 +79,29 @@ class PublishableContent(PublishableMixin, BaseContent):
         """ If publish_from is set, use that, otherwise use created """
 
         return self.publish_from or self.created
+
+    def save(self, *args, **kwargs):
+
+        super(PublishableContent, self).save(*args, **kwargs)
+
+        if self.is_public or self.is_scheduled:
+            if self.publish_from and self.publish_from > self.created:
+                ahead = (self.publish_from - self.created).total_seconds()
+                log.info(
+                    "publishing-feature: %s(id=%d) seconds ahead: "
+                    "%s (=%s hours)" % (
+                        self.__class__.__name__,
+                        self.id,
+                        int(ahead),
+                        int(ahead/3600)
+                    )
+                )
+            else:
+                log.info("publishing-feature: %s(id=%d) directly" % (
+                    self.__class__.__name__,
+                    self.id)
+                )
+
 
     class Meta:
         abstract = True
