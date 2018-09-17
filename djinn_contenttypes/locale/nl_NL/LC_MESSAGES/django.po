@@ -132,7 +132,7 @@ msgstr "Wanneer Publiceren vanaf is geselecteerd, moet er een datum ingevuld wor
 
 #: forms/base.py:289
 msgid "You must set the publish to date"
-msgstr "Publicatie datum is verplicht"
+msgstr "Publiceren tot datum is verplicht als Verwijder na verstrijken is geselecteerd"
 
 #: forms/share.py:7
 msgid "Colleagues that follow you"
