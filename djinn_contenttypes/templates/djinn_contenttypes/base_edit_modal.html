@@ -34,7 +34,7 @@
 {#{% endblock %}#}
 
 {% block form %}
-<form action="{{ view.edit_url }}" method="POST"
+<form {% block form_id %}{% endblock %}action="{{ view.edit_url }}" method="POST"
       class="protectedp modalform"  name="ct_edit_form" novalidate>
 
   {{ form.media }}
