@@ -20,6 +20,8 @@ djinn.contenttypes.show_modal = function(data, args) {
     args = [];
   }
 
+  $(document).find(".modal:not(#MyModal)").remove();
+
   var styling = {"z-index": "5000"};
 
   var modal = $(data).modal({'show': false}).css(styling);
@@ -85,6 +87,7 @@ $(document).ready(function() {
 
     modal.find('input,textarea').placehold();
   });
+
 
   $(document).on("modal_action_show", "#sharecontent", function(e) {
 
