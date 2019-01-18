@@ -201,6 +201,10 @@ class BaseContentForm(BaseSharingForm):
         wf = get_workflow(self.instance)
 
         state = get_state(self.instance)
+        if state.name != 'public':
+            self.fields['state'].initial = "on"
+        else:
+            self.fields['state'].initial = None
 
         if not state:
             state = wf.initial_state
@@ -252,9 +256,11 @@ class BaseContentForm(BaseSharingForm):
         # if the instance is created, set initial state, else apply
         # transition
         #
-        if self.instance.is_tmp and "state" in self.changed_data:
+        # if self.instance.is_tmp and "state" in self.changed_data:
+        if self.instance.is_tmp:
             if self.cleaned_data['state'] == "make_private":
                 set_state(self.instance, "private")
+            if "state" in self.changed_data:
                 del self.changed_data[self.changed_data.index('state')]
 
         if commit and "state" in self.changed_data:
