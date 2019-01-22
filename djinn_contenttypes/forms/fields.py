@@ -1,5 +1,5 @@
 from django.forms import CharField
-from sanitizer.templatetags.sanitizer import strip_filter
+from djinn_forms.templatetags.djinn_forms import pg_strip_filter
 
 
 class NoScriptCharField(CharField):
@@ -16,6 +16,6 @@ class NoScriptCharField(CharField):
 
         if value:
             value = value.replace("\r\n", "\n")
-            return strip_filter(value)
+            return pg_strip_filter(value)
         else:
             return None
