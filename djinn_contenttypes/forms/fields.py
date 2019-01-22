@@ -1,5 +1,5 @@
 from django.forms import CharField
-from djinn_forms.templatetags.djinn_forms import pg_strip_filter
+from djinn_contenttypes.templatetags.djinn_contenttypes import pg_strip_filter
 
 
 class NoScriptCharField(CharField):
