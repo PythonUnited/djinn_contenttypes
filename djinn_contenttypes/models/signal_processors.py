@@ -78,7 +78,14 @@ def publishable_post_save(sender, instance, **kwargs):
 
     if implements(instance, PublishableContent):
 
-        if instance.is_public:
+        # MJB 20190430 Pagina plaatsen in gesloten groep leverde helemaal geen
+        # timeline-entries meer op. Zelfs niet voor de plaatser zelf.
+        # Probleem zat in de is_public method die in de Base class kijkt of
+        # het een gesloten groep is. Conclusie is_public is in zo'n geval wel
+        # False, maar hier moet gekeken worden naar de published status
+        # (i.c.m. is_tmp)
+        # if instance.is_public:
+        if instance.is_published and not instance.is_tmp:
 
             changed = False
 
