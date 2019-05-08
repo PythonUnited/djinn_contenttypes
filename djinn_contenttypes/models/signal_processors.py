@@ -9,6 +9,7 @@ from djinn_contenttypes.models.history import (
     CREATED, CHANGED, PUBLISHED, UNPUBLISHED, History)
 from djinn_core.utils import implements
 from djinn_workflow.signals import state_change
+from djinn_workflow.utils import get_state
 
 
 unpublish = django.dispatch.Signal(providing_args=["instance"])
@@ -85,7 +86,8 @@ def publishable_post_save(sender, instance, **kwargs):
         # False, maar hier moet gekeken worden naar de published status
         # (i.c.m. is_tmp)
         # if instance.is_public:
-        if instance.is_published and not instance.is_tmp:
+        if instance.is_published and not instance.is_tmp and \
+                get_state(instance).name != "private" and not instance.is_deleted:
 
             changed = False
 
