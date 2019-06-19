@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.template.defaultfilters import striptags
 from django.utils.translation import gettext_lazy as _
 
 DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 200)
@@ -29,6 +30,7 @@ class FeedMixin(models.Model):
         if not self.description_feed:
             txt = getattr(self, self.description_source_field, '')
             if txt:
+                txt = striptags(txt)
                 self.description_feed = txt[:DESCR_FEED_MAX_LENGTH]
                 if len(txt) > DESCR_FEED_MAX_LENGTH:
                     self.description_feed += '...'
