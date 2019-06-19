@@ -121,4 +121,12 @@ $(document).ready(function() {
     });
   });
 
+  $(document).on("focusout", ".description_feed_src", function(e) {
+    if ($("#id_description_feed").val().length == 0 && $(".description_feed_src").val().length > 0) {
+
+      $("#id_description_feed").val($(".description_feed_src").val())
+
+    }
+  });
+
 });
