@@ -26,14 +26,14 @@ class FeedMixin(models.Model):
     )
 
     def save(self, *args, **kwargs):
-
-        if not self.description_feed:
+        txt = self.description_feed
+        if not txt:
             txt = getattr(self, self.description_source_field, '')
-            if txt:
-                txt = striptags(txt)
-                self.description_feed = txt[:DESCR_FEED_MAX_LENGTH]
-                if len(txt) > DESCR_FEED_MAX_LENGTH:
-                    self.description_feed += '...'
+        if txt:
+            txt = striptags(txt)
+            self.description_feed = txt[:DESCR_FEED_MAX_LENGTH]
+            if len(txt) > DESCR_FEED_MAX_LENGTH:
+                self.description_feed += '...'
 
         return super().save(*args, **kwargs)
 
