@@ -1,3 +1,5 @@
+* stripping html from description_feed during save
+
 1.4.10
 =====
 * fixed membership checks 

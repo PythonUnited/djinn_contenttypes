@@ -219,6 +219,15 @@ class BaseContentForm(BaseSharingForm):
         if not self.instance.parentusergroup and self.instance.is_tmp:
             self.initial['parentusergroup'] = -1
 
+        if 'description_feed' in self.fields:
+            self.fields['description_feed'].widget.attrs.update({
+                'placeholder': _(
+                    "Geef hier de samenvatting voor infoschermen. Indien "
+                    "niets ingevuld komt hier een ingekorte versie van het "
+                    "tekst-veld."
+                )
+            })
+
     def _group_choices(self):
 
         """Populate group selector. This adds the special case '-1' for no

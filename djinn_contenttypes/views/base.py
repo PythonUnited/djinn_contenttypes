@@ -722,3 +722,18 @@ class DeleteView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         self.request.META["HTTP_ACCEPT"] = "text/plain"
 
         return self.render_to_response(context)
+
+
+class FeedViewMixin(object):
+
+    def get_queryset(self, queryset):
+
+        if self.kwargs.get('for_rssfeed', False):
+
+            return queryset.filter(publish_for_feed=True)
+
+        return queryset
+
+    @property
+    def for_rssfeed(self):
+        return self.kwargs.get('for_rssfeed', False)
