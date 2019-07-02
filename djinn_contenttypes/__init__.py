@@ -1,3 +1,6 @@
+default_app_config = 'djinn_contenttypes.apps.DjinnContenttypesAppConfig'
+
+
 def get_js():
 
     return ["djinn_contenttypes.js"]
