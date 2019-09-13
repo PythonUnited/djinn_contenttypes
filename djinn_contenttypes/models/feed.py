@@ -2,8 +2,23 @@ from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils.translation import gettext_lazy as _
+from django.utils.feedgenerator import Rss201rev2Feed
+
 
 DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 200)
+
+class MoreInfoFeedGenerator(Rss201rev2Feed):
+
+    MORE_INFO_FIELDS = [
+        'more_info_class', 'more_info_text', 'more_info_qrcode_url', ]
+
+    def get_more_info_fields(self):
+        return self.MORE_INFO_FIELDS
+
+    def add_item_elements(self, handler, item):
+        super(MoreInfoFeedGenerator, self).add_item_elements(handler, item)
+        for extrafield in self.get_more_info_fields():
+            handler.addQuickElement(extrafield, item.get(extrafield, None))
 
 
 class FeedMixin(models.Model):
