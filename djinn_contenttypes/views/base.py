@@ -272,7 +272,9 @@ class HistoryMixin(object):
 
         success_url = None
 
-        for url in []: # self.request.session.get('history', []):
+        # for url in []: # self.request.session.get('history', []):
+        # MJB even kijken hoe dit bevalt...
+        for url in self.request.session.get('history', []):
 
             absolute_url = self.request.build_absolute_uri(url)
             # history url testing ONLY agains local server
