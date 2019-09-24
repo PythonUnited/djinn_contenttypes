@@ -10,7 +10,8 @@ DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 200)
 class MoreInfoFeedGenerator(Rss201rev2Feed):
 
     MORE_INFO_FIELDS = [
-        'more_info_class', 'more_info_text', 'more_info_qrcode_url', ]
+        'background_img_url', 'more_info_class', 'more_info_text',
+        'more_info_qrcode_url', ]
 
     def get_more_info_fields(self):
         return self.MORE_INFO_FIELDS
@@ -39,6 +40,10 @@ class FeedMixin(models.Model):
         null=True, blank=True,
         help_text=_("Samenvatting specifiek voor tonen op infoscherm(en)")
     )
+
+    @property
+    def keywords(self, sepchar=" + "):
+        return sepchar.join(self.keywordslist)
 
     def save(self, *args, **kwargs):
         txt = self.description_feed

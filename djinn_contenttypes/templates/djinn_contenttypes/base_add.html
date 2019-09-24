@@ -21,6 +21,13 @@
           value="save" name="action">
     {% trans "Save" %}
   </button>
+    {% if view.allow_saveandedit %}
+        <button class="btn btn-primary save-action" type="submit"
+                value="saveandedit" name="action">
+          {% trans "Save and edit again" %}
+        </button>
+    {% endif %}
+
     <button class="btn cancel-action" type="submit" 
           value="cancel" name="action">
     {% trans "Cancel" %}

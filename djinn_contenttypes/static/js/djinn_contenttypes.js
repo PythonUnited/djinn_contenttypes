@@ -129,4 +129,28 @@ $(document).ready(function() {
     }
   });
 
+    $(document).on("click", ".js-copy-orig-url", function(e) {
+      // Copies the full URL to an image to the client clipboard
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      var hiddenEleForCopy = $('#_hiddenEleForCopy_');
+      // Checking Element exists or not
+      if(!hiddenEleForCopy.length){
+        $('body').append('<input style="position:absolute;top: -9999px;" id="_hiddenEleForCopy_" value=""></input>');
+        hiddenEleForCopy = $('#_hiddenEleForCopy_');
+      }
+      hiddenEleForCopy.val(location.protocol + "//" + location.host + $(e.currentTarget).data('url'));
+      hiddenEleForCopy.select();
+      document.execCommand('copy');
+      document.getSelection().removeAllRanges();
+
+      var copyMsgElem = $('.copyMsg');
+      if(!copyMsgElem.length) {
+        $(e.currentTarget).append("<div class='copyMsg' style='display:none'>Gekopieerd!</div>\n");
+      }
+      $(e.currentTarget).find('.copyMsg').fadeIn(400).delay(200).fadeOut(400);
+    });
+
 });

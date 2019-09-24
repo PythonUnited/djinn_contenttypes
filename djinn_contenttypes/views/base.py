@@ -10,6 +10,9 @@ from django.urls import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 import json
+
+from image_cropping import ImageCroppingMixin
+
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import (
@@ -76,10 +79,18 @@ class TemplateResolverMixin(object):
                        kwargs={'pk': self.object.id})
 
     @property
+    def allow_saveandedit(self):
+        return CTRegistry.get(self.ct_name).get("allow_saveandedit", False)
+
+    @property
     def view_url(self):
 
         if not self.object:
             return "/"
+
+        if self.allow_saveandedit and \
+                self.request_data.get('action', None) == 'saveandedit':
+            return self.edit_url
 
         kwargs = {"pk": self.object.id}
 
