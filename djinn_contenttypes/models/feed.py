@@ -48,7 +48,7 @@ class FeedMixin(models.Model):
         help_text=_("Samenvatting specifiek voor tonen op infoscherm(en)")
     )
 
-    def get_qrcode_img_url(self, abs_url):
+    def get_qrcode_img_url(self, abs_url, http_host=''):
 
         qrcode_instance = pyqrcode.create(abs_url, error='Q')
 
@@ -62,7 +62,7 @@ class FeedMixin(models.Model):
             settings.MEDIA_ROOT, qrcode_filename), scale=6)
 
         qrcode_img_url = "%s%s%s" % (
-                self.http_host, settings.MEDIA_URL, qrcode_filename)
+                http_host, settings.MEDIA_URL, qrcode_filename)
 
         return qrcode_img_url
 
@@ -73,7 +73,7 @@ class FeedMixin(models.Model):
     def qrcode_img_url(self, http_host=''):
         content_url = "%s%s" % (http_host, self.get_qrcode_target_url)
 
-        url = self.get_qrcode_img_url(content_url)
+        url = self.get_qrcode_img_url(content_url, http_host=http_host)
         return url
 
     @property
