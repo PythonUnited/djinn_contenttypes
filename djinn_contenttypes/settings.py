@@ -7,7 +7,7 @@ DEFAULT_DATE_INPUT_FORMAT = getattr(
     settings, 'DEFAULT_DATE_INPUT_FORMAT', '%d/%m/%Y')
 
 FEED_HEADER_HIGH_SIZE = getattr(
-    settings, 'FEED_HEADER_HIGH_SIZE', [900, 600])
+    settings, 'FEED_HEADER_HIGH_SIZE', [800, 600])
 
 FEED_HEADER_NORMAL_SIZE = getattr(
-    settings, 'FEED_HEADER_NORMAL_SIZE', [900, 600])
+    settings, 'FEED_HEADER_NORMAL_SIZE', [800, 600])
