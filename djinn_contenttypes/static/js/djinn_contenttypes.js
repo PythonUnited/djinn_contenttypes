@@ -121,6 +121,15 @@ $(document).ready(function() {
     });
   });
 
+  $(document).on("click", "input[name=publish_for_feed]", function(e) {
+
+    if ($(this).attr("checked") == "checked") {
+      $("div.feed_options").show();
+    } else {
+      $("div.feed_options").hide();
+    }
+  });
+
   $(document).on("focusout", ".description_feed_src", function(e) {
     if ($("#id_description_feed").val().length == 0 && $(".description_feed_src").val().length > 0) {
 
