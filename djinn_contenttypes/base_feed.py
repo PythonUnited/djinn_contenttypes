@@ -3,6 +3,13 @@ from django.contrib.syndication.views import Feed
 
 class DjinnFeed(Feed):
 
+    def get_feed(self, obj, request):
+
+        self.items_with_image = "items_with_image" in request.GET
+        self.items_no_image = "items_no_image" in request.GET
+
+        return super().get_feed(obj, request)
+
     def get_object(self, request, *args, **kwargs):
 
         super().get_object(request, *args, **kwargs)

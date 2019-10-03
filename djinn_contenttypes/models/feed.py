@@ -71,7 +71,14 @@ class FeedMixin(models.Model):
         return self.get_absolute_url()
 
     def qrcode_img_url(self, http_host=''):
-        content_url = "%s%s" % (http_host, self.get_qrcode_target_url)
+        target_url = self.get_qrcode_target_url
+        if target_url.endswith('::'):
+            # internal URL (or urn?). Remove the nasty characters
+            target_url = target_url[:-2]
+        if target_url.lower().startswith('http') or target_url.lower().startswith('//'):
+            content_url = target_url
+        else:
+            content_url = "%s%s" % (http_host, target_url)
 
         url = self.get_qrcode_img_url(content_url, http_host=http_host)
         return url
