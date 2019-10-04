@@ -6,8 +6,11 @@ from django.utils.feedgenerator import Rss201rev2Feed
 from image_cropping.utils import get_backend
 import os
 import pyqrcode
+import logging
+from photologue.models import Photo
 from djinn_contenttypes.settings import FEED_HEADER_NORMAL_SIZE
 
+log = logging.getLogger(__name__)
 
 DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 200)
 
@@ -114,6 +117,14 @@ class FeedMixin(models.Model):
                     'detail': True,
                 }
             )
+        else:
+            slug = "%s_feed_placeholder" % self.__class__.__name__.lower()
+            try:
+                stockphoto = Photo.objects.is_public().get(slug=slug)
+                return stockphoto.image.url
+            except Exception as exc:
+                log.error("stockphoto '%s' does not exist. "
+                          "Upload in django-admin.photologue." % slug)
 
         return feed_img_url
 
