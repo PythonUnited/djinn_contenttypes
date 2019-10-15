@@ -513,7 +513,10 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         try:
             self.object.creator = self.request.user
             self.object.changed_by = self.request.user
-            self.object.is_tmp = False
+            if self.request.POST.get('action', 'create') == 'saveandedit':
+                self.object.is_tmp = True
+            else:
+                self.object.is_tmp = False
         except:
             pass
 
@@ -640,7 +643,10 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
             self.object.set_owner(form.cleaned_data['owner'].user)
 
         try:
-            self.object.is_tmp = False
+            if self.request.POST.get('action', 'save') == 'saveandedit':
+                self.object.is_tmp = True
+            else:
+                self.object.is_tmp = False
         except:
             pass
 

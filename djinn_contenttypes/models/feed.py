@@ -8,7 +8,6 @@ import os
 import pyqrcode
 import logging
 from photologue.models import Photo
-from djinn_contenttypes.settings import FEED_HEADER_NORMAL_SIZE
 
 log = logging.getLogger(__name__)
 
@@ -43,6 +42,13 @@ class FeedMixin(models.Model):
         _("Toon op infoschermen"),
         default=False,
         help_text=_("Item tonen op infoscherm(en)")
+    )
+
+    use_default_image = models.BooleanField(
+        _("Standaard afbeelding gebruiken"),
+        default=False,
+        help_text=_("Gebruik de afbeelding die voor dit content-type als "
+                    "standaardafbeelding is ingesteld.")
     )
 
     description_feed = models.TextField(
@@ -104,20 +110,11 @@ class FeedMixin(models.Model):
 
     @property
     def feed_bg_img_url(self):
-        feed_img_url = None,
-        img_field = getattr(self, self.feed_bg_img_fieldname, False)
-        img_crop_field = getattr(self, self.feed_bg_img_crop_fieldname, False)
-        if img_field:
-            feed_img_url = get_backend().get_thumbnail_url(
-                img_field.image,
-                {
-                    'size': FEED_HEADER_NORMAL_SIZE,
-                    'box': img_crop_field,
-                    'crop': True,
-                    'detail': True,
-                }
-            )
-        else:
+        feed_img_url = None
+
+        if self.use_default_image:
+            # Als plaatser bewust voor de stock-photo kiest, dan
+            # de afbeelding die eventueel lokaal is ingesteld negeren
             slug = "%s_feed_placeholder" % self.__class__.__name__.lower()
             try:
                 stockphoto = Photo.objects.is_public().get(slug=slug)
@@ -126,6 +123,22 @@ class FeedMixin(models.Model):
                 log.error("stockphoto '%s' does not exist. "
                           "Upload in django-admin.photologue." % slug)
 
+        img_field = getattr(self, self.feed_bg_img_fieldname, False)
+        if img_field:
+            img_crop_field_value = getattr(
+                self, self.feed_bg_img_crop_fieldname, False)
+            img_crop_field = self._meta.get_field(
+                self.feed_bg_img_crop_fieldname)
+            feed_img_url = get_backend().get_thumbnail_url(
+                img_field.image,
+                {
+                    'size': (img_crop_field.width, img_crop_field.height),
+                    'box': img_crop_field_value,
+                    'crop': True,
+                    'detail': True,
+                }
+            )
+        # de achtergrondafbeelding mag ook leeg zijn...
         return feed_img_url
 
     def save(self, *args, **kwargs):
