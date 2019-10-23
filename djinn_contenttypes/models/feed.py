@@ -143,67 +143,77 @@ class FeedMixin(models.Model):
 
     @property
     def feed_bg_img_url(self):
-        feed_img_url = None
+        feed_img = None
+        feed_img_field = None
 
         if self.use_default_image:
             # Als plaatser bewust voor de stock-photo kiest, dan
             # de afbeelding die eventueel lokaal is ingesteld negeren
             slug = "%s_feed_placeholder" % self.__class__.__name__.lower()
             try:
-                stockphoto = Photo.objects.is_public().get(slug=slug)
-                return stockphoto.image.url
+                feed_img_field = Photo.objects.is_public().get(slug=slug)
+                feed_img = Image.open(feed_img_field.image.file)
             except Exception as exc:
                 log.error("stockphoto '%s' does not exist. "
                           "Upload in django-admin.photologue." % slug)
 
-        img_field = getattr(self, self.feed_bg_img_fieldname, False)
-        if img_field:
+        if not feed_img_field:
+            feed_img_field = getattr(self, self.feed_bg_img_fieldname, False)
+        if not self.use_default_image and feed_img_field:
             img_crop_field_value = getattr(
                 self, self.feed_bg_img_crop_fieldname, False)
             img_crop_field = self._meta.get_field(
                 self.feed_bg_img_crop_fieldname)
+            # with these options even lousy source images will be upscaled so
+            # the overlay (watermark) will be applied correctly
             thumbnail_options = {
                 'size': (img_crop_field.width, img_crop_field.height),
                 'box': img_crop_field_value,
-                'crop': True,
+                'crop': "scale",
+                'upscale': True,
                 'detail': True,
             }
 
             # get the cropped version of img_field.image
-            thumbnailer = get_thumbnailer(img_field.image)
-            thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
+            thumbnailer = get_thumbnailer(feed_img_field.image)
+            feed_img = thumbnailer.get_thumbnail(thumbnail_options)
+            if feed_img:
+                # lot of feed_img juggling going on to be able to apply the watermark
+                # to Photo instances as well as django-image-cropping images.
+                feed_img = feed_img.image
 
+        if feed_img:
             # see if a watermark is defined
             watermark = Watermark.objects.filter(name='feed_backgroundimage_watermark').first()
-            if not watermark:
+            if watermark:
                 # if no watermark, return the url to the cropped image
-                return thumbnail.url
 
-            # TODO hier kan nog een check op het bestaan vd ge-watermark-te image.
-            # TODO kan meteen worden teruggegeven.
+                # TODO hier kan nog een check op het bestaan vd ge-watermark-te image.
+                # TODO kan meteen worden teruggegeven.
 
-            # apply the watermark
-            watermark_image = Image.open(watermark.image.file)
-            position = (thumbnail.image.size[0]-watermark.image.width, 0)
-            watermarked_thumbnail = apply_watermark(thumbnail.image, watermark_image, position, opacity=1)
+                # apply the watermark
+                watermark_image = Image.open(watermark.image.file)
+                position = (feed_img.size[0]-watermark.image.width, 0)
+                watermarked_thumbnail = apply_watermark(feed_img, watermark_image, position, opacity=1)
 
-            # fix for Cannot write mode RGBA as JPEG
-            watermarked_thumbnail = watermarked_thumbnail.convert("RGB")
+                # fix for Cannot write mode RGBA as JPEG
+                watermarked_thumbnail = watermarked_thumbnail.convert("RGB")
 
-            # insert "wm_" in the filename after last /
-            sep_idx = img_field.image.name.rindex("/") + 1
-            wm_tn_name = img_field.image.name[:sep_idx] + "wm_" + img_field.image.name[sep_idx:]
+                # insert "wm_" in the filename after last /
+                sep_idx = feed_img_field.image.name.rindex("/") + 1
+                wm_tn_name = feed_img_field.image.name[:sep_idx] + "wm_" + feed_img_field.image.name[sep_idx:]
 
-            # save the watermarked image to this new filename
-            wm_tn_filename = "/".join([settings.MEDIA_ROOT, wm_tn_name])
-            watermarked_thumbnail.save(wm_tn_filename)
+                # save the watermarked image to this new filename
+                wm_tn_filename = "/".join([settings.MEDIA_ROOT, wm_tn_name])
+                watermarked_thumbnail.save(wm_tn_filename)
 
-            feed_img_url = f"{settings.MEDIA_URL}{wm_tn_name}"
+                feed_img_url = f"{settings.MEDIA_URL}{wm_tn_name}"
 
-            return feed_img_url
+                return feed_img_url
+            return feed_img.url
 
         # de achtergrondafbeelding mag ook leeg zijn...
-        return feed_img_url
+        return None
 
     def save(self, *args, **kwargs):
         txt = self.description_feed

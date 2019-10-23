@@ -13,7 +13,7 @@ class DjinnCroppingMixin(object):
         if not self.cropping_field_name:
             raise NotImplementedError("Form-classes using DjinnCroppingMixin "
                                       "must provide the name of the image "
-                                      "field in image_field_name")
+                                      "field in cropping_field_name")
 
         super().__init__(*args, **kwargs)
 
