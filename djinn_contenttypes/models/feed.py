@@ -1,13 +1,16 @@
+from PIL import Image
 from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import striptags
 from django.utils.translation import gettext_lazy as _
 from django.utils.feedgenerator import Rss201rev2Feed
-from image_cropping.utils import get_backend
 import os
 import pyqrcode
 import logging
-from photologue.models import Photo
+from photologue.models import Photo, Watermark
+from photologue.utils.watermark import apply_watermark
+from easy_thumbnails.files import get_thumbnailer
+from djinn_contenttypes.settings import FEED_HEADER_SIZE
 
 log = logging.getLogger(__name__)
 
@@ -109,6 +112,31 @@ class FeedMixin(models.Model):
         return 'gronet'
 
     @property
+    def feedimg_too_small(self):
+        img_field = getattr(self, self.feed_bg_img_fieldname, False)
+        if not img_field:
+            return False
+        img = img_field.image
+        if img.width < FEED_HEADER_SIZE.get(self.ct_name)[0] or \
+                img.height < FEED_HEADER_SIZE.get(self.ct_name)[1]:
+            return True
+        return False
+
+    @property
+    def feedimg_selection_too_small(self):
+
+        img_crop_field_value = getattr(self, self.feed_bg_img_crop_fieldname, False)
+        if not img_crop_field_value:
+            return False
+        coords = img_crop_field_value.split(',')
+        min_width = FEED_HEADER_SIZE.get(self.ct_name)[0]
+        min_height = FEED_HEADER_SIZE.get(self.ct_name)[1]
+        if int(coords[2])-int(coords[0]) < min_width or int(coords[3])-int(coords[1])<min_height:
+            return True
+
+        return False
+
+    @property
     def feed_bg_img_url(self):
         feed_img_url = None
 
@@ -129,15 +157,46 @@ class FeedMixin(models.Model):
                 self, self.feed_bg_img_crop_fieldname, False)
             img_crop_field = self._meta.get_field(
                 self.feed_bg_img_crop_fieldname)
-            feed_img_url = get_backend().get_thumbnail_url(
-                img_field.image,
-                {
-                    'size': (img_crop_field.width, img_crop_field.height),
-                    'box': img_crop_field_value,
-                    'crop': True,
-                    'detail': True,
-                }
-            )
+            thumbnail_options = {
+                'size': (img_crop_field.width, img_crop_field.height),
+                'box': img_crop_field_value,
+                'crop': True,
+                'detail': True,
+            }
+
+            # get the cropped version of img_field.image
+            thumbnailer = get_thumbnailer(img_field.image)
+            thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
+
+            # see if a watermark is defined
+            watermark = Watermark.objects.filter(name='feed_backgroundimage_watermark').first()
+            if not watermark:
+                # if no watermark, return the url to the cropped image
+                return thumbnail.url
+
+            # TODO hier kan nog een check op het bestaan vd ge-watermark-te image.
+            # TODO kan meteen worden teruggegeven.
+
+            # apply the watermark
+            watermark_image = Image.open(watermark.image.file)
+            position = (thumbnail.image.size[0]-watermark.image.width, 0)
+            watermarked_thumbnail = apply_watermark(thumbnail.image, watermark_image, position, opacity=1)
+
+            # fix for Cannot write mode RGBA as JPEG
+            watermarked_thumbnail = watermarked_thumbnail.convert("RGB")
+
+            # insert "wm_" in the filename after last /
+            sep_idx = img_field.image.name.rindex("/") + 1
+            wm_tn_name = img_field.image.name[:sep_idx] + "wm_" + img_field.image.name[sep_idx:]
+
+            # save the watermarked image to this new filename
+            wm_tn_filename = "/".join([settings.MEDIA_ROOT, wm_tn_name])
+            watermarked_thumbnail.save(wm_tn_filename)
+
+            feed_img_url = f"{settings.MEDIA_URL}{wm_tn_name}"
+
+            return feed_img_url
+
         # de achtergrondafbeelding mag ook leeg zijn...
         return feed_img_url
 

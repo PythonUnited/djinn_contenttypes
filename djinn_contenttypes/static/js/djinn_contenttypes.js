@@ -124,9 +124,9 @@ $(document).ready(function() {
   $(document).on("click", "input[name=publish_for_feed]", function(e) {
 
     if ($(this).attr("checked") == "checked") {
-      $("div.feed_options").show();
+      $("div.feed-options").show();
     } else {
-      $("div.feed_options").hide();
+      $("div.feed-options").hide();
     }
   });
 

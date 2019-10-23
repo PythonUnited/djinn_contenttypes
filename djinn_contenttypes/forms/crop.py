@@ -21,7 +21,9 @@ class DjinnCroppingMixin(object):
         image_field = getattr(self.instance, self.cropping_field_name, None)
         if image_field:
             hidden_attrs = get_attrs(image_field.image, self.cropping_field_name)
-            self.fields[self.cropping_field_name].widget.attrs.update({'hide_image': True})
+            self.fields[self.cropping_field_name].widget.attrs.update({
+                'hide_image': True,
+            })
 
         self.fields[self.cropping_field_name + '_hidden'] = forms.CharField(
             max_length=500,
