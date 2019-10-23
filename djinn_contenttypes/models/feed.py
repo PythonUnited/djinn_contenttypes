@@ -112,6 +112,11 @@ class FeedMixin(models.Model):
         return 'gronet'
 
     @property
+    def has_feedimg(self):
+        return self.use_default_image or \
+               getattr(self, self.feed_bg_img_fieldname, False)
+
+    @property
     def feedimg_too_small(self):
         img_field = getattr(self, self.feed_bg_img_fieldname, False)
         if not img_field:
