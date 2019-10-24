@@ -16,5 +16,5 @@ urlpatterns = [
 
     url(r'^content/preview/(?P<ctype>[\w]+)/(?P<id>[\d]+)/?$',
         FeedPreview.as_view(),
-        name="djinn_contenttypes_share"),
+        name="djinn_contenttypes_preview"),
 ]
