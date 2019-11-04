@@ -49,10 +49,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
     def save(self, *args, **kwargs):
 
         is_new = self.id == None
+        max_keywords = getattr(self, 'max_keywords', 10)
 
         if self.userkeywords:
             self.userkeywords = self.userkeywords.replace("'", '')
-            kw_list = self.userkeywords.split(',')[:10]
+            kw_list = self.userkeywords.split(',')[:max_keywords]
             self.userkeywords = ",".join([kw.strip() for kw in kw_list])
 
         super(BaseContent, self).save(*args, **kwargs)
