@@ -80,7 +80,8 @@ class TemplateResolverMixin(object):
 
     @property
     def allow_saveandedit(self):
-        return CTRegistry.get(self.ct_name).get("allow_saveandedit", False)
+        return CTRegistry.get(self.ct_name).get("allow_saveandedit", False) \
+               and self.request.user.has_perm('auth.manage_feeds')
 
     @property
     def view_url(self):
