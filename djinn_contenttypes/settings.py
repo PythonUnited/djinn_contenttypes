@@ -10,3 +10,6 @@ FEED_HEADER_SIZE = getattr(
     settings, 'FEED_HEADER_SIZE', {
         'event': [1920, 500], 'news': [1920, 500], 'project': [1920, 100]})
 
+WYSIWYG_SIZE_NAMES = getattr(
+    settings, 'CACHECHECK_WYSIWYG_SIZE_NAMES', [
+        'display', 'wysiwyg_include_lr', 'wysiwyg_include_c'])
