@@ -84,23 +84,23 @@ class PublishableContent(PublishableMixin, BaseContent):
 
         super(PublishableContent, self).save(*args, **kwargs)
 
-        if self.is_public or self.is_scheduled:
-            if self.publish_from and self.publish_from > self.created:
-                ahead = (self.publish_from - self.created).total_seconds()
-                log.info(
-                    "publishing-feature: %s(id=%d) seconds ahead: "
-                    "%s (=%s hours)" % (
-                        self.__class__.__name__,
-                        self.id,
-                        int(ahead),
-                        int(ahead/3600)
-                    )
-                )
-            else:
-                log.info("publishing-feature: %s(id=%d) directly" % (
-                    self.__class__.__name__,
-                    self.id)
-                )
+        # if self.is_public or self.is_scheduled:
+        #     if self.publish_from and self.publish_from > self.created:
+        #         ahead = (self.publish_from - self.created).total_seconds()
+        #         log.info(
+        #             "publishing-feature: %s(id=%d) seconds ahead: "
+        #             "%s (=%s hours)" % (
+        #                 self.__class__.__name__,
+        #                 self.id,
+        #                 int(ahead),
+        #                 int(ahead/3600)
+        #             )
+        #         )
+        #     else:
+        #         log.info("publishing-feature: %s(id=%d) directly" % (
+        #             self.__class__.__name__,
+        #             self.id)
+        #         )
 
 
     class Meta:
