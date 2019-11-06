@@ -349,15 +349,16 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
         if content_type == "text/html":
             self.add_to_history()
 
-        for photologue_image in self.object.images.all():
-            # check if image cache is up to date
-            # This proved to be a problem with image_urls stored hard in
-            # wysiwyg content.
-            for sizename in WYSIWYG_SIZE_NAMES:
-                # this will try to get the url from cache.
-                # if the cached file doesn't exist anymore, it is created again
-                the_url = photologue_image._get_SIZE_url(sizename)
-                # print(the_url)
+        if hasattr(self.object, 'images'):
+            for photologue_image in self.object.images.all():
+                # check if image cache is up to date
+                # This proved to be a problem with image_urls stored hard in
+                # wysiwyg content.
+                for sizename in WYSIWYG_SIZE_NAMES:
+                    # this will try to get the url from cache.
+                    # if the cached file doesn't exist anymore, it is created again
+                    the_url = photologue_image._get_SIZE_url(sizename)
+                    # print(the_url)
 
         return self.render_to_response(context, content_type=content_type)
 
