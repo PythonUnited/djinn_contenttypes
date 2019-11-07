@@ -48,7 +48,6 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
 
     def save(self, *args, **kwargs):
 
-        is_new = self.id == None
         max_keywords = getattr(self, 'max_keywords', 10)
 
         if self.userkeywords:
@@ -58,7 +57,7 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
 
         super(BaseContent, self).save(*args, **kwargs)
 
-        if is_new and not self.get_owner():
+        if not self.get_owner():
             self.set_owner(self.creator)
 
     def __unicode__(self):
