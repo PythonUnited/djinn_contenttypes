@@ -13,3 +13,6 @@ FEED_HEADER_SIZE = getattr(
 WYSIWYG_SIZE_NAMES = getattr(
     settings, 'CACHECHECK_WYSIWYG_SIZE_NAMES', [
         'display', 'wysiwyg_include_lr', 'wysiwyg_include_c'])
+
+IMAGESIZES_CHECKING_INTERVAL_SECS = getattr(
+    settings, 'IMAGESIZES_CHECKING_INTERVAL_SECS', 7200)

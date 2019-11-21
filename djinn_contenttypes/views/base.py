@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.views.generic.detail import DetailView as BaseDetailView
 from django.views.generic.edit import UpdateView as BaseUpdateView
 from django.views.generic.edit import DeleteView as BaseDeleteView
@@ -11,7 +12,8 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 import json
 
-from djinn_contenttypes.settings import WYSIWYG_SIZE_NAMES
+from djinn_contenttypes.settings import WYSIWYG_SIZE_NAMES, \
+    IMAGESIZES_CHECKING_INTERVAL_SECS
 from djinn_core.utils import implements
 from djinn_contenttypes.registry import CTRegistry
 from djinn_contenttypes.utils import (
@@ -350,15 +352,38 @@ class DetailView(AbstractBaseView, BaseDetailView, HistoryMixin):
             self.add_to_history()
 
         if hasattr(self.object, 'images'):
-            for photologue_image in self.object.images.all():
-                # check if image cache is up to date
-                # This proved to be a problem with image_urls stored hard in
-                # wysiwyg content.
-                for sizename in WYSIWYG_SIZE_NAMES:
-                    # this will try to get the url from cache.
-                    # if the cached file doesn't exist anymore, it is created again
-                    the_url = photologue_image._get_SIZE_url(sizename)
-                    # print(the_url)
+            '''
+            20191121
+            This section takes care of re-generating images at sizes that 
+            are used in the intranet's wysiwygs. Since the URLS are stored in 
+            the wysiwyg content, the images-library does not see them missing 
+            from the images cache folder.
+            So, we periodically check them here, as users try to access them.
+            But not too often, since checking results in a number of queries 
+            and filesystem checks. 
+            '''
+
+            img_cache_key = "imgsizes_checked_%s_%d" % (
+                self.ct_name, self.object.id)
+            if not cache.get(img_cache_key):
+                # If the key is not in the cache, it is time to check the
+                # images (again)
+                # print("checking image sizes...")
+                for photologue_image in self.object.images.all():
+                    # check if image cache is up to date
+                    # This proved to be a problem with image_urls stored hard in
+                    # wysiwyg content.
+                    for sizename in WYSIWYG_SIZE_NAMES:
+                        # this will try to get the url from cache.
+                        # if the cached file doesn't exist anymore, it is created again
+                        the_url = photologue_image._get_SIZE_url(sizename)
+                        # print(the_url)
+                # After the check/regenerate, show other users check has been
+                # done recently.
+                cache.set(img_cache_key, 'no need to check now',
+                          IMAGESIZES_CHECKING_INTERVAL_SECS)
+            # else:
+            #     print("no need to check")
 
         return self.render_to_response(context, content_type=content_type)
 
