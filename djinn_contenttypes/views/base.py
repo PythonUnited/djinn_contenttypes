@@ -284,7 +284,8 @@ class HistoryMixin(object):
             # absolute_url = iri_to_uri(absolute_url)
             cookies = self.request.COOKIES
 
-            if check_get_url(absolute_url, cookies=cookies) == 200:
+            if check_get_url(absolute_url, cookies=cookies,
+                             **{"timeout": 1.0}) == 200:
 
                 success_url = url
                 break
