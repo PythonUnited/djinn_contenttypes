@@ -286,7 +286,7 @@ class HistoryMixin(object):
 
             try:
                 if check_get_url(absolute_url, cookies=cookies,
-                                 **{"timeout": 2.0}) == 200:
+                                 **{"timeout": 1.0}) == 200:
 
                     success_url = url
                     break
