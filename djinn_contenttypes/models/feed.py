@@ -14,7 +14,7 @@ from djinn_contenttypes.settings import FEED_HEADER_SIZE
 
 log = logging.getLogger(__name__)
 
-DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 200)
+DESCR_FEED_MAX_LENGTH = getattr(settings, 'DESCR_FEED_MAX_LENGTH', 1000)
 
 
 class MoreInfoFeedGenerator(Rss201rev2Feed):
