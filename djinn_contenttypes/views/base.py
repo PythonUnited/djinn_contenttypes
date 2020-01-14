@@ -285,9 +285,10 @@ class HistoryMixin(object):
             cookies = self.request.COOKIES
 
             try:
-                if check_get_url(absolute_url, cookies=cookies,
-                                 **{"timeout": 1.0}) == 200:
+                statuscode = check_get_url(absolute_url,
+                                           cookies=cookies, **{"timeout": 3.0})
 
+                if statuscode == 200:
                     success_url = url
                     break
             except Exception as exc:
@@ -694,6 +695,10 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
         self.object.save()
 
+        if self.request.POST.get('action', 'save') == 'saveandedit':
+            return self.render_to_response(self.get_context_data(form=form),
+                                           status=202)
+
         if not self.partial:
             # Translators: edit form status message
             messages.success(self.request, _("Saved changes"))
@@ -710,7 +715,11 @@ class UpdateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
     def handle_cancel(self):
 
         if self.object and getattr(self.object, "is_tmp", False):
-            self.object.delete()
+            # MJB 20200114
+            # We used to delete on cancel, but now let the nightly
+            # pg_purge_empty_content job do this
+            # self.object.delete()
+            pass
 
         return HttpResponseRedirect(self.get_redir_url())
 

@@ -216,7 +216,7 @@ class BaseContentForm(BaseSharingForm):
         # If there is no parentusergroup in the instance, and the instance is
         # a temporary one, set the group to -1.
         #
-        if not self.instance.parentusergroup and self.instance.is_tmp:
+        if not self.instance.parentusergroup and self.instance.is_tmp and self.data.get('action', '') != 'saveandedit':
             self.initial['parentusergroup'] = -1
 
         if 'description_feed' in self.fields:
