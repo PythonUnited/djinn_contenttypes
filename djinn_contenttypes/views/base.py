@@ -284,17 +284,22 @@ class HistoryMixin(object):
             # absolute_url = iri_to_uri(absolute_url)
             cookies = self.request.COOKIES
 
-            try:
-                statuscode = check_get_url(absolute_url,
-                                           cookies=cookies, **{"timeout": 3.0})
+            # DEZE BLOKKEERT. PAK DE EERSTE MAAR
+            # try:
+            #     statuscode = check_get_url(absolute_url,
+            #                                cookies=cookies, **{"timeout": 3.0})
+            #
+            #     if statuscode == 200:
+            #         success_url = url
+            #         break
+            # except Exception as exc:
+            #     # may be timeout or invalid request.
+            #     # try the next one
+            #     pass
 
-                if statuscode == 200:
-                    success_url = url
-                    break
-            except Exception as exc:
-                # may be timeout or invalid request.
-                # try the next one
-                pass
+            if self.request.path != url:
+                success_url = url
+                break
 
         if not success_url:
             success_url = self.request.user.profile.get_absolute_url()
