@@ -278,28 +278,29 @@ class HistoryMixin(object):
         # MJB even kijken hoe dit bevalt...
         for url in self.request.session.get('history', []):
 
-            absolute_url = self.request.build_absolute_uri(url)
-            # history url testing ONLY agains local server
-            # absolute_url = "http://%s%s" % (settings.HTTP_HOST, url)
-            # absolute_url = iri_to_uri(absolute_url)
-            cookies = self.request.COOKIES
-
-            # DEZE BLOKKEERT. PAK DE EERSTE MAAR
-            # try:
-            #     statuscode = check_get_url(absolute_url,
-            #                                cookies=cookies, **{"timeout": 3.0})
-            #
-            #     if statuscode == 200:
-            #         success_url = url
-            #         break
-            # except Exception as exc:
-            #     # may be timeout or invalid request.
-            #     # try the next one
-            #     pass
-
             if self.request.path != url:
-                success_url = url
-                break
+                absolute_url = self.request.build_absolute_uri(url)
+                # history url testing ONLY agains local server
+                # absolute_url = "http://%s%s" % (settings.HTTP_HOST, url)
+                # absolute_url = iri_to_uri(absolute_url)
+                cookies = self.request.COOKIES
+
+                # DEZE BLOKKEERT. PAK DE EERSTE MAAR
+                try:
+                    statuscode = check_get_url(absolute_url,
+                                               cookies=cookies, **{"timeout": 2.0})
+
+                    if statuscode == 200:
+                        success_url = url
+                        break
+                except Exception as exc:
+                    # may be timeout or invalid request.
+                    # try the next one
+                    pass
+
+            # if self.request.path != url:
+            #     success_url = url
+            #     break
 
         if not success_url:
             success_url = self.request.user.profile.get_absolute_url()
