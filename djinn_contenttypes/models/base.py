@@ -55,6 +55,14 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
             kw_list = self.userkeywords.split(',')[:max_keywords]
             self.userkeywords = ",".join([kw.strip() for kw in kw_list])
 
+        # 08-09-2020 overdragen compleet maken door ook de creator te zetten.
+        # anders gaan berichten er op verkeerde naam uit...
+        if self.id:
+            # get_owner heeft alleen betekenis als het object al eens is opgeslagen
+            owner = self.get_owner()
+            if owner:
+                self.creator = owner
+
         super(BaseContent, self).save(*args, **kwargs)
 
         if not self.get_owner():
