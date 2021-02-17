@@ -279,7 +279,7 @@ class BaseContentForm(BaseSharingForm):
 
         # Op de een of andere manier wordt de owner nergens gezet. Dan
         # maar hier
-        if 'owner' in self.cleaned_data.keys() and self.cleaned_data['owner']:
+        if commit and 'owner' in self.cleaned_data.keys() and self.cleaned_data['owner']:
             self.instance.set_owner(self.cleaned_data['owner'].user)
 
         self.save_relations(commit=commit)
