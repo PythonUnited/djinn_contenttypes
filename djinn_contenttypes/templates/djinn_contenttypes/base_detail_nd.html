@@ -1,0 +1,155 @@
+{% extends "layout-8x4_nd.html" %}
+
+{% load pgcomment_tags i18n djinn_contenttypes djinn_contenttypes_tags %}
+{% load djinn_auth_tags auth_tags djinn_workflow_tags %}
+{% load djinn_likes %}
+
+{% block body_class %}ct {{ object.ct_name }} view {% pub_classes object %}
+{% endblock %}
+
+{% block left-pane %}
+
+<div class="inner-column">
+
+  {% block header %}
+  <header>
+    <h1 class="page-title">{% block title %}{% title object %}{% endblock %}
+      {% if_has_perm object request.user 'change' %}
+      {% include "djinn_contenttypes/snippets/publabels.html" %}
+      {% endif_has_perm %}
+    </h1>
+  </header>
+
+  {% block metainfo %}
+  <div class="meta-info">
+  {% with highlight_from=object.highlight_from %}
+    <span class="profile-type">{{ object.ct_label }}</span>
+
+    {% if_has_perm object request.user 'change' %}
+    {% include "djinn_contenttypes/snippets/publine.html" %}
+    {% endif_has_perm %}
+
+    <span class="byline">
+      {% trans "Created" context "content meta info" %}: {{ view.created }},
+      
+      {% if not highlight_from or highlight_from > highlight_from.now %}
+        {% trans "Last change" %}: {{ object.changed }},
+      {% endif %}
+        
+      {% if object|implements:"djinn_contenttypes.Commentable" %}
+        {% trans "Reactions" %}: {% comment_count_for user object %}
+      {% endif %}
+    </span>
+
+  {% endwith %}
+  </div>
+
+
+  {% endblock metainfo %}
+  {% endblock header %}
+
+  {% block content %}
+  {% endblock content %}
+
+  {% likes object %}
+  {% like_button object %}
+  {% block extra_actions %}{% endblock extra_actions %}
+
+  {% if object|implements:"djinn_contenttypes.Commentable" %}
+  {% comments_for object %}
+  {% endif %}
+</div>
+
+{% endblock left-pane %}
+
+
+{% block right-pane %}
+
+<div class="inner-column">
+    <ul id="page-actions" class="page-actions">
+
+        <li>
+          {% if_has_perm object request.user 'change' %}
+          {% edit_action object %}
+          {% endif_has_perm %}
+        </li>
+
+    </ul>
+
+    <article id="aside-owner">
+        {% owner_nd object 'False' %}
+    </article>
+
+    {% if object.parentusergroup %}
+
+    {% with group=object.parentusergroup.profile %}
+
+    <article id="aside-group">
+        <header>
+            <h1>Geplaatst in groep</h1>
+        </header>
+        <div class="with-profile-photo">
+            <figure class="profile-photo">
+                <a class="groupprofile" href="{{ group.get_absolute_url }}">
+                    <img src="{{ group.avatar_url }}"  alt="Geen foto"/>
+                </a>
+            </figure>
+            <div class="text">
+                <a class="groupprofile" href="{{ group.get_absolute_url }}">{{ group|safe }}</a>
+{#                VRAAG AAN MB dit moet nog dynamisch gemaakt worden denk ik #}
+                <ul class="page-actions profile-section-list">
+                    <li class="groupaction groupaction-add-news toggle-subactions">
+                        <a href="javascript:void(0);">Toevoegen &#x25BC;</a>
+                        <ul class="groupaction-sub">
+                            <li class="groupsubaction groupaction-add-news"><a href="#">Nieuwsbericht</a></li>
+                            <li class="groupsubaction groupaction-add-document"><a href="#">Bestand</a></li>
+                            <li class="groupsubaction groupaction-add-page"><a href="#">Pagina</a></li>
+                            <li class="groupsubaction groupaction-add-product"><a href="#">Productpagina</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    {% endwith %}
+    {% endif %}
+
+{#    <article id="aside-tags">#}
+{#        <header>#}
+{#            <h1>Trefwoorden</h1>#}
+{#        </header>#}
+{#        <ul class="tags">#}
+{#            <li><a href="#">wob</a></li>#}
+{#            <li><a href="#">wobverzoek</a></li>#}
+{#            <li><a href="#">wet-openbaarheid-van-bestuur</a></li>#}
+{#        </ul>#}
+{#    </article>#}
+{##}
+{#    <article id="aside-recommendations">#}
+{#        <header>#}
+{#            <h1>Kijk ook eens bij</h1>#}
+{#        </header>#}
+{#        <ul>#}
+{#            <li><a href="#">Pieter van der Burgh</a></li>#}
+{#        </ul>#}
+{#    </article>#}
+{##}
+{#    <article id="aside-interesting">#}
+{#        <header>#}
+{#            <h1>Misschien interessant</h1>#}
+{#        </header>#}
+{#        <ul>#}
+{#            <li><a href="#">4 Mijl van Groningen</a></li>#}
+{#            <li><a href="#">AbvaKabo FNV Bedrijfsledengroep</a></li>#}
+{#            <li><a href="#">Algemene Bestuurlijke & Juridische zaken</a></li>#}
+{#            <li><a href="#">Arbo</a></li>#}
+{#        </ul>#}
+{#    </article>#}
+
+</div>
+
+{#    BEGIN OUDE SPUL right-pane#}
+{% block right-pane-extra %}
+{% endblock %}
+{#    END OUDE SPUL right-pane#}
+{% endblock right-pane %}
