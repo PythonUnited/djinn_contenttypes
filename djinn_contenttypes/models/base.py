@@ -77,7 +77,14 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
     @property
     def slug(self):
 
-        return slugify(self.title or '_new_%s_' % str(self.__class__))
+        dynamic_slug = slugify(self.title or '_new_%s_' % str(self.__class__))
+        if not dynamic_slug:
+            # als iemand een niet-sluggable karakter in title zet, dan is
+            # dynamic_slug leeg. We zetten er dan tenminste een underscore in
+            # ter voorkoming Nonetype excepties
+            return "_"
+
+        return dynamic_slug
 
     @property
     def ct_class(self):
