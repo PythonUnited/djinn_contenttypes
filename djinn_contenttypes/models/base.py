@@ -87,6 +87,10 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
         return dynamic_slug
 
     @property
+    def created_as_isoformat(self):
+        return self.created.isoformat()
+
+    @property
     def ct_class(self):
 
         """ Use this method at your own peril... it's expensive"""
