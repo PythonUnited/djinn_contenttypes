@@ -252,12 +252,17 @@ class BaseContentForm(BaseSharingForm):
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
 
+        groups_as_options = [(group.id, str(group)) for group in groups]
+        # sorting must be done here since groups is a combination of 2 queries
+        groups_as_options = sorted(groups_as_options, key=lambda x: x[1].lower())
+
         return [
+            # First 2 choices always on top
             # Translators: djinn_contenttypes group make a choice label
             ("-1", _("Make a choice")),
             # Translators: djinn_contenttypes group no group label
             (("", _("Do not add to a group")))] + \
-            [(group.id, str(group)) for group in groups]
+            groups_as_options
 
     def save(self, commit=True):
 
