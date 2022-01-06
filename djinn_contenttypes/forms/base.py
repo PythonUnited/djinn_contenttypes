@@ -13,6 +13,8 @@ from djinn_forms.widgets.relate import RelateSingleWidget, RelateWidget
 from djinn_forms.forms.relate import RelateMixin
 from djinn_forms.widgets.datetimewidget import DateTimeWidget
 from djinn_contenttypes import settings
+from pgauth.util import get_usergroups_by_user
+
 
 class PartialUpdateMixin(object):
 
@@ -239,7 +241,7 @@ class BaseContentForm(BaseSharingForm):
         if self.user and self.user.is_superuser:
             groups = UserGroup.objects.all()
         elif self.user:
-            groups = self.user.usergroup_set.all()
+            groups = get_usergroups_by_user(self.user)
         else:
             groups = UserGroup.objects.none()
 
