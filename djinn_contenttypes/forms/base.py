@@ -5,7 +5,8 @@ from djinn_forms.forms.share import ShareMixin
 from djinn_workflow.utils import (
     get_workflow, get_state, apply_transition, set_state)
 from pgauth.models import UserGroup
-from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID
+from pgauth.settings import OWNER_ROLE_ID, EDITOR_ROLE_ID, \
+    PROFILE_TYPE_DEPARTMENT_ID
 from djinn_forms.fields.role import LocalRoleSingleField
 from djinn_forms.fields.relate import RelateField
 from djinn_forms.fields.keyword import KeywordField
@@ -244,6 +245,8 @@ class BaseContentForm(BaseSharingForm):
             groups = get_usergroups_by_user(self.user)
         else:
             groups = UserGroup.objects.none()
+
+        groups = groups.exclude(profile_type=PROFILE_TYPE_DEPARTMENT_ID)
 
         # if we already have a group set, add it.
         #
