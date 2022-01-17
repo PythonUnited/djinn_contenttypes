@@ -126,7 +126,7 @@ class BaseContentForm(BaseSharingForm):
     # Translators: contenttypes usergroup label
     parentusergroup = forms.ModelChoiceField(label=_("Add to group"),
                                              required=False,
-                                             queryset=UserGroup.objects.all())
+                                             queryset=UserGroup.objects.none())
 
 
     publish_from = forms.DateTimeField(
@@ -198,7 +198,9 @@ class BaseContentForm(BaseSharingForm):
         self.init_relation_fields()
         self.init_share_fields()
 
+        self.fields['parentusergroup'].queryset = self._group_queryset()
         self.fields['parentusergroup'].choices = self._group_choices()
+
         self.fields['userkeywords'].show_label = True
 
         wf = get_workflow(self.instance)
@@ -232,12 +234,7 @@ class BaseContentForm(BaseSharingForm):
                 )
             })
 
-    def _group_choices(self):
-
-        """Populate group selector. This adds the special case '-1' for no
-        selection made, so we can make sure the user needs to either
-        select a group, or select 'no group'.
-        """
+    def _group_queryset(self):
 
         if self.user and self.user.is_superuser:
             groups = UserGroup.objects.all()
@@ -252,10 +249,19 @@ class BaseContentForm(BaseSharingForm):
         #
         if self.instance.parentusergroup:
             groups = groups | UserGroup.objects.filter(
-                pk=self.instance.parentusergroup.id)
+                pk=self.instance.parentusergroup_id)
 
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
+        return groups
+
+    def _group_choices(self):
+
+        """Populate group selector. This adds the special case '-1' for no
+        selection made, so we can make sure the user needs to either
+        select a group, or select 'no group'.
+        """
+        groups = self._group_queryset()
 
         groups_as_options = [(group.id, str(group)) for group in groups]
         # sorting must be done here since groups is a combination of 2 queries
