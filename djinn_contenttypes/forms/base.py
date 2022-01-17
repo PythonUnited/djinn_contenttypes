@@ -251,6 +251,11 @@ class BaseContentForm(BaseSharingForm):
             groups = groups | UserGroup.objects.filter(
                 pk=self.instance.parentusergroup_id)
 
+        # if the user is in a usergroup page and add permissions were granted:
+        if self.data.get('parentusergroup', False):
+            groups = groups | UserGroup.objects.filter(
+                pk=self.data.get('parentusergroup'))
+
         groups = groups.filter(is_system=False,
                                name__isnull=False).exclude(name="").distinct()
         return groups
