@@ -569,10 +569,18 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
         except:
             pass
 
-        # And now for real!
-        #
+        if 'owner' in form.cleaned_data.keys():
+            # Het opslaan van owner in de form-save komt te laat voor het
+            # versturen van de timeline berichten.
+            # Dus de owner-aanpassing moet daarvoor al gedaan worden
+            new_owner = form.cleaned_data['owner']
+            if implements(self.object, BaseContent) and new_owner and\
+                    new_owner != self.object.get_owner():
+                self.object.set_owner(new_owner.user)
+
         self.object = form.save()
 
+        # owner nog steeds leeg, dan maar dit:
         if not self.object.get_owner() and \
                 implements(self.object, BaseContent):
             self.object.set_owner(self.request.user)
