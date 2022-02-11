@@ -47,6 +47,7 @@ class CategoryMixin(models.Model):
         Category,
         null=True, blank=True,
         on_delete=models.SET_NULL,
+        verbose_name=_("Category"),
         related_name='%(class)s_category',
         help_text=_("De categorie waaronder dit content-item verschijnt")
     )

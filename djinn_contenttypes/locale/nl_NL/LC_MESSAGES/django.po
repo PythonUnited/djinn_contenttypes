@@ -412,6 +412,9 @@ msgstr "Deel %(obj)s met:"
 msgid "Share this message with:"
 msgstr "Deel dit bericht met:"
 
+msgid "Category"
+msgstr "Categorie"
+
 #~ msgid "When Publish from is selected, you should enter a publish from date"
 #~ msgstr ""
 #~ "Wanneer Publiceren vanaf is geselecteerd, moet er een datum ingevuld "
