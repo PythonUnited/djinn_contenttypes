@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 
 
@@ -15,6 +16,22 @@ class Category(models.Model):
         help_text=_(
             "Vast kenmerk van deze categorie. Na initieel aanmaken liefst niet meer aanpassen.")
     )
+
+    @staticmethod
+    def get_name_by_slug(slug):
+
+        cache_key = f"content_category_{slug}"
+        category_name = cache.get(cache_key)
+
+        if not category_name:
+            try:
+                category_name = Category.objects.get(slug=slug).name
+            except:
+                category_name = slug
+            if category_name == "-1":
+                category_name = _("Overig")
+            cache.set(cache_key, category_name)
+        return category_name
 
     def __str__(self):
         return self.name
