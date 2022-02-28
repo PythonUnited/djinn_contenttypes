@@ -17,10 +17,17 @@ def create_permissions(**kwargs):
     role_feedadmin, created = Role.objects.get_or_create(
         name=FEEDADMIN_ROLE_ID)
 
-    manage, created = Permission.objects.get_or_create(
+    manage_feeds, created = Permission.objects.get_or_create(
         codename="manage_feeds",
         content_type=contenttype,
         defaults={'name': 'Manage feeds'})
 
-    role_admin.add_permission_if_missing(manage)
-    role_feedadmin.add_permission_if_missing(manage)
+    role_admin.add_permission_if_missing(manage_feeds)
+    role_feedadmin.add_permission_if_missing(manage_feeds)
+
+    manage_memberships, created = Permission.objects.get_or_create(
+        codename="manage_organisation_membership",
+        content_type=contenttype,
+        defaults={'name': 'Manage baseteam/domain memberships'})
+
+    role_admin.add_permission_if_missing(manage_memberships)
