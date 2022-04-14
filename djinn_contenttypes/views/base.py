@@ -821,3 +821,30 @@ class FeedViewMixin(object):
     @property
     def for_rssfeed(self):
         return self.kwargs.get('for_rssfeed', False)
+
+
+class DesignVersionMixin(object):
+    """
+    Allows a view to switch between the old and the new template
+    (with _nd2022 added in the template name)
+
+    add parameter to URL:
+    ?olddesign=1
+    """
+
+    def get_template_names(self):
+
+        if self.template_name:
+            if 'olddesign' in self.request.GET:
+                return self.template_name.replace("gronet_v3/", "")
+
+            template_name_tmp = self.template_name
+            if 'tprefix' in self.request.GET:
+                template_name_tmp = f"gronet_{self.request.GET['tprefix']}/{template_name_tmp}"
+
+            if 'tpostfix' in self.request.GET:
+                template_name_tmp = template_name_tmp.replace(".html", f"_{self.request.GET['tpostfix']}.html")
+
+            return template_name_tmp
+
+        return super().get_template_names()
