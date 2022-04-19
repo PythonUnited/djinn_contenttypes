@@ -826,7 +826,9 @@ class FeedViewMixin(object):
 class DesignVersionMixin(object):
     """
     Allows a view to switch between the old and the new template
-    (with _nd2022 added in the template name)
+    (new: template_path starting with 'gronet_v3')
+
+    NOTE: In case of new templates, Diazo is fully bypassed!
 
     add parameter to URL:
     ?olddesign=1
@@ -848,3 +850,15 @@ class DesignVersionMixin(object):
             return template_name_tmp
 
         return super().get_template_names()
+
+
+    def dispatch(self, request, *args, **kwargs):
+
+        response = super().dispatch(request, *args, **kwargs)
+
+        if 'olddesign' not in self.request.GET:
+            # disallow Diazo to modify anything.
+            # So, not even touch the outgoing html doctype, xmlns, etcetera
+            response['X-Diazo-Off'] = 'true'
+
+        return response
