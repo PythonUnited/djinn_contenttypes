@@ -841,7 +841,7 @@ class DesignVersionMixin(object):
                 return self.template_name.replace("gronet_v3/", "")
 
             template_name_tmp = self.template_name
-            if 'tprefix' in self.request.GET:
+            if 'tprefix' in self.request.GET and not template_name_tmp.startswith('gronet_'):
                 template_name_tmp = f"gronet_{self.request.GET['tprefix']}/{template_name_tmp}"
 
             if 'tpostfix' in self.request.GET:
