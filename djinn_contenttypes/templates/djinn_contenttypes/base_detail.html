@@ -44,7 +44,9 @@
   {% endwith %}
   </div>
 
+  {% if object|implements:"djinn_likes.LikeableMixin" %}
   {% likes object %}
+  {% endif %}
 
   {% endblock metainfo %}
   {% endblock header %}
