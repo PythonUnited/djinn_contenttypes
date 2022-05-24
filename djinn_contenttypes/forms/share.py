@@ -63,7 +63,7 @@ class ShareForm(forms.Form):
         widget=forms.Textarea(
             attrs={"class": "expand count_characters init_expansion",
                    'data-maxchars': '200',
-                   "cols": 100}),
+                   "cols": 60}),
         required=True
     )
 
