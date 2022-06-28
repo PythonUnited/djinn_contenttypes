@@ -21,7 +21,7 @@ class Highlight(models.Model):
         _('Highlight to'), null=True,
         blank=True)
 
-    object_ct = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_ct = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('object_ct', 'object_id')
 

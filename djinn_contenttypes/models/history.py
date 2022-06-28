@@ -70,7 +70,7 @@ class History(models.Model):
 
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
-    object_ct = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_ct = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('object_ct', 'object_id')
     status_flag = models.PositiveSmallIntegerField(db_index=True)
