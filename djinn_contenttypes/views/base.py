@@ -468,16 +468,18 @@ class CreateView(TemplateResolverMixin, SwappableMixin, AcceptMixin,
 
                 # Set any data that is available, i.e. through initial data
                 #
-                if self.get_initial():
+                initial_data = self.get_initial()
+                if initial_data:
                     form_class = self.get_form_class()
 
                     kwargs = self.get_form_kwargs()
-                    kwargs['data'] = self.get_initial()
+                    kwargs['data'] = initial_data
+                    kwargs['instance'] = obj
 
                     form = form_class(**kwargs)
                     form.cleaned_data = {}
 
-                    for field in self.get_initial().keys():
+                    for field in initial_data.keys():
                         if field in form.data and field in form.fields:
                             value = form.fields[field].clean(form.data[field])
                             setattr(obj, field, value)
