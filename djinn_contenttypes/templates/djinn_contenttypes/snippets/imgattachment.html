@@ -1,4 +1,4 @@
-{% load contentutil_tags %}
+{% load contentutil_tags i18n %}
 
 <li class="editable">
 
@@ -9,14 +9,14 @@
     <a class="edit-inline"
        href="{% url 'djinn_contenttypes_edit_imgattachment' object.id %}"
        >
-      Aanpassen
+      {% trans "Edit" %}
     </a>
     <a class="rm-inline"
        data-pu_callback="djinn.forms.remove_attachment:{{ object.id }}"
        data-pu_confirmdelete="true"
        href="{% url 'djinn_contenttypes_delete_imgattachment' object.id %}"
        >
-      Verwijderen
+      {% trans "Remove" %}
     </a>
   </span>
 
