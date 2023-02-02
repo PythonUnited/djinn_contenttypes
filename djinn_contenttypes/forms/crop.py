@@ -1,6 +1,5 @@
 from django import forms
-from django.conf import settings
-from django.contrib.admin.templatetags import admin_static
+from django.templatetags.static import static
 from image_cropping.widgets import get_attrs
 
 
@@ -39,7 +38,7 @@ class DjinnCroppingMixin(object):
             "image_cropping/js/jquery.Jcrop.min.js",
             "js/image_cropping.js",
         ]
-        js = [admin_static.static(path) for path in js]
+        js = [static.static(path) for path in js]
 
         # if settings.IMAGE_CROPPING_JQUERY_URL:
         #     js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
@@ -48,6 +47,6 @@ class DjinnCroppingMixin(object):
             "image_cropping/css/jquery.Jcrop.min.css",
             "image_cropping/css/image_cropping.css",
         ]
-        css = {'all': [admin_static.static(path) for path in css]}
+        css = {'all': [static.static(path) for path in css]}
 
         return forms.Media(css=css, js=js)
