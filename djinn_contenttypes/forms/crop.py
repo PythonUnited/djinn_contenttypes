@@ -38,7 +38,7 @@ class DjinnCroppingMixin(object):
             "image_cropping/js/jquery.Jcrop.min.js",
             "js/image_cropping.js",
         ]
-        js = [static.static(path) for path in js]
+        js = [static(path) for path in js]
 
         # if settings.IMAGE_CROPPING_JQUERY_URL:
         #     js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
@@ -47,6 +47,6 @@ class DjinnCroppingMixin(object):
             "image_cropping/css/jquery.Jcrop.min.css",
             "image_cropping/css/image_cropping.css",
         ]
-        css = {'all': [static.static(path) for path in css]}
+        css = {'all': [static(path) for path in css]}
 
         return forms.Media(css=css, js=js)
