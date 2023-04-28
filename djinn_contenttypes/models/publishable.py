@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djinn_contenttypes.models.base import BaseContent
@@ -79,6 +79,10 @@ class PublishableContent(PublishableMixin, BaseContent):
         """ If publish_from is set, use that, otherwise use created """
 
         return self.publish_from or self.created
+
+    def just_published(self):
+        delta = datetime.now() - self.publishing_date
+        return  delta >= timedelta(minutes=0) and delta < timedelta(hours=24)
 
     def save(self, *args, **kwargs):
 

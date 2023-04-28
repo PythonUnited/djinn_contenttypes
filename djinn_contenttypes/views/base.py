@@ -297,6 +297,9 @@ class HistoryMixin(object):
             #         # may be timeout or invalid request.
             #         # try the next one
             #         pass
+            if isinstance(self, DeleteView):
+                if f"/{self.kwargs[self.pk_url_kwarg]}/" in url:
+                    continue
 
             if self.request.path != url:
                 success_url = url
