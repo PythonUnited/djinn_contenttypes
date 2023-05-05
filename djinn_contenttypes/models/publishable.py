@@ -82,7 +82,7 @@ class PublishableContent(PublishableMixin, BaseContent):
 
     def just_published(self):
         delta = datetime.now() - self.publishing_date
-        return  delta >= timedelta(minutes=0) and delta < timedelta(hours=24)
+        return  delta >= timedelta(minutes=0) and delta < timedelta(hours=48)
 
     def save(self, *args, **kwargs):
 
