@@ -81,8 +81,9 @@ class PublishableContent(PublishableMixin, BaseContent):
         return self.publish_from or self.created
 
     def just_published(self):
+        # beschouw als 'nieuw' als het in afgelopen 3 dagen is gepubliceerd
         delta = datetime.now() - self.publishing_date
-        return  delta >= timedelta(minutes=0) and delta < timedelta(hours=48)
+        return  delta >= timedelta(minutes=0) and delta < timedelta(hours=72)
 
     def save(self, *args, **kwargs):
 
