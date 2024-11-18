@@ -63,10 +63,11 @@ class BaseContent(models.Model, LocalRoleMixin, SharingMixin, RelatableMixin,
             if owner:
                 self.creator = owner
 
-        super(BaseContent, self).save(*args, **kwargs)
+        response = super(BaseContent, self).save(*args, **kwargs)
 
         if not self.get_owner():
             self.set_owner(self.creator)
+        return response
 
     def __unicode__(self):
 
